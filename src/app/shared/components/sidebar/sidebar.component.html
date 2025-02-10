@@ -1,0 +1,341 @@
+<div
+  class="bg-gradient-to-b from-black from-10% via-purple-950 via-30% to-black to-90% fixed flex flex-col left-0 w-14 md:w-60 bg-black h-full text-white transition-all duration-300 border-none z-10 sidebar group"
+>
+  <div class="flex justify-center mt-4 tracking-wide truncate">
+    <img class="h-8 w-8" src="images/logo.png" alt="Logo" />
+    <span class="ml-2 text-xl font-bold text-white hidden md:block">
+      Graphora
+    </span>
+  </div>
+
+  <!-- NUEVO -->
+  <div
+    (click)="selected('new', '/new')"
+    class="w-full flex justify-center mt-2"
+  >
+    <a
+      [ngClass]="{ selectedBack: selectedFilter === 'new' }"
+      class="relative px-2 flex flex-row items-center md:h-9 text-white md:p-3 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 md:mt-6"
+    >
+      <div
+        class="flex flex-row w-full tracking-wide truncate items-center justify-center"
+      >
+        <b class="font-bold text-2xl">+</b>
+        <span
+          [ngClass]="{ selectedText: selectedFilter === 'new' }"
+          class="ml-2 text-sm font-semibold hidden md:block"
+          >Nuevo</span
+        >
+      </div>
+    </a>
+  </div>
+
+  <div
+    class="overflow-y-auto overflow-y-hidden flex flex-col justify-between flex-grow"
+  >
+    <ul class="flex flex-col py-2 space-y-1 p-4">
+      <!-- INICIO -->
+      <li (click)="selected('home', '/home')">
+        <a
+          [ngClass]="{ 'scale-105': selectedFilter === 'home' }"
+          class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105"
+        >
+          <span class="inline-flex justify-center items-center">
+            <svg
+              class="primary text-white"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="#dddddd"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                stroke-width="1"
+                [attr.stroke-width]="selectedFilter === 'home' ? '2' : '1'"
+                d="M5.5 21.003a1.5 1.5 0 01-1.5-1.5v-8.61l-1.178.993a.5.5 0 01-.644-.765l8.856-7.458a1.5 1.5 0 011.932 0l8.856 7.458a.5.5 0 01-.644.765L20 10.894v8.61a1.5 1.5 0 01-1.5 1.5h-13zm6.178-16.575a.5.5 0 01.644 0L19 10.052v9.451a.5.5 0 01-.5.5H15v-6a1 1 0 00-1-1h-4a1 1 0 00-1 1v6H5.5a.5.5 0 01-.5-.5v-9.451l6.678-5.624zM10 20.003h4v-6h-4v6z"
+              ></path>
+            </svg>
+          </span>
+          <div
+            class="flex flex-row justify-between w-full tracking-wide truncate"
+          >
+            <span
+              [ngClass]="{ 'font-bold': selectedFilter === 'home' }"
+              class="ml-2 text-sm"
+              >Inicio</span
+            >
+          </div>
+        </a>
+      </li>
+
+      <!-- DOCUMENTOS -->
+      <li (click)="selected('documents', '/documents')">
+        <a
+          [ngClass]="{ 'scale-105': selectedFilter === 'documents' }"
+          class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105"
+        >
+          <span class="inline-flex justify-center items-center">
+            <svg
+              class="primary"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="#dddddd"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M11.707 4l-1.56-1.56A1.5 1.5 0 009.085 2H4.5A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18H6v.5A1.5 1.5 0 007.5 20H9v.5a1.5 1.5 0 001.5 1.5h9a1.5 1.5 0 001.5-1.5v-9.207L15.707 6h-1l-1.56-1.56A1.5 1.5 0 0012.085 4h-.379zM4.5 3a.5.5 0 00-.5.5v13a.5.5 0 00.5.5H6V5.5A1.5 1.5 0 017.5 4h2.793l-.854-.854A.5.5 0 009.086 3H4.5zM7 5.5a.5.5 0 01.5-.5h4.586a.5.5 0 01.353.146l.854.854H10.5A1.5 1.5 0 009 7.5V19H7.5a.5.5 0 01-.5-.5v-13zM10.5 7a.5.5 0 00-.5.5v13a.5.5 0 00.5.5h9a.5.5 0 00.5-.5V12h-3.5a1.5 1.5 0 01-1.5-1.5V7h-4.5zm5.5.707L19.293 11H16.5a.5.5 0 01-.5-.5V7.707z"
+              ></path>
+            </svg>
+          </span>
+          <div
+            class="flex flex-row justify-between w-full tracking-wide truncate"
+          >
+            <span
+              [ngClass]="{ 'font-bold': selectedFilter === 'documents' }"
+              class="ml-2 text-sm"
+              >Documentos</span
+            >
+          </div>
+        </a>
+      </li>
+
+      <!-- RECIENTES -->
+      <!-- <li (click)="selected('recent', '/recent')">
+        <a
+          [ngClass]="{ selectedBack: selectedFilter === 'recent' }"
+          class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105"
+        >
+          <span class="inline-flex justify-center items-center">
+            <svg
+              class="primary"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="#dddddd"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 6.5a.5.5 0 00-1 0v6a.5.5 0 00.223.416l3 2a.5.5 0 00.554-.832L12 12.232V6.5z"
+              ></path>
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-1 0a8 8 0 11-16 0 8 8 0 0116 0z"
+              ></path>
+            </svg>
+          </span>
+          <div
+            class="flex flex-row justify-between w-full tracking-wide truncate"
+          >
+            <span
+              [ngClass]="{ selectedText: selectedFilter === 'recent' }"
+              class="ml-2 text-sm"
+              >Recientes</span
+            >
+          </div>
+        </a>
+      </li> -->
+
+      <!-- FAVORITOS -->
+      <li (click)="selected('favorites', '/favorites')">
+        <a
+          [ngClass]="{ 'scale-105': selectedFilter === 'favorites' }"
+          class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105"
+        >
+          <span class="inline-flex justify-center items-center">
+            <svg
+              class="primary"
+              fill="#dddddd"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M13.754 8.653 12 4.49l-1.754 4.164a2.001 2.001 0 0 1-1.69 1.212l-4.553.36 3.47 2.935c.57.482.819 1.24.644 1.96l-1.06 4.388 3.899-2.351a2.025 2.025 0 0 1 2.088 0l3.898 2.351-1.06-4.387a1.963 1.963 0 0 1 .646-1.961l3.47-2.934-4.554-.36a2.001 2.001 0 0 1-1.69-1.213Zm-.83-4.544c-.341-.812-1.507-.812-1.849 0L9.321 8.274a1 1 0 0 1-.845.606l-4.553.36c-.888.07-1.248 1.165-.572 1.737l3.47 2.934c.285.241.41.62.322.98l-1.06 4.388c-.206.855.736 1.531 1.497 1.073l3.898-2.351c.32-.193.723-.193 1.044 0l3.898 2.351c.76.458 1.703-.218 1.497-1.073l-1.06-4.388a.982.982 0 0 1 .322-.98l3.47-2.934c.676-.572.316-1.667-.572-1.737l-4.553-.36a1 1 0 0 1-.845-.606l-1.754-4.165Z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </span>
+          <div
+            class="flex flex-row justify-between w-full tracking-wide truncate"
+          >
+            <span
+              [ngClass]="{ 'font-bold': selectedFilter === 'favorites' }"
+              class="ml-2 text-sm"
+              >Favoritos</span
+            >
+          </div>
+        </a>
+      </li>
+
+      <!-- COMPARTIDO CONMIGO -->
+      <li (click)="selected('shared', '/shared')">
+        <a
+          [ngClass]="{ 'scale-105': selectedFilter === 'shared' }"
+          class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105"
+        >
+          <span class="inline-flex justify-center items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="#dddddd"
+              class="primary"
+            >
+              <path
+                d="M3 5.5A1.5 1.5 0 0 1 4.5 4h7.465c.501 0 .97.25 1.248.668l1.406 2.11a.5.5 0 0 0 .416.222H19.5A1.5 1.5 0 0 1 21 8.5v9c0 .037-.001.073-.004.11V14H20V8.5a.5.5 0 0 0-.5-.5h-4.465a1.5 1.5 0 0 1-1.248-.668l-1.406-2.11A.5.5 0 0 0 11.965 5H4.5a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h5.496v1H4.5A1.5 1.5 0 0 1 3 17.5v-12Z"
+              ></path>
+              <path
+                fill-rule="evenodd"
+                d="M18.506 12.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-1 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                clip-rule="evenodd"
+              ></path>
+              <path
+                fill-rule="evenodd"
+                d="M16.006 15h1.99a3 3 0 0 1 3 3v3h-10v-3a3 3 0 0 1 3-3h2.01Zm-4.01 3a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2h-8v-2Z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </span>
+          <div
+            class="flex flex-row justify-between w-full tracking-wide truncate"
+          >
+            <span
+              [ngClass]="{ 'font-bold': selectedFilter === 'shared' }"
+              class="ml-2 text-sm"
+              >Compartido conmigo</span
+            >
+          </div>
+        </a>
+      </li>
+
+      <!-- Notificaciones -->
+      <li (click)="selected('notifications', '/notifications')">
+        <a
+          [ngClass]="{ 'scale-105': selectedFilter === 'notifications' }"
+          class="relative flex flex-row items-center h-11 text-white md:p-3 rounded-lg transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105"
+        >
+          <span class="inline-flex justify-center items-center">
+            <svg
+              [ngClass]="{ selectedText: selectedFilter === 'notifications' }"
+              class="w-5 h-5 fill-current text-white transition duration-200"
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              ></path>
+            </svg>
+            <span
+              *ngIf="notification"
+              class="new-indicator font-bold h-auto text-2xl text-red-600 absolute top-px left-7"
+              >•</span
+            >
+          </span>
+          <div
+            class="flex flex-row justify-between w-full tracking-wide truncate"
+          >
+            <span
+              [ngClass]="{ 'font-bold': selectedFilter === 'notifications' }"
+              class="ml-2 text-sm flex flex-row items-center"
+              >Notificaciones
+            </span>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Usuario -->
+    <div
+      class="flex flex-col md:flex-row justify-between items-center w-full p-2 mb-3"
+    >
+      <!-- Imagen, nombre, apellido y correo -->
+      <div
+        class="flex justify-center items-center md:space-x-2 space-y-3 md:space-y-0"
+      >
+        <div>
+          <img
+            class="w-8 h-8 rounded-full object-cover"
+            [src]="user?.image ? user.image : 'images/userDefault.png'"
+            alt="avatar"
+          />
+        </div>
+        <div class="flex hidden md:block justify-start flex-col items-start">
+          <p class="text-sm leading-5 text-white">
+            {{ user?.name ?? "User" }} {{ user?.lastname ?? "Lastname" }}
+          </p>
+          <p class="text-xs leading-3 text-gray-300">
+            {{ user?.email ?? "user@gmail.com" }}
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col items-center md:flex-row space-y-3 md:space-y-0"
+      >
+        <!-- Btn Configuraciones -->
+        <a
+          (click)="selected('settings', '/settings')"
+          class="group hover:bg-white rounded hover:cursor-pointer transition duration-500 ease-in-out md:mr-3"
+          [ngClass]="{ 'bg-white': selectedFilter === 'settings' }"
+        >
+          <svg
+            class="w-6 h-6 stroke-2 stroke-current transition duration-500 hover:text-black"
+            [ngClass]="{ 'text-black': selectedFilter === 'settings' }"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              d="M10.325 4.317C10.751 2.561 13.249 2.561 13.675 4.317C13.7389 4.5808 13.8642 4.82578 14.0407 5.032C14.2172 5.23822 14.4399 5.39985 14.6907 5.50375C14.9414 5.60764 15.2132 5.65085 15.4838 5.62987C15.7544 5.60889 16.0162 5.5243 16.248 5.383C17.791 4.443 19.558 6.209 18.618 7.753C18.4769 7.98466 18.3924 8.24634 18.3715 8.51677C18.3506 8.78721 18.3938 9.05877 18.4975 9.30938C18.6013 9.55999 18.7627 9.78258 18.9687 9.95905C19.1747 10.1355 19.4194 10.2609 19.683 10.325C21.439 10.751 21.439 13.249 19.683 13.675C19.4192 13.7389 19.1742 13.8642 18.968 14.0407C18.7618 14.2172 18.6001 14.4399 18.4963 14.6907C18.3924 14.9414 18.3491 15.2132 18.3701 15.4838C18.3911 15.7544 18.4757 16.0162 18.617 16.248C19.557 17.791 17.791 19.558 16.247 18.618C16.0153 18.4769 15.7537 18.3924 15.4832 18.3715C15.2128 18.3506 14.9412 18.3938 14.6906 18.4975C14.44 18.6013 14.2174 18.7627 14.0409 18.9687C13.8645 19.1747 13.7391 19.4194 13.675 19.683C13.249 21.439 10.751 21.439 10.325 19.683C10.2611 19.4192 10.1358 19.1742 9.95929 18.968C9.7828 18.7618 9.56011 18.6001 9.30935 18.4963C9.05859 18.3924 8.78683 18.3491 8.51621 18.3701C8.24559 18.3911 7.98375 18.4757 7.752 18.617C6.209 19.557 4.442 17.791 5.382 16.247C5.5231 16.0153 5.60755 15.7537 5.62848 15.4832C5.64942 15.2128 5.60624 14.9412 5.50247 14.6906C5.3987 14.44 5.23726 14.2174 5.03127 14.0409C4.82529 13.8645 4.58056 13.7391 4.317 13.675C2.561 13.249 2.561 10.751 4.317 10.325C4.5808 10.2611 4.82578 10.1358 5.032 9.95929C5.23822 9.7828 5.39985 9.56011 5.50375 9.30935C5.60764 9.05859 5.65085 8.78683 5.62987 8.51621C5.60889 8.24559 5.5243 7.98375 5.383 7.752C4.443 6.209 6.209 4.442 7.753 5.382C8.753 5.99 10.049 5.452 10.325 4.317Z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1"
+            />
+            <path
+              d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+
+        <!-- Btn cerrar sesion -->
+        <a
+          (click)="logout()"
+          id="logout"
+          class="group hover:bg-white rounded hover:cursor-pointer transition duration-500 ease-in-out md:mr-3"
+        >
+          <svg
+            class="w-6 h-6 stroke-2 stroke-current text-white transition duration-500 hover:text-black"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path stroke-width="1" d="M15 16l4-4-4-4" />
+            <path stroke-width="1" d="M20 12H9" />
+            <path
+              stroke-width="1"
+              d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
