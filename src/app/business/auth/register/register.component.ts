@@ -1,22 +1,28 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; 
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule],
+  imports: [RouterModule, ReactiveFormsModule, FontAwesomeModule], 
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
 export default class RegisterComponent {
   registerForm: FormGroup;
+  faEye = faEye;
+  faEyeSlash = faEyeSlash;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(private router: Router, private fb: FormBuilder) {
     this.registerForm = this.fb.group(
       {
         password: [
-        '',
+          '',
           [
             Validators.required,
             Validators.minLength(8),
@@ -37,6 +43,18 @@ export default class RegisterComponent {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value; 
     return password === confirmPassword ? null : { passwordsMismatch: true };
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  goToHome(){
+    this.router.navigate(['/start'])
   }
 
   onSubmit() {
