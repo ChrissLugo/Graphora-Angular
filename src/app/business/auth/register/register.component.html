@@ -37,7 +37,7 @@
                     </div>
 
                     @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {  
-                        <span class="text-red-500" [hidden]="!registerForm.get('password')?.errors?.['required']">
+                        <span class="text-red-500" [hidden]="registerForm.get('password')?.errors?.['required']">
                             La contraseña es obligatoria.
                         </span>
                         <span class="text-red-500" [hidden]="registerForm.get('password')?.errors?.['minlength']">
