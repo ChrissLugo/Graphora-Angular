@@ -53,7 +53,7 @@ export default class RegisterComponent {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  goToHome(){
+  goToStart(){
     this.router.navigate(['/start'])
   }
 
