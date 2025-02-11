@@ -35,10 +35,6 @@ export default class RegisterComponent {
     );
   }
 
-  login() {
-    this.router.navigate(['/login']);
-  }
-
   passwordMatchValidator(control: AbstractControl) {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value; 
@@ -51,10 +47,6 @@ export default class RegisterComponent {
 
   toggleConfirmPasswordVisibility() {
     this.showConfirmPassword = !this.showConfirmPassword;
-  }
-
-  goToStart(){
-    this.router.navigate(['/start'])
   }
 
   onSubmit() {
