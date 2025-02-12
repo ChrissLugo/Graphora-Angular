@@ -3,13 +3,17 @@ import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; 
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { HttpErrorResponse } from '@angular/common/http';
 import { RegisterService } from '../../core/services/register/register.service';
-import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, FontAwesomeModule, HttpClientModule], 
+  imports: [
+    RouterModule, 
+    ReactiveFormsModule, 
+    FontAwesomeModule,
+  ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -21,9 +25,9 @@ export default class RegisterComponent {
   showConfirmPassword = false;
 
   constructor(
-        private router: Router, 
-        private fb: FormBuilder, 
-        // private _registerService: RegisterService
+      private router: Router, 
+      private fb: FormBuilder,
+      // private registerService: RegisterService
     ) {
     this.registerForm = this.fb.group(
       {
@@ -40,10 +44,6 @@ export default class RegisterComponent {
       { validators: this.passwordMatchValidator }
     );
   }
-
-//   login() {
-//     this.router.navigate(['/login']);
-//   }
 
   passwordMatchValidator(control: AbstractControl) {
     const password = control.get('password')?.value;
@@ -64,22 +64,31 @@ export default class RegisterComponent {
   }
 
   onSubmit() {
-    if (this.registerForm.valid) {
-        // const { email, password, confirmPassword } = this.registerForm.value;
-      
-        // this._registerService.register({ email, password }).subscribe({
-        //     next: (response) => {
-        //         console.log(response)
-        //         this.router.navigate(['/login']);
-        //     },
-        //     error: (e: HttpErrorResponse) => {
-        //         console.error("Error: ", e);
-        //         alert("Hubo un error al registrarse");
-        //     }
-        // })
-    } else {
-      alert("Las contraseñas no coinciden o faltan datos");
-      this.registerForm.markAllAsTouched();
-    }
+    // this.registerService.register("").subscribe({
+    //   next: (responde) => {
+
+    //   },
+    //   error: (error) => {
+        
+    //   }
+    // })
+
+  // if (this.registerForm.valid) {
+  //     // const { email, password, confirmPassword } = this.registerForm.value;
+    
+  //     // this.registerService.register({ email, password }).subscribe({
+  //     //     next: (response) => {
+  //     //         console.log(response)
+  //     //         this.router.navigate(['/login']);
+  //     //     },
+  //     //     error: (e: HttpErrorResponse) => {
+  //     //         console.error("Error: ", e);
+  //     //         alert("Hubo un error al registrarse");
+  //     //     }
+  //     // })
+  // } else {
+  //   alert("Las contraseñas no coinciden o faltan datos");
+  //   this.registerForm.markAllAsTouched();
+  // }
   }
 }
