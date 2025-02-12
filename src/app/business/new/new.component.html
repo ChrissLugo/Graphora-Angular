@@ -1,5 +1,5 @@
 <nav
-	class="flex flex-col bg-gradient-to-b from-purple-950 from-5% to-black to-99%"
+	class="flex flex-col fixed top-0 left-0 w-full z-50 bg-gradient-to-b from-purple-950 from-5% to-black to-99%"
 >
 	<div class="w-full h-15 flex items-center px-4 justify-between">
 		<!-- Opciones -->
@@ -27,17 +27,43 @@
 		<button
 			class="flex items-center md:h-9 text-white md:p-3 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full"
 		>
-			Compartir
+			<svg
+				class="w-5 h-5"
+				fill="#ffffff"
+				viewBox="0 0 32 32"
+				version="1.1"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+				<g
+					id="SVGRepo_tracerCarrier"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				></g>
+				<g id="SVGRepo_iconCarrier">
+					<title>share</title>
+					<path
+						d="M0 25.472q0 2.368 1.664 4.032t4.032 1.664h18.944q2.336 0 4-1.664t1.664-4.032v-8.192l-3.776 3.168v5.024q0 0.8-0.544 1.344t-1.344 0.576h-18.944q-0.8 0-1.344-0.576t-0.544-1.344v-18.944q0-0.768 0.544-1.344t1.344-0.544h9.472v-3.776h-9.472q-2.368 0-4.032 1.664t-1.664 4v18.944zM5.696 19.808q0 2.752 1.088 5.28 0.512-2.944 2.24-5.344t4.288-3.872 5.632-1.664v5.6l11.36-9.472-11.36-9.472v5.664q-2.688 0-5.152 1.056t-4.224 2.848-2.848 4.224-1.024 5.152zM32 22.080v0 0 0z"
+					></path>
+				</g>
+			</svg>
+			<span class="ml-2">Compartir</span>
 		</button>
 	</div>
 
-	<!-- Options -->
-	<div class="w-full h-10 border-t-1 border-gray-900 px-4"></div>
-</nav>
-<div class="h-full w-full">
-	<!-- diagrama.component.html -->
+	<!-- Opciones -->
 	<div
-		#myDiagramDiv
-		style="width: 600px; height: 400px; border: 1px solid black"
-	></div>
+		class="flex flex-row items-center w-full h-10 border-y-1 border-gray-900 px-4 space-x-4"
+	>
+		<p class="text-white">Estilo</p>
+		<p class="text-white">Fuente</p>
+		<p class="text-white">Tamaño</p>
+		<p class="text-white">Negrita</p>
+		<p class="text-white">Cursiva</p>
+		<p class="text-white">Subrayado</p>
+		<p class="text-white">Alineación</p>
+	</div>
+</nav>
+<div class="h-dvh w-full">
+	<div #myDiagramDiv class="h-dvh w-full bg-black"></div>
 </div>
