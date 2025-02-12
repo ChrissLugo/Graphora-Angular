@@ -1,1 +1,43 @@
-<p class="text-2xl text-white font-bold">Canva nuevo</p>
+<nav
+	class="flex flex-col bg-gradient-to-b from-purple-950 from-5% to-black to-99%"
+>
+	<div class="w-full h-15 flex items-center px-4 justify-between">
+		<!-- Opciones -->
+		<div class="flex flex-row">
+			<!-- Logo -->
+			<div class="flex items-center cursor-pointer" routerLink="'/start'">
+				<img class="h-10 w-10" src="images/logo.png" alt="Logo" />
+			</div>
+			<div class="flex flex-col ml-4">
+				<!-- Nombre del proyecto -->
+				<h1 class="text-xl font-semibold text-white">Document</h1>
+				<div class="flex justify-between">
+					<ul class="flex flex-row space-x-4">
+						<li>
+							<a class="text-white text-sm cursor-pointer"
+								>Archivo</a
+							>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Compartir -->
+		<button
+			class="flex items-center md:h-9 text-white md:p-3 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full"
+		>
+			Compartir
+		</button>
+	</div>
+
+	<!-- Options -->
+	<div class="w-full h-10 border-t-1 border-gray-900 px-4"></div>
+</nav>
+<div class="h-full w-full">
+	<!-- diagrama.component.html -->
+	<div
+		#myDiagramDiv
+		style="width: 600px; height: 400px; border: 1px solid black"
+	></div>
+</div>
