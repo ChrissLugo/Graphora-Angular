@@ -12,16 +12,10 @@ export class RegisterService {
 	private registerUrl: string;
 
 	constructor(private http: HttpClient) {
-		this.registerUrl = ''; // Asegúrate de definir la ruta correcta
+		this.registerUrl = 'users/'; // Asegúrate de definir la ruta correcta
 	}
 
 	register(userData: any): Observable<any> {
-		return this.http
-			.post<any>(`${this.apiURL}${this.registerUrl}`, userData)
-			.pipe(
-				tap((res) => {
-					console.log(res);
-				})
-			);
+		return this.http.post<any>(`${this.apiURL}${this.registerUrl}`, userData)
 	}
 }

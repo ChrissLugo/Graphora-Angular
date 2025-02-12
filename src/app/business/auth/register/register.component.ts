@@ -11,6 +11,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { RegisterService } from '../../../core/services/register/register.service';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
 	selector: 'app-register',
@@ -73,32 +74,22 @@ export default class RegisterComponent {
 	}
 
 	onSubmit() {
-		console.log('btoooon');
-		this.registerService.register('').subscribe({
-			next: (response: any) => {
-				if (response) {
-					console.log(response);
-				}
-			},
-			error: (error: any) => {
-				console.error('Error: ', error);
-			},
-		});
-		// if (this.registerForm.valid) {
-		//     // const { email, password, confirmPassword } = this.registerForm.value;
-		//     // this.registerService.register({ email, password }).subscribe({
-		//     //     next: (response) => {
-		//     //         console.log(response)
-		//     //         this.router.navigate(['/login']);
-		//     //     },
-		//     //     error: (e: HttpErrorResponse) => {
-		//     //         console.error("Error: ", e);
-		//     //         alert("Hubo un error al registrarse");
-		//     //     }
-		//     // })
-		// } else {
-		//   alert("Las contraseñas no coinciden o faltan datos");
-		//   this.registerForm.markAllAsTouched();
-		// }
+		if (this.registerForm.valid) {
+		    const { email, password } = this.registerForm.value;
+            const rememberMe = false;
+		    this.registerService.register({ email, password, rememberMe }).subscribe({
+		        next: (response) => {
+		            console.log(response)
+		            this.router.navigate(['/login']);
+		        },
+		        error: (e: HttpErrorResponse) => {
+		            console.error("Error: ", e);
+		            alert("Hubo un error al registrarse");
+		        }
+		    })
+		} else {
+		  alert("Las contraseñas no coinciden o faltan datos");
+		  this.registerForm.markAllAsTouched();
+		}
 	}
 }
