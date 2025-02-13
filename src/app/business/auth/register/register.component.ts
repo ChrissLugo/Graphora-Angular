@@ -21,6 +21,9 @@ export default class RegisterComponent {
   constructor(private router: Router, private fb: FormBuilder) {
     this.registerForm = this.fb.group(
       {
+        name: ["", [Validators.required]],  // 🔹 Nombre requerido
+        lastName: ["", [Validators.required]], // 🔹 Apellido requerido
+        email: ["", [Validators.required, Validators.email]], 
         password: [
           '',
           [
@@ -29,7 +32,7 @@ export default class RegisterComponent {
             Validators.pattern(/^(?=.*[A-Z])(?=.*\d).*$/)
           ]
         ],
-        confirmPassword: ['', [Validators.required]]
+        confirmPassword: ['', [Validators.required]],
       },
       { validators: this.passwordMatchValidator }
     );
