@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
     "@tailwindcss/postcss": "^4.0.3",
+    "flowbite": "^3.1.2",
     "gojs": "^3.0.19",
     "gojs-angular": "^2.1.2",
     "postcss": "^8.5.1",

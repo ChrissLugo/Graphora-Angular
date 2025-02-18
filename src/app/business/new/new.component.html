@@ -3,29 +3,18 @@
 >
 	<div class="w-full h-15 flex items-center px-4 justify-between">
 		<!-- Opciones -->
-		<div class="flex flex-row">
+		<div class="flex flex-row align-center items-center">
 			<!-- Logo -->
-			<div class="flex items-center cursor-pointer" routerLink="'/start'">
-				<img class="h-10 w-10" src="images/logo.png" alt="Logo" />
-			</div>
-			<div class="flex flex-col ml-4">
-				<!-- Nombre del proyecto -->
-				<h1 class="text-xl font-semibold text-white">Document</h1>
-				<div class="flex justify-between">
-					<ul class="flex flex-row space-x-4">
-						<li>
-							<a class="text-white text-sm cursor-pointer"
-								>Archivo</a
-							>
-						</li>
-					</ul>
-				</div>
+			<img class="h-10 w-10" src="images/logo.png" alt="Logo" />
+			<!-- Nombre del proyecto -->
+			<div class="flex flex-col text-white ml-2">
+				<h1 class="text-sm">Nombre:</h1>
+				<h2 class="text-xl font-semibold text-white">Documento</h2>
 			</div>
 		</div>
-
 		<!-- Compartir -->
 		<button
-			class="flex items-center md:h-9 text-white md:p-3 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full"
+			class="flex items-center md:h-7 text-white md:p-2 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full"
 		>
 			<svg
 				class="w-5 h-5"
@@ -47,7 +36,7 @@
 					></path>
 				</g>
 			</svg>
-			<span class="ml-2">Compartir</span>
+			<span class="ml-2 tex-nomal">Compartir</span>
 		</button>
 	</div>
 
@@ -55,6 +44,246 @@
 	<div
 		class="flex flex-row items-center w-full h-10 border-y-1 border-gray-900 px-4 space-x-4"
 	>
+		<button
+			id="dropdownDefaultButton"
+			data-dropdown-toggle="dropdown"
+			class="text-white text-center inline-flex items-center hover:text-purple-300 cursor-pointer border-r-2 border-gray-900 pr-2"
+			type="button"
+		>
+			Archivo
+			<svg
+				class="w-2.5 h-2.5 ms-3"
+				aria-hidden="true"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 10 6"
+			>
+				<path
+					stroke="currentColor"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="m1 1 4 4 4-4"
+				/>
+			</svg>
+		</button>
+
+		<!-- Dropdown menu -->
+		<div
+			id="dropdown"
+			class="z-10 hidden bg-black divide-y divide-gray-100 rounded-lg shadow-sm w-44"
+		>
+			<ul
+				class="py-2 text-sm text-gray-700 dark:text-gray-200"
+				aria-labelledby="dropdownDefaultButton"
+			>
+				<li>
+					<a
+						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+						>Nuevo...</a
+					>
+				</li>
+				<li>
+					<button
+						id="doubleDropdownButton"
+						data-dropdown-toggle="openFrom"
+						data-dropdown-placement="right-start"
+						type="button"
+						class="flex items-center justify-between w-full px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+					>
+						Abrir desde...<svg
+							class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 6 10"
+						>
+							<path
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="m1 9 4-4-4-4"
+							/>
+						</svg>
+					</button>
+					<div
+						id="openFrom"
+						class="z-10 hidden rounded-lg shadow-sm w-44 bg-black"
+					>
+						<ul
+							class="py-2 text-sm text-gray-700 dark:text-gray-200"
+							aria-labelledby="doubleDropdownButton"
+						>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Overview</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>My downloads</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Billing</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Rewards</a
+								>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<button
+						id="doubleDropdownButton"
+						data-dropdown-toggle="openRecent"
+						data-dropdown-placement="right-start"
+						type="button"
+						class="flex items-center justify-between w-full px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+					>
+						Recientes...<svg
+							class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 6 10"
+						>
+							<path
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="m1 9 4-4-4-4"
+							/>
+						</svg>
+					</button>
+					<div
+						id="openRecent"
+						class="z-10 hidden rounded-lg shadow-sm w-44 bg-black"
+					>
+						<ul
+							class="py-2 text-sm text-gray-700 dark:text-gray-200"
+							aria-labelledby="doubleDropdownButton"
+						>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Overview</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>My downloads</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Billing</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Rewards</a
+								>
+							</li>
+						</ul>
+					</div>
+				</li>
+
+				<li>
+					<a
+						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+						>Guardar</a
+					>
+				</li>
+				<li>
+					<a
+						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+						>Guardar como...</a
+					>
+				</li>
+
+				<li>
+					<a
+						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+						>Renombrar...</a
+					>
+				</li>
+
+				<li>
+					<button
+						id="doubleDropdownButton"
+						data-dropdown-toggle="exportAs"
+						data-dropdown-placement="right-start"
+						type="button"
+						class="flex items-center justify-between w-full px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+					>
+						Exportar como...<svg
+							class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 6 10"
+						>
+							<path
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="m1 9 4-4-4-4"
+							/>
+						</svg>
+					</button>
+					<div
+						id="exportAs"
+						class="z-10 hidden rounded-lg shadow-sm w-44 bg-black"
+					>
+						<ul
+							class="py-2 text-sm text-gray-700 dark:text-gray-200"
+							aria-labelledby="doubleDropdownButton"
+						>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Overview</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>My downloads</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Billing</a
+								>
+							</li>
+							<li>
+								<a
+									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
+									>Rewards</a
+								>
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+
 		<p class="text-white">Estilo</p>
 		<p class="text-white">Fuente</p>
 		<p class="text-white">Tamaño</p>
@@ -64,6 +293,10 @@
 		<p class="text-white">Alineación</p>
 	</div>
 </nav>
-<div class="h-dvh w-full">
+<div class="h-dvh w-full flex flex-row">
+	<div class="h-dvh w-60 bg-black overflow-hidden border-x-1 border-gray-900">
+		<div #myPalette class="h-full mt-2 p-20"></div>
+	</div>
+
 	<div #myDiagramDiv class="h-dvh w-full bg-black"></div>
 </div>
