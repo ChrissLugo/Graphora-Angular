@@ -39,6 +39,9 @@ export default class RegisterComponent {
 	) {
 		this.registerForm = this.fb.group(
 			{
+				name: ['', Validators.required],
+				lastName: ['', Validators.required],
+				email: ['', Validators.required],
 				password: [
 					'',
 					[
@@ -75,11 +78,13 @@ export default class RegisterComponent {
 
 	onSubmit() {
 		if (this.registerForm.valid) {
-		    const { email, password } = this.registerForm.value;
+			const formData = { ...this.registerForm.value};
+			delete formData.confirmPassword;
+			
+			const { name, lastName, email, password } = formData;
             const rememberMe = false;
-		    this.registerService.register({ email, password, rememberMe }).subscribe({
+		    this.registerService.register({ name, lastName, email, password, rememberMe }).subscribe({
 		        next: (response) => {
-		            console.log(response)
 		            this.router.navigate(['/login']);
 		        },
 		        error: (e: HttpErrorResponse) => {
