@@ -82,8 +82,7 @@ export default class RegisterComponent {
 			delete formData.confirmPassword;
 			
 			const { name, lastName, email, password } = formData;
-            const rememberMe = false;
-		    this.registerService.register({ name, lastName, email, password, rememberMe }).subscribe({
+		    this.registerService.register({ name, lastName, email, password }).subscribe({
 		        next: (response) => {
 		            this.router.navigate(['/login']);
 		        },
