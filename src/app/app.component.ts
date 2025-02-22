@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { AlertDemoComponent } from './alert-demo.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  imports: [AlertDemoComponent],
+  template: `
+    <h1 class="text-center text-2xl font-bold p-4">Prueba de Alertas</h1>
+    <app-alert-demo></app-alert-demo>
+  `,
 })
-export class AppComponent {
-  title = 'Graphora-Angular';
-}
+export class AppComponent {}
