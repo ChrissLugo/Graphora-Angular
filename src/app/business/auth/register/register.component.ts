@@ -87,8 +87,8 @@ export default class RegisterComponent {
 		            this.router.navigate(['/login']);
 		        },
 		        error: (e: HttpErrorResponse) => {
-		            console.error("Error: ", e);
-		            alert("Hubo un error al registrarse");
+		            console.log("Error: ", e);
+		            alert("Error: " + e.error.message);
 		        }
 		    })
 		} else {
