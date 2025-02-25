@@ -6,45 +6,48 @@ import Swal from 'sweetalert2';
 })
 export class AlertService {
   private baseStyles = {
-    popup: 'rounded-lg shadow-lg bg-purple-900 text-white',
+    popup: 'rounded-lg shadow-lg bg-black border border-purple-500 text-purple-300',
     title: 'font-bold text-lg text-purple-300',
-    confirmButton: 'px-4 py-2 rounded-md font-medium text-white',
+    confirmButton:
+      'px-4 py-2 rounded-md font-medium text-purple-300 border border-purple-500 hover:bg-purple-500 hover:text-white',
+    cancelButton:
+      'px-4 py-2 rounded-md font-medium text-purple-300 border border-purple-500 hover:bg-purple-500 hover:text-white',
   };
-
+// PRUEBA DE COMMIT NUEVO
   constructor() {}
 
-  success(message: string, title: string = 'Éxito') {
+  success(mensaje: string, titulo: string = 'Exito') {
     Swal.fire({
-      title,
-      text: message,
+      title: titulo,
+      text: mensaje,
       icon: 'success',
       confirmButtonText: 'OK',
       customClass: {
         popup: this.baseStyles.popup,
-        title: `${this.baseStyles.title} text-purple-400`,
-        confirmButton: `bg-purple-500 hover:bg-purple-600 ${this.baseStyles.confirmButton}`,
+        title: this.baseStyles.title,
+        confirmButton: this.baseStyles.confirmButton,
       },
     });
   }
 
-  error(message: string, title: string = 'Error') {
+  error(mensaje: string, titulo: string = 'Error') {
     Swal.fire({
-      title,
-      text: message,
+      title: titulo,
+      text: mensaje,
       icon: 'error',
       confirmButtonText: 'OK',
       customClass: {
         popup: this.baseStyles.popup,
-        title: `${this.baseStyles.title} text-purple-400`,
-        confirmButton: `bg-purple-700 hover:bg-purple-800 ${this.baseStyles.confirmButton}`,
+        title: this.baseStyles.title,
+        confirmButton: this.baseStyles.confirmButton,
       },
     });
   }
 
-  confirm(message: string, title: string = 'Confirmación', callback: () => void) {
+  confirm(mensaje: string, titulo: string = 'Confirmación', callback: () => void) {
     Swal.fire({
-      title,
-      text: message,
+      title: titulo,
+      text: mensaje,
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'OK',
@@ -52,11 +55,11 @@ export class AlertService {
       customClass: {
         popup: this.baseStyles.popup,
         title: this.baseStyles.title,
-        confirmButton: `bg-purple-500 hover:bg-purple-600 ${this.baseStyles.confirmButton}`,
-        cancelButton: `bg-purple-300 hover:bg-purple-400 ${this.baseStyles.confirmButton} text-black`,
+        confirmButton: this.baseStyles.confirmButton,
+        cancelButton: this.baseStyles.cancelButton,
       },
-    }).then((result) => {
-      if (result.isConfirmed) {
+    }).then((resultado) => {
+      if (resultado.isConfirmed) {
         callback();
       }
     });
