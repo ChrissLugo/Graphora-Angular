@@ -1,25 +1,43 @@
+import { ActivatedRoute, Route } from '@angular/router';
 import go from 'gojs';
-import { TextNode } from '../nodes/text-node';
-import { EmptyNode } from '../nodes/empty-node';
 
-export abstract class Diagram {
+export abstract class BaseDiagram {
 	protected diagram: go.Diagram;
-	protected palette: go.Palette;
 
-	constructor(
-		public diagramDiv: HTMLElement,
-		public paletteDiv: HTMLElement
-	) {
-		// Inicializar y configurar el diagrama
-		this.diagram = new go.Diagram(diagramDiv, {
+	// protected palette: go.Palette;
+
+	constructor() {
+		//Configuraciones generales de diagrama
+		this.diagram = new go.Diagram({
+			'undoManager.isEnabled': true,
 			'animationManager.isEnabled': true,
+			'grid.visible': true,
+			'draggingTool.isGridSnapEnabled': true,
+			initialContentAlignment: go.Spot.Center,
+			allowLink: true,
+			allowRotate: true,
+			model: new go.GraphLinksModel({
+				linkToPortIdProperty: 'toPort',
+				linkFromPortIdProperty: 'fromPort',
+				linkKeyProperty: 'key',
+			}),
 		});
-		this.diagram.undoManager.isEnabled = true;
-		this.diagram.grid.visible = true;
-		this.diagram.toolManager.draggingTool.isGridSnapEnabled = true;
-		this.diagram.initialContentAlignment = go.Spot.Center;
-		this.diagram.allowLink = true;
-		this.diagram.allowRotate = true;
+
+		function makePort(id: string, spot: go.Spot) {
+			return new go.Shape('Circle', {
+				desiredSize: new go.Size(8, 8),
+				opacity: 0.5,
+				fill: 'gray',
+				strokeWidth: 0,
+				portId: id,
+				alignment: spot,
+				fromSpot: spot,
+				toSpot: spot,
+				fromLinkable: true,
+				toLinkable: true,
+				cursor: 'pointer',
+			});
+		}
 
 		// Configurar la cuadricula personalizada
 		this.diagram.grid = new go.Panel('Grid', {
@@ -31,50 +49,54 @@ export abstract class Diagram {
 			new go.Shape('LineV', { stroke: '#2a2a2a', interval: 5 })
 		);
 
-		// Crear una plantilla común para el diagrama y la paleta
-		const nodeTemplate = new go.Node('Auto').add(
-			new go.Shape('RoundedRectangle', {
-				strokeWidth: 0.5,
-			}).bind('fill', 'color'),
-			new go.TextBlock({ margin: 8 }).bind('text')
-		);
+		// define the Node template
+		this.diagram.nodeTemplate = new go.Node('Spot', {
+			contextMenu: (
+				go.GraphObject.build('ContextMenu') as go.Adornment
+			).add(
+				(go.GraphObject.build('ContextMenuButton') as go.Panel).add(
+					new go.TextBlock('Group', {
+						click: (e, obj) =>
+							e.diagram.commandHandler.groupSelection(),
+					})
+				)
+			),
+		})
+			.bindTwoWay(
+				'location',
+				'loc',
+				go.Point.parse,
+				go.Point.stringifyFixed(1)
+			)
+			.add(
+				new go.Panel('Auto').add(
+					new go.Shape('RoundedRectangle', { strokeWidth: 0.5 }).bind(
+						'fill',
+						'color'
+					),
+					new go.TextBlock({ margin: 8, editable: true }).bindTwoWay(
+						'text'
+					)
+				),
+				// Ports
+				makePort('t', go.Spot.Top),
+				makePort('l', go.Spot.Left),
+				makePort('r', go.Spot.Right),
+				makePort('b', go.Spot.Bottom)
+			);
 
-		// Usar la plantilla en el diagrama
-		this.diagram.nodeTemplate = nodeTemplate;
-
-		// Inicializar y configurar la paleta
-		this.palette = new go.Palette(paletteDiv);
-		// Se utiliza la misma plantilla para la paleta...
-		this.palette.nodeTemplate = nodeTemplate;
-
-		// Agregar plantillas personalizadas para categorías específicas
-		this.palette.nodeTemplateMap.add(
-			'TextNode',
-			new TextNode().nodoConfig()
+		this.diagram.linkTemplate = new go.Link({
+			// curve: go.Curve.Bezier,
+			fromEndSegmentLength: 30,
+			toEndSegmentLength: 30,
+		}).add(
+			new go.Shape({ strokeWidth: 1.5, stroke: 'white' }),
+			new go.Shape({
+				toArrow: 'Standard',
+				stroke: 'white',
+				fill: 'white',
+			})
 		);
-		this.palette.nodeTemplateMap.add(
-			'EmptyNode',
-			new EmptyNode().nodoConfig()
-		);
-		// También se agregan al mapa de plantillas del diagrama
-		this.diagram.nodeTemplateMap.add(
-			'TextNode',
-			new TextNode().nodoConfig()
-		);
-
-		// Agregar nodos iniciales a la paleta (incluyendo algunos de categorías personalizadas)
-		this.palette.model = new go.GraphLinksModel([
-			{ category: 'EmptyNode' }, // Espacio adicional en la parte superior
-			{ category: 'EmptyNode' },
-			{ category: 'TextNode' },
-			{ text: 'Nodo 2', color: 'lightgreen' },
-			{ text: 'Nodo 1', color: 'lightblue' },
-			{ text: 'Nodo 2', color: 'lightgreen' },
-			{ text: 'Nodo 1', color: 'lightblue' },
-			{ text: 'Nodo 2', color: 'lightgreen' },
-			{ text: 'Nodo 1', color: 'lightblue' },
-			{ text: 'Nodo 2', color: 'lightgreen' },
-		]);
 
 		// Llamada a configuración adicional que se definirá en subclases
 		this.configureDiagram();

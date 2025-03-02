@@ -1,1 +1,35 @@
-<h1 class="text-white font-semibold text-3xl">Inicio</h1>
+<h1 class="text-white font-semibold text-xl">
+	¡Explora, experimenta y diseña! 🚀 Elige una plantilla y lleva tus ideas al
+	siguiente nivel. ✨🎨
+</h1>
+
+<h2 class="text-white font-semibold mt-4">Plantillas:</h2>
+<div class="flex flex-row mt-2 space-x-4">
+	<div
+		[routerLink]="['/diagram', 'class']"
+		class="rounded-md hover:scale-105 transition duration-300 easy-in-out border border-gray-600 hover:cursor-pointer"
+	>
+		<a class="flex flex-col items-center">
+			<img
+				class="rounded-md w-40 h-35"
+				src="images/class_diagram.png"
+				alt="diagram class"
+			/>
+			<h1 class="text-white font-semibold p-2">Diagrama de clase</h1>
+		</a>
+	</div>
+
+	<div
+		[routerLink]="['/diagram', 'flow']"
+		class="rounded-md hover:scale-105 transition duration-300 easy-in-out border border-gray-600 hover:cursor-pointer"
+	>
+		<a class="flex flex-col items-center">
+			<img
+				class="rounded-md w-40 h-35"
+				src="images/flow_diagram.png"
+				alt="diagram class"
+			/>
+			<h1 class="text-white font-semibold p-2">Diagrama de flujo</h1>
+		</a>
+	</div>
+</div>

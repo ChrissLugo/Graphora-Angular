@@ -1,6 +1,6 @@
 import { BaseDiagram } from '../diagram';
 import * as go from 'gojs';
 
-export class ClassDiagram extends BaseDiagram {
+export class FlowDiagram extends BaseDiagram {
 	override configureDiagram(): void {}
 }
