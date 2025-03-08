@@ -3,6 +3,7 @@ import go from 'gojs';
 
 export abstract class BaseDiagram {
 	protected diagram: go.Diagram;
+	protected abstract state: object;
 
 	// protected palette: go.Palette;
 
@@ -104,6 +105,10 @@ export abstract class BaseDiagram {
 
 	// Método abstracto para que las subclases puedan configurar el diagrama adicionalmente
 	protected abstract configureDiagram(): void;
+
+	public getState(): Object {
+		return this.state;
+	}
 
 	public getDiagram(): go.Diagram {
 		return this.diagram;

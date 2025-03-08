@@ -1,6 +1,0 @@
-import { BaseDiagram } from '../diagram';
-import * as go from 'gojs';
-
-export class ClassDiagram extends BaseDiagram {
-	override configureDiagram(): void {}
-}

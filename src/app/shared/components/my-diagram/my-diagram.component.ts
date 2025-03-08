@@ -1,9 +1,4 @@
-import {
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import * as go from 'gojs';
 import {
@@ -15,7 +10,6 @@ import { TextNode } from '../../../core/models/nodes/text-node';
 import { EmptyNode } from '../../../core/models/nodes/empty-node';
 import { DiagramMakerService } from '../../../core/services/diagram/diagram-maker.service';
 import { ActivatedRoute } from '@angular/router';
-import { BaseDiagram } from '../../../core/models/diagrams/diagram';
 
 @Component({
 	selector: 'app-my-diagram',
@@ -37,6 +31,8 @@ export default class MyDiagramComponent {
 	private diagramtype: string | null = '';
 	private diagramInstance!: go.Diagram;
 	public observedDiagram: any = null;
+	//SE PASARA DESDE LA CONFIGURACION DEL TIPO DE DIAGRAMA
+	public state: any;
 
 	constructor(
 		private diagramMakerService: DiagramMakerService,
@@ -44,7 +40,15 @@ export default class MyDiagramComponent {
 		private cdr: ChangeDetectorRef
 	) {
 		this.initDiagram = this.initDiagram.bind(this);
-		this.getDiagramType();
+
+		//Recuperamos el parametro del tipo de diagrama
+		this.route.paramMap.subscribe((params) => {
+			this.diagramtype = params.get('type');
+			// console.log(this.diagramtype);
+		});
+
+		this.diagramInstance = this.getDiagramType();
+		this.state = this.getState();
 	}
 
 	public ngAfterViewInit() {
@@ -53,34 +57,28 @@ export default class MyDiagramComponent {
 		this.cdr.detectChanges();
 	}
 
-	private getDiagramType() {
-		//Recuperamos el parametro del tipo de diagrama
-		this.route.paramMap.subscribe((params) => {
-			this.diagramtype = params.get('type');
-			// console.log(this.diagramtype);
-		});
-
+	private getDiagramType(): go.Diagram {
 		const diagram = this.diagramMakerService.inicializarDiagrama(
 			this.diagramtype
 		);
-
-		if (diagram) this.diagramInstance = diagram.getDiagram();
+		if (!diagram) return new go.Diagram();
+		return diagram.getDiagram();
 	}
 
-	//SE PASARA DESDE LA CONFIGURACION DEL TIPO DE DIAGRAMA
-	public state = {
-		// Diagram state props
-		diagramNodeData: [{ category: 'TextNode' }, { category: 'TextNode' }],
-		diagramLinkData: [],
-		diagramModelData: { prop: 'value' },
+	private getState(): any {
+		const diagram = this.diagramMakerService.inicializarDiagrama(
+			this.diagramtype
+		);
+		if (!diagram) return new go.Diagram();
+		return diagram.getState();
+	}
 
-		skipsDiagramUpdate: false,
-		selectedNodeData: null, // used by InspectorComponent
-
+	public allPaletteState = {
 		// Palette state props
 		paletteNodeData: [
 			{ category: 'EmptyNode' }, // Espacio adicional en la parte superior
 			{ category: 'EmptyNode' },
+
 			{ category: 'TextNode' },
 			{ category: 'TextNode' },
 		],
@@ -96,12 +94,9 @@ export default class MyDiagramComponent {
 	};
 
 	public initDiagram = (): go.Diagram => {
-		if (this.diagramInstance) {
-			this.diagramInstance.nodeTemplateMap = this.getTemplateNodes();
-			return this.diagramInstance;
-		} else {
-			return new go.Diagram();
-		}
+		if (!this.diagramInstance) return new go.Diagram();
+		this.diagramInstance.nodeTemplateMap = this.getTemplateNodes();
+		return this.diagramInstance;
 	};
 
 	public initPalette = (): go.Palette => {
@@ -119,7 +114,7 @@ export default class MyDiagramComponent {
 
 	// TO-DO
 	// - VERIFICAR QUE CADA TIPO DIAGRAMA TENGA SU STATE Y SE PUEDA OBTENER AQUI
-	// - ERROR CON LOS NODOS VACIOS EN LA PALETA, TIENE RESPOSIVE Y SE ACOMODAN MAL
+	// x ERROR CON LOS NODOS VACIOS EN LA PALETA, TIENE RESPOSIVE Y SE ACOMODAN MAL
 	// - HACER EL INSPECTOR
 	// - REFACTORIZAR CÓDIGO
 }

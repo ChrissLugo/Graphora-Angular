@@ -4,7 +4,7 @@ import * as go from 'gojs';
 export class EmptyNode extends BaseNode {
 	override nodoConfig(): go.Node {
 		return new go.Node('Auto', {
-			width: 50,
+			width: 70,
 			height: 100,
 		}).add(
 			new go.Shape('RoundedRectangle', {
