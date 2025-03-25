@@ -18,7 +18,6 @@ export default class LoginComponent {
     credentials = {
         email: '',
         password: '',
-        rememberMe: false
     };
 
     errorMessage = '';
