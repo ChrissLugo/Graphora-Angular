@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common'; // Importa CommonModule para *ng
 import { LoginService } from '../../../core/services/login/login.service';
 import { SwalMessageService } from '../../../services/swal-message.service';
 import Swal from 'sweetalert2';
+import { TokenService } from '../../../core/services/token/token.service';
 
 @Component({
     selector: 'app-login',
@@ -30,7 +31,8 @@ export default class LoginComponent {
     constructor(
         private router: Router,
         private _loginService: LoginService,
-        private _messageService: SwalMessageService
+        private _messageService: SwalMessageService,
+        private _tokenService: TokenService
     ) { }
 
     onSubmit() {
@@ -41,45 +43,24 @@ export default class LoginComponent {
 
         this._messageService.loadMessage();
 
-        this.isLoading = false;
-        this.errorMessage = '';
+        this.isLoading = true;
         const formData = this.credentials;
 
         this._loginService.login(formData).subscribe({
             next: (response) => {
-                localStorage.setItem('authToken', response.accessToken);
-                localStorage.setItem('refreshToken', response.refreshToken);
-                this.router.navigate(['/home']);
-
+                // Guarda los tokens en el servicio
+                this._tokenService.saveTokens(
+                    response.accessToken, 
+                    response.refreshToken
+                );
+                
                 Swal.close();
-                // Por si se quiere mostrar un mensaje de exito, aunque no lo veo valido 
-                // this._messageService.messageIcon(response.message, "success").then(() => {
-                //     console.log(response);
-                // });
-
+                this.router.navigate(['/home']);
             },
             error: (e: HttpErrorResponse) => {
+                this.isLoading = false; // <- Asegurar que se desactive la carga en errores
                 this._messageService.errorResponse(e);
             }
         });
-        // this.http.post<any>('URL_DE_TU_BACKEND/login', this.credentials)
-        //     .subscribe({
-        //         next: (response) => {
-        //             // Guardar token si es necesario
-        //             if (this.credentials.rememberMe) {
-        //                 localStorage.setItem('authToken', response.token);
-        //             } else {
-        //                 sessionStorage.setItem('authToken', response.token);
-        //             }
-        //             this.router.navigate(['/home']);
-        //         },
-        //         error: (err) => {
-        //             this.errorMessage = err.error.message || 'Error en el login';
-        //             this.isLoading = false;
-        //         },
-        //         complete: () => {
-        //             this.isLoading = false;
-        //         }
-        //     });
     }
 }
