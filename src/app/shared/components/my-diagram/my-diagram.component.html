@@ -20,7 +20,9 @@
 			[nodeDataArray]="state.diagramNodeData"
 			[modelData]="state.diagramModelData"
 			[linkDataArray]="state.diagramLinkData"
+			(modelChange)="diagramModelChange($event)"
 		>
+			>
 		</gojs-diagram>
 	</div>
 
@@ -32,6 +34,10 @@
 			class="w-full flex-1 bg-black rounded-md my-2 p-2 border border-gray-600 animate-fade-left animate-duration-300"
 		>
 			<h1 class="text-white font-bold">Propiedades</h1>
+			<app-inspector
+				[nodeData]="state.selectedNodeData"
+				(onInspectorChange)="handleInspectorChange($event)"
+			></app-inspector>
 		</div>
 	</div>
 

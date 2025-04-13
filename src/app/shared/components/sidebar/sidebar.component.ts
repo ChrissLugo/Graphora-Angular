@@ -3,11 +3,23 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+	faArrowRightFromBracket,
+	faGear,
+	faBell,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'app-sidebar',
 	standalone: true,
-	imports: [FormsModule, NgClass, CommonModule, RouterLink],
+	imports: [
+		FormsModule,
+		NgClass,
+		CommonModule,
+		RouterLink,
+		FontAwesomeModule,
+	],
 	templateUrl: './sidebar.component.html',
 	styleUrls: ['./sidebar.component.css'],
 })
@@ -15,6 +27,10 @@ export class SidebarComponent {
 	selectedFilter: string = '';
 	user: any;
 	notification!: boolean;
+	//icons
+	faArrowRightFromBracket = faArrowRightFromBracket;
+	faGear = faGear;
+	faBell = faBell;
 
 	constructor(private router: Router) {
 		this.selectedFilter = this.router.url.replace(/\//g, '');

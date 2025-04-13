@@ -6,7 +6,10 @@ export class ClassDiagram extends BaseDiagram {
 
 	protected override state = {
 		// Diagram state props
-		diagramNodeData: [{ category: 'TextNode' }, { category: 'TextNode' }],
+		diagramNodeData: [
+			{ key: 1, category: 'TextNode', text: 'Texto', color: 'white' },
+			{ key: 2, category: 'TextNode', text: 'Texto', color: 'white' },
+		],
 		diagramLinkData: [],
 		diagramModelData: { prop: 'value' },
 

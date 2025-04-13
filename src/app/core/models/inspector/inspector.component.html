@@ -1,0 +1,17 @@
+<div *ngIf="nodeData" id="myInspectorDiv">
+	<table class="text-white">
+		<tbody>
+			<tr *ngFor="let entry of nodeData | keyvalue">
+				<app-inspector-row
+					class="text-white"
+					*ngIf="entry.key !== 'id'"
+					[id]="entry.key"
+					[value]="entry.value"
+					(onInputChangeEmitter)="onInputChange($event)"
+				></app-inspector-row>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="text-white" *ngIf="!nodeData">Select a Node to use Inspector</div>

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import * as go from 'gojs';
 import {
+	DataSyncService,
 	DiagramComponent,
 	OverviewComponent,
 	PaletteComponent,
@@ -10,6 +11,10 @@ import { TextNode } from '../../../core/models/nodes/text-node';
 import { EmptyNode } from '../../../core/models/nodes/empty-node';
 import { DiagramMakerService } from '../../../core/services/diagram/diagram-maker.service';
 import { ActivatedRoute } from '@angular/router';
+import { StartNodeFlow } from '../../../core/models/nodes/start-node-flow';
+import { DiamondNode } from '../../../core/models/nodes/diamond-node';
+import { InspectorComponent } from '../../../core/models/inspector/inspector.component';
+import { produce } from 'immer';
 
 @Component({
 	selector: 'app-my-diagram',
@@ -18,6 +23,7 @@ import { ActivatedRoute } from '@angular/router';
 		DiagramComponent,
 		PaletteComponent,
 		OverviewComponent,
+		InspectorComponent,
 	],
 	templateUrl: './my-diagram.component.html',
 	styleUrl: './my-diagram.component.css',
@@ -31,7 +37,6 @@ export default class MyDiagramComponent {
 	private diagramtype: string | null = '';
 	private diagramInstance!: go.Diagram;
 	public observedDiagram: any = null;
-	//SE PASARA DESDE LA CONFIGURACION DEL TIPO DE DIAGRAMA
 	public state: any;
 
 	constructor(
@@ -51,11 +56,37 @@ export default class MyDiagramComponent {
 		this.state = this.getState();
 	}
 
+	// currently selected node; for inspector
+	public selectedNodeData!: go.ObjectData;
+
 	public ngAfterViewInit() {
 		if (this.observedDiagram) return;
 		this.observedDiagram = this.myDiagramComponent.diagram;
-		this.cdr.detectChanges();
-	}
+		this.cdr.detectChanges(); // IMPORTANT: without this, Angular will throw ExpressionChangedAfterItHasBeenCheckedError (dev mode only)
+
+		const appComp: any = this;
+		// listener for inspector
+		this.myDiagramComponent.diagram.addDiagramListener(
+			'ChangedSelection',
+			function (e) {
+				if (e.diagram.selection.count === 0) {
+					appComp.selectedNodeData = null;
+				}
+				const node = e.diagram.selection.first();
+				appComp.state = produce(appComp.state, (draft: any) => {
+					if (node instanceof go.Node) {
+						var idx = draft.diagramNodeData.findIndex(
+							(nd: any) => nd.key == node.data.key
+						);
+						var nd = draft.diagramNodeData[idx];
+						draft.selectedNodeData = nd;
+					} else {
+						draft.selectedNodeData = null;
+					}
+				});
+			}
+		);
+	} // end ngAfterViewInit
 
 	private getDiagramType(): go.Diagram {
 		const diagram = this.diagramMakerService.inicializarDiagrama(
@@ -79,16 +110,19 @@ export default class MyDiagramComponent {
 			{ category: 'EmptyNode' }, // Espacio adicional en la parte superior
 			{ category: 'EmptyNode' },
 
-			{ category: 'TextNode' },
-			{ category: 'TextNode' },
+			{ key: 1, category: 'TextNode', text: 'Texto', color: 'white' },
+			{ category: 'StartFlow' },
+			{ category: 'DiamondNode' },
 		],
 		paletteModelData: { prop: 'val' },
 	};
 
 	public getTemplateNodes = () => {
 		const sharedTemplateMap = new go.Map<string, go.Node>();
-		sharedTemplateMap.add('TextNode', new TextNode().nodoConfig());
+		sharedTemplateMap.add('TextNode', new TextNode().getNode());
 		sharedTemplateMap.add('EmptyNode', new EmptyNode().nodoConfig());
+		sharedTemplateMap.add('StartFlow', new StartNodeFlow().nodoConfig());
+		sharedTemplateMap.add('DiamondNode', new DiamondNode().nodoConfig());
 
 		return sharedTemplateMap;
 	};
@@ -112,9 +146,71 @@ export default class MyDiagramComponent {
 		return new go.Overview();
 	}
 
+	/**
+	 * Update a node's data based on some change to an inspector row's input
+	 * @param changedPropAndVal An object with 2 entries: "prop" (the node data prop changed), and "newVal" (the value the user entered in the inspector <input>)
+	 */
+	public handleInspectorChange(changedPropAndVal: any) {
+		const path = changedPropAndVal.prop;
+		const value = changedPropAndVal.newVal;
+
+		this.state = produce(this.state, (draft: any) => {
+			var data = draft.selectedNodeData;
+			data[path] = value;
+			const key = data.key;
+			const idx = draft.diagramNodeData.findIndex(
+				(nd: any) => nd.key == key
+			);
+			if (idx >= 0) {
+				draft.diagramNodeData[idx] = data;
+				draft.skipsDiagramUpdate = false; // we need to sync GoJS data with this new app state, so do not skips Diagram update
+			}
+		});
+	}
+
+	public diagramModelChange = (changes: go.IncrementalData) => {
+		if (!changes) return;
+		const appComp = this;
+		this.state = produce(this.state, (draft: any) => {
+			// set skipsDiagramUpdate: true since GoJS already has this update
+			// this way, we don't log an unneeded transaction in the Diagram's undoManager history
+			draft.skipsDiagramUpdate = true;
+			draft.diagramNodeData = DataSyncService.syncNodeData(
+				changes,
+				draft.diagramNodeData,
+				appComp.observedDiagram.model
+			);
+			draft.diagramLinkData = DataSyncService.syncLinkData(
+				changes,
+				draft.diagramLinkData,
+				appComp.observedDiagram.model
+			);
+			draft.diagramModelData = DataSyncService.syncModelData(
+				changes,
+				draft.diagramModelData
+			);
+			// If one of the modified nodes was the selected node used by the inspector, update the inspector selectedNodeData object
+			const modifiedNodeData = changes.modifiedNodeData;
+			if (modifiedNodeData && draft.selectedNodeData) {
+				for (let i = 0; i < modifiedNodeData.length; i++) {
+					const mn = modifiedNodeData[i];
+					const nodeKeyProperty = appComp.myDiagramComponent.diagram
+						.model.nodeKeyProperty as string;
+					if (
+						mn[nodeKeyProperty] ===
+						draft.selectedNodeData[nodeKeyProperty]
+					) {
+						draft.selectedNodeData = mn;
+					}
+				}
+			}
+		});
+	};
+
 	// TO-DO
-	// - VERIFICAR QUE CADA TIPO DIAGRAMA TENGA SU STATE Y SE PUEDA OBTENER AQUI
+	// x VERIFICAR QUE CADA TIPO DIAGRAMA TENGA SU STATE Y SE PUEDA OBTENER AQUI
 	// x ERROR CON LOS NODOS VACIOS EN LA PALETA, TIENE RESPOSIVE Y SE ACOMODAN MAL
-	// - HACER EL INSPECTOR
+	// x HACER EL INSPECTOR
+	// ERROR: al haber un nodo ya en la plantilla y modificar otro este se cicla y se rompe, se empieza a multiplicar el nodo que ha existia en la plantilla
 	// - REFACTORIZAR CÓDIGO
 }
