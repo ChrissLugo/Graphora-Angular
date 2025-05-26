@@ -1,6 +1,8 @@
 ::ng-deep .font-picker {
 	background-color: black !important;
 	top: 45px !important;
+	/* position: absolute !important;
+	z-index: 99999; */
 }
 
 ::ng-deep .font-picker .arrow {

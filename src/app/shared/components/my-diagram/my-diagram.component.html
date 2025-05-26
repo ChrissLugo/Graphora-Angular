@@ -29,11 +29,9 @@
 	<!-- Propiedades de los elementos (inspector) -->
 	<div
 		*ngIf="state.selectedNodeData"
-		class="absolute z-9999 bottom-0 right-0 flex flex-col h-full pt-25 w-55 pb-32 items-center"
+		class="absolute z-9999 bottom-33 right-2.5 h-[27.5rem] 2xl:h-[52rem] bg-black rounded-md border border-gray-600 animate-fade-left animate-duration-300 py-2"
 	>
-		<div
-			class="w-full flex-1 bg-black rounded-md my-2 p-2 border border-gray-600 animate-fade-left animate-duration-300"
-		>
+		<div class="overflow-y-auto max-h-full">
 			<h1 class="text-white font-bold mb-4 text-xl text-center">
 				Propiedades
 			</h1>
@@ -46,7 +44,7 @@
 
 	<!-- Vista previa -->
 	<div
-		class="absolute z-50 bottom-1 right-2 w-50 h-30 bg-black border border-gray-600 rounded-md"
+		class="absolute z-50 bottom-1 right-2.5 w-52 h-30 bg-black border border-gray-600 rounded-md"
 	>
 		<gojs-overview
 			#myOverview
