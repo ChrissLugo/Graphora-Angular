@@ -1,5 +1,5 @@
 import { BaseDiagram } from '../diagram';
-import * as go from 'gojs';
+import go from 'gojs';
 
 export class ClassDiagram extends BaseDiagram {
 	protected override configureDiagram(): void {}
@@ -7,8 +7,24 @@ export class ClassDiagram extends BaseDiagram {
 	protected override state = {
 		// Diagram state props
 		diagramNodeData: [
-			{ key: 1, category: 'TextNode', text: 'Texto', color: 'white' },
-			{ key: 2, category: 'TextNode', text: 'Texto', color: 'white' },
+			{
+				key: 1,
+				category: 'TextNode',
+				text: 'Texto',
+				color: '#ffffff',
+				textBgColor: null,
+				font: '16px Adamina',
+				borderWidth: 1,
+			},
+			{
+				key: 2,
+				category: 'DiamondNode',
+				text: 'Texto',
+				color: '#ffffff',
+				textBgColor: null,
+				font: '16px Adamina',
+				borderWidth: 1,
+			},
 		],
 		diagramLinkData: [],
 		diagramModelData: { prop: 'value' },

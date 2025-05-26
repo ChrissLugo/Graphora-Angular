@@ -1,9 +1,9 @@
-import { BaseNode } from './base-node';
 import * as go from 'gojs';
 
-export class EmptyNode extends BaseNode {
-	override nodoConfig(): go.Node {
-		return new go.Node('Auto', {
+export class EmptyNode {
+	protected node: go.Node;
+	constructor() {
+		this.node = new go.Node('Auto', {
 			width: 70,
 			height: 100,
 		}).add(
@@ -19,5 +19,9 @@ export class EmptyNode extends BaseNode {
 				editable: true,
 			})
 		);
+	}
+
+	public getNode() {
+		return this.node;
 	}
 }

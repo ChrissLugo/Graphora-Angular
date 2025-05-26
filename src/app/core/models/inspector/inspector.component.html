@@ -1,5 +1,5 @@
-<div *ngIf="nodeData" id="myInspectorDiv">
-	<table class="text-white">
+<div *ngIf="nodeData" id="" class="flex flex-col gap-2">
+	<!-- <table class="text-white">
 		<tbody>
 			<tr *ngFor="let entry of nodeData | keyvalue">
 				<app-inspector-row
@@ -12,6 +12,178 @@
 			</tr>
 		</tbody>
 	</table>
-</div>
+	<br /> -->
 
-<div class="text-white" *ngIf="!nodeData">Select a Node to use Inspector</div>
+	<div class="mt-4 mb-2">
+		<h1 class="w-full font-bold text-md">Fuente</h1>
+		<hr class="h-px border-gray-300 bg-purple-900" />
+	</div>
+
+	<!-- Font Picker -->
+	<div
+		[(fontPicker)]="font"
+		[fpSearchText]="'Buscar fuentes'"
+		[fpLoadingText]="'Cargando fuentes...'"
+		[fpPopularLabel]="'Fuentes populares'"
+		[fpWidth]="'500px'"
+		[fpHeight]="'400px'"
+		[fpPosition]="'left'"
+		[fpSortByFamilies]="true"
+		[fpResultsLabel]="'Resultados de la búsqueda'"
+		(fontPickerChange)="fontpicker()"
+		class="border border-gray-300 rounded px-4 py-2 cursor-pointer text-sm hover:bg-gray-950 overflow-hidden whitespace-nowrap text-ellipsis justify-center text-center"
+	>
+		{{ nodeData["font"] || "Ninguna" }}
+	</div>
+
+	<!-- ALING TEXT -->
+	<div class="flex flex-col w-full">
+		<label class="text-sm mb-2">Alineación</label>
+		<div class="flex flex-row justify-between w-full gap-10 px-4">
+			<div class="flex flex-row justify-between w-full">
+				<fa-icon
+					[icon]="'align-left'"
+					class="cursor-pointer"
+					title="Izquierda"
+					(click)="alignmentText('left')"
+				></fa-icon>
+				<fa-icon
+					[icon]="'align-center'"
+					class="cursor-pointer"
+					title="Centro"
+					(click)="alignmentText('center')"
+				></fa-icon>
+				<fa-icon
+					[icon]="'align-right'"
+					class="cursor-pointer"
+					title="Derecha"
+					(click)="alignmentText('right')"
+				></fa-icon>
+			</div>
+		</div>
+	</div>
+
+	<!-- TEXT AREA -->
+	<div>
+		<textarea
+			id="text"
+			rows="4"
+			class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:border-purple-500 focus:outline-none focus:ring-0"
+			placeholder="Ingrese su texto"
+			[value]="nodeData['text']"
+			type="text"
+			(change)="onInputChangee($event)"
+		></textarea>
+	</div>
+
+	<!-- TEXT COLOR PICKER -->
+	<label for="colorPicker" class="flex items-center w-full justify-between">
+		<span class="text-sm">Color:</span>
+		<label
+			for="color"
+			class="relative flex items-center h-6 hover:bg-gray-900 cursor-pointer border-gray-800 rounded border-[1px] p-2 gap-2"
+		>
+			<input
+				type="color"
+				id="color"
+				name="colorPicker"
+				[value]="nodeData['color']"
+				(change)="onInputChangee($event)"
+				class="w-4 h-4 appearance-none cursor-pointer"
+			/>
+			<fa-icon [icon]="['fas', 'eye-dropper']" class=""></fa-icon>
+		</label>
+	</label>
+
+	<!-- TEXT BACKGROUND COLOR PICKER -->
+	<label for="textBgColor" class="flex items-center w-full justify-between">
+		<span class="text-sm">Fondo:</span>
+		<label
+			for="textBgColor"
+			class="relative flex items-center h-6 hover:bg-gray-900 cursor-pointer border-gray-800 rounded border-[1px] p-2 gap-2"
+		>
+			<input
+				type="color"
+				id="textBgColor"
+				name="textBgColor"
+				[value]="nodeData['textBgColor']"
+				(change)="onInputChangee($event)"
+				class="w-4 h-4 appearance-none cursor-pointer"
+			/>
+			<fa-icon [icon]="['fas', 'eye-dropper']" class=""></fa-icon>
+		</label>
+	</label>
+
+	<div class="mt-4 mb-2">
+		<h1 class="w-full font-bold text-md">Borde</h1>
+		<hr class="h-px border-gray-300 bg-purple-900" />
+	</div>
+
+	<!-- Border Color -->
+	<label for="borderColor" class="flex items-center w-full justify-between">
+		<span class="text-sm">Color:</span>
+		<label
+			for="borderColor"
+			class="relative flex items-center h-6 hover:bg-gray-900 cursor-pointer border-gray-800 rounded border-[1px] p-2 gap-2"
+		>
+			<input
+				type="color"
+				id="borderColor"
+				name="borderColor"
+				[value]="nodeData['borderColor']"
+				(change)="onInputChangee($event)"
+				class="w-4 h-4 appearance-none cursor-pointer"
+			/>
+			<fa-icon [icon]="['fas', 'eye-dropper']" class=""></fa-icon>
+		</label>
+	</label>
+
+	<!-- GROSOR DEL BORDE -->
+	<div class="flex items-center w-full justify-between">
+		<span class="text-sm">Grosor:</span>
+		<input
+			id="borderWidth"
+			min="0"
+			type="number"
+			class="w-20 h-7 p-2 border-gray-800 rounded border-[1px] focus:border-purple-500 focus:outline-none focus:ring-0"
+			(change)="onInputChangee($event)"
+			[value]="nodeData['borderWidth']"
+		/>
+	</div>
+
+	<!-- TIPO DE BORDE -->
+	<div class="flex items-center w-full justify-between">
+		<span class="text-sm">Tipo:</span>
+		<select
+			name="select"
+			id="borderStyle"
+			(change)="onBorderStyleChange($event)"
+			class="p-2 border-gray-800 rounded border-[1px] focus:border-purple-500 focus:outline-none focus:ring-0 text-sm"
+		>
+			<option [value]="'[]'">Sólido</option>
+
+			<option [value]="'[6, 4]'">Punteado</option>
+		</select>
+	</div>
+
+	<hr class="h-px border-gray-300 bg-purple-900 mt-4" />
+
+	<!-- Color del Fondo -->
+	<label for="shapeBgColor" class="flex items-center w-full justify-between">
+		<span class="text-sm">Color del Fondo:</span>
+		<label
+			for="shapeBgColor"
+			class="relative flex items-center h-6 hover:bg-gray-900 cursor-pointer border-gray-800 rounded border-[1px] p-2 gap-2"
+		>
+			<input
+				type="color"
+				id="shapeBgColor"
+				name="shapeBgColor"
+				[value]="nodeData['shapeBgColor']"
+				(change)="onInputChangee($event)"
+				class="w-4 h-4 appearance-none cursor-pointer"
+			/>
+			<fa-icon [icon]="['fas', 'eye-dropper']" class=""></fa-icon>
+		</label>
+	</label>
+</div>

@@ -1,6 +1,7 @@
 import { ActivatedRoute, Route } from '@angular/router';
+import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
+import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import go from 'gojs';
-
 export abstract class BaseDiagram {
 	protected diagram: go.Diagram;
 	protected abstract state: object;
@@ -14,6 +15,17 @@ export abstract class BaseDiagram {
 			'animationManager.isEnabled': true,
 			'grid.visible': true,
 			'draggingTool.isGridSnapEnabled': true,
+			draggingTool: new GuidedDraggingTool(),
+			'draggingTool.horizontalGuidelineColor': 'blue',
+			'draggingTool.verticalGuidelineColor': 'blue',
+			'draggingTool.centerGuidelineColor': 'green',
+			'draggingTool.guidelineWidth': 1,
+			'draggingTool.dragsLink': true,
+			'relinkingTool.isUnconnectedLinkValid': true,
+			'relinkingTool.portGravity': 20,
+			'linkingTool.isUnconnectedLinkValid': true,
+			'linkingTool.portGravity': 20,
+			rotatingTool: new RotateMultipleTool(),
 			initialContentAlignment: go.Spot.Center,
 			allowLink: true,
 			allowRotate: true,
@@ -86,18 +98,40 @@ export abstract class BaseDiagram {
 				makePort('b', go.Spot.Bottom)
 			);
 
-		this.diagram.linkTemplate = new go.Link({
-			// curve: go.Curve.Bezier,
-			fromEndSegmentLength: 30,
-			toEndSegmentLength: 30,
-		}).add(
-			new go.Shape({ strokeWidth: 1.5, stroke: 'white' }),
+		var linkSelectionAdornmentTemplate = new go.Adornment('Link').add(
 			new go.Shape({
-				toArrow: 'Standard',
-				stroke: 'white',
-				fill: 'white',
+				isPanelMain: true, // isPanelMain declares that this Shape shares the Link.geometry
+				fill: null,
+				stroke: 'deepskyblue',
+				strokeWidth: 0, // use selection object's strokeWidth
 			})
 		);
+
+		this.diagram.linkTemplate = new go.Link({
+			// the whole link panel
+			selectable: true,
+			selectionAdornmentTemplate: linkSelectionAdornmentTemplate,
+			relinkableFrom: true,
+			relinkableTo: true,
+			reshapable: true,
+			routing: go.Routing.AvoidsNodes,
+			curve: go.Curve.JumpOver,
+			corner: 5,
+			toShortLength: 4,
+		})
+			.bindTwoWay('points')
+			.add(
+				new go.Shape({
+					isPanelMain: true,
+					strokeWidth: 2,
+					stroke: 'white',
+				}),
+				new go.Shape({
+					toArrow: 'Standard',
+					stroke: 'white',
+					fill: 'white',
+				})
+			);
 
 		// Llamada a configuración adicional que se definirá en subclases
 		this.configureDiagram();

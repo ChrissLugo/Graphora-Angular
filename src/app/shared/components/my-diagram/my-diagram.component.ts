@@ -8,13 +8,15 @@ import {
 	PaletteComponent,
 } from 'gojs-angular';
 import { TextNode } from '../../../core/models/nodes/text-node';
-import { EmptyNode } from '../../../core/models/nodes/empty-node';
+// import { EmptyNode } from '../../../core/models/nodes/empty-node';
 import { DiagramMakerService } from '../../../core/services/diagram/diagram-maker.service';
 import { ActivatedRoute } from '@angular/router';
-import { StartNodeFlow } from '../../../core/models/nodes/start-node-flow';
-import { DiamondNode } from '../../../core/models/nodes/diamond-node';
+// import { StartNodeFlow } from '../../../core/models/nodes/start-node-flow';
 import { InspectorComponent } from '../../../core/models/inspector/inspector.component';
+import { CommonModule } from '@angular/common';
 import { produce } from 'immer';
+import { EmptyNode } from '../../../core/models/nodes/empty-node';
+import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 
 @Component({
 	selector: 'app-my-diagram',
@@ -24,6 +26,7 @@ import { produce } from 'immer';
 		PaletteComponent,
 		OverviewComponent,
 		InspectorComponent,
+		CommonModule,
 	],
 	templateUrl: './my-diagram.component.html',
 	styleUrl: './my-diagram.component.css',
@@ -110,20 +113,18 @@ export default class MyDiagramComponent {
 			{ category: 'EmptyNode' }, // Espacio adicional en la parte superior
 			{ category: 'EmptyNode' },
 
-			{ key: 1, category: 'TextNode', text: 'Texto', color: 'white' },
-			{ category: 'StartFlow' },
-			{ category: 'DiamondNode' },
+			{ key: 1, category: 'TextNode', text: 'Texto', color: '#fff' },
+			{ key: 2, category: 'DiamondNode', text: 'Texto', color: '#fff' },
 		],
 		paletteModelData: { prop: 'val' },
 	};
 
 	public getTemplateNodes = () => {
 		const sharedTemplateMap = new go.Map<string, go.Node>();
+		sharedTemplateMap.add('EmptyNode', new EmptyNode().getNode());
 		sharedTemplateMap.add('TextNode', new TextNode().getNode());
-		sharedTemplateMap.add('EmptyNode', new EmptyNode().nodoConfig());
-		sharedTemplateMap.add('StartFlow', new StartNodeFlow().nodoConfig());
-		sharedTemplateMap.add('DiamondNode', new DiamondNode().nodoConfig());
 
+		sharedTemplateMap.add('DiamondNode', new DiamondNode().getNode());
 		return sharedTemplateMap;
 	};
 
@@ -153,6 +154,7 @@ export default class MyDiagramComponent {
 	public handleInspectorChange(changedPropAndVal: any) {
 		const path = changedPropAndVal.prop;
 		const value = changedPropAndVal.newVal;
+		console.log('datos recibidos', changedPropAndVal);
 
 		this.state = produce(this.state, (draft: any) => {
 			var data = draft.selectedNodeData;

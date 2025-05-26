@@ -28,12 +28,15 @@
 
 	<!-- Propiedades de los elementos (inspector) -->
 	<div
-		class="absolute z-50 bottom-0 right-0 flex flex-col h-full pt-25 w-55 pb-32 items-center"
+		*ngIf="state.selectedNodeData"
+		class="absolute z-9999 bottom-0 right-0 flex flex-col h-full pt-25 w-55 pb-32 items-center"
 	>
 		<div
 			class="w-full flex-1 bg-black rounded-md my-2 p-2 border border-gray-600 animate-fade-left animate-duration-300"
 		>
-			<h1 class="text-white font-bold">Propiedades</h1>
+			<h1 class="text-white font-bold mb-4 text-xl text-center">
+				Propiedades
+			</h1>
 			<app-inspector
 				[nodeData]="state.selectedNodeData"
 				(onInspectorChange)="handleInspectorChange($event)"
