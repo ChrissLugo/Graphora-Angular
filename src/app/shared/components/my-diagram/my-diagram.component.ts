@@ -209,6 +209,41 @@ export default class MyDiagramComponent {
 		});
 	};
 
+	// When the blob is complete, make an anchor tag for it and use the tag to initiate a download
+	// Works in Chrome, Firefox, Safari, Edge, IE11
+	myCallback(blob: Blob) {
+		const filename = 'myDiagram.png';
+		// IE11 / Edge Legacy
+		if ((window.navigator as any).msSaveOrOpenBlob) {
+			(window.navigator as any).msSaveOrOpenBlob(blob, filename);
+			return;
+		}
+		// resto de navegadores modernos
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		URL.revokeObjectURL(url);
+		document.body.removeChild(a);
+	}
+
+	makeBlob() {
+		this.diagramInstance.makeImageData({
+			background: 'black',
+			returnType: 'blob',
+			// así te aseguras de que this dentro de myCallback sea la instancia del componente
+			callback: (blob) => this.myCallback(blob),
+		});
+	}
+
+	JsonOnClick() {
+		const diagramData = this.diagramInstance.model.toJson();
+		console.log(diagramData);
+	}
+
 	// TO-DO
 	// x VERIFICAR QUE CADA TIPO DIAGRAMA TENGA SU STATE Y SE PUEDA OBTENER AQUI
 	// x ERROR CON LOS NODOS VACIOS EN LA PALETA, TIENE RESPOSIVE Y SE ACOMODAN MAL
