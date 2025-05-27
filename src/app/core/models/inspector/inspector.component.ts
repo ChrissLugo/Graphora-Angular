@@ -18,10 +18,16 @@ import {
 	faAlignRight,
 	faEyeDropper,
 } from '@fortawesome/free-solid-svg-icons';
+import { FormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-inspector',
-	imports: [CommonModule, FontPickerDirective, FontAwesomeModule],
+	imports: [
+		CommonModule,
+		FontPickerDirective,
+		FontAwesomeModule,
+		FormsModule,
+	],
 	templateUrl: './inspector.component.html',
 	styleUrl: './inspector.component.css',
 })
@@ -40,9 +46,17 @@ export class InspectorComponent {
 		);
 	}
 
+	stringify(value: any): string {
+		return JSON.stringify(value);
+	}
 	ngOnInit(): void {
 		console.log('data enviada', this.nodeData);
-		console.log('dataa', this.nodeData['borderStyle']);
+		console.log(
+			'dataa',
+			this.nodeData['borderStyle'],
+			'asdfasdf',
+			this.stringify(this.nodeData['borderStyle'])
+		);
 	}
 
 	alignmentText(position: string) {
@@ -85,7 +99,10 @@ export class InspectorComponent {
 			prop: e.target.id,
 			newVal: array,
 		};
-		console.log('Valor en la funcion onBorderStyleChange ', obj);
+		console.log(
+			'Valor en la funcion onBorderStyleChange ',
+			array.toString()
+		);
 
 		this.onInspectorChange.emit(obj);
 	}

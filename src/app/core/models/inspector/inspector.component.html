@@ -160,9 +160,19 @@
 			(change)="onBorderStyleChange($event)"
 			class="p-2 border-gray-800 rounded border-[1px] focus:border-purple-500 focus:outline-none focus:ring-0 text-sm"
 		>
-			<option [value]="'[]'">Sólido</option>
+			<option
+				[value]="'[]'"
+				[selected]="stringify(nodeData['borderStyle']) === '[]'"
+			>
+				───
+			</option>
 
-			<option [value]="'[6, 4]'">Punteado</option>
+			<option
+				[value]="'[6,4]'"
+				[selected]="stringify(nodeData['borderStyle']) === '[6,4]'"
+			>
+				- - - -
+			</option>
 		</select>
 	</div>
 
