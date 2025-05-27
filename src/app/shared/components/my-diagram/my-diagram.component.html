@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar [diagram]="this.diagramInstance" />
 <div class="h-dvh w-full flex flex-row">
 	<!-- Paleta del diagrama -->
 	<div class="h-dvh w-60 bg-black overflow-hidden border-x-1 border-gray-900">
@@ -52,12 +52,4 @@
 			divClassName="w-full h-full"
 		></gojs-overview>
 	</div>
-
-	<button class="bg-white cursor-pointer" (click)="makeBlob()">
-		Descargar diagrama png
-	</button>
-	hr
-	<button class="bg-white cursor-pointer" (click)="JsonOnClick()">
-		Generar json
-	</button>
 </div>

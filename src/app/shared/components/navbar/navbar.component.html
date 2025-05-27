@@ -5,11 +5,13 @@
 		<!-- Opciones -->
 		<div class="flex flex-row align-center items-center">
 			<!-- Logo -->
-			<img class="h-10 w-10" src="images/logo.png" alt="Logo" />
+			<img class="h-13 w-13" src="images/logo.png" alt="Logo" />
 			<!-- Nombre del proyecto -->
 			<div class="flex flex-col text-white ml-2">
 				<h1 class="text-sm">Nombre:</h1>
-				<h2 class="text-xl font-semibold text-white">Documento</h2>
+				<h2 class="text-xl font-semibold text-white">
+					{{ this.fileName || "Documento" }}
+				</h2>
 			</div>
 		</div>
 		<!-- Compartir -->
@@ -42,254 +44,58 @@
 
 	<!-- Opciones -->
 	<div
-		class="flex flex-row items-center w-full h-10 border-y-1 border-gray-900 px-4 space-x-4"
+		class="flex items-center w-full h-10 border-y-1 border-gray-900 space-x-5"
 	>
+		<!-- Archivo -->
 		<button
-			id="dropdownDefaultButton"
-			data-dropdown-toggle="dropdown"
-			class="text-white text-center inline-flex items-center hover:text-purple-300 cursor-pointer border-r-2 border-gray-900 pr-2"
-			type="button"
+			mat-button
+			[matMenuTriggerFor]="archivoMenu"
+			class="text-white hover:text-purple-300 border-r-2 border-gray-900 pr-2"
 		>
-			Archivo
-			<svg
-				class="w-2.5 h-2.5 ms-3"
-				aria-hidden="true"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 10 6"
-			>
-				<path
-					stroke="currentColor"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="m1 1 4 4 4-4"
-				/>
-			</svg>
+			<fa-icon size="lg" [icon]="['fas', 'file']"></fa-icon>
+			<label class="text-sm cursor-pointer mx-1">Archivo</label>
+			<fa-icon size="xs" [icon]="['fas', 'chevron-down']"></fa-icon>
 		</button>
+		<mat-menu #archivoMenu="matMenu" class="bg-black text-white">
+			<button mat-menu-item (click)="newFile()">Nuevo…</button>
+			<button mat-menu-item (click)="openFromFile()">Abrir desde…</button>
+			<button mat-menu-item (click)="renameFile()">Renombrar</button>
+		</mat-menu>
 
-		<!-- Dropdown menu -->
-		<div
-			id="dropdown"
-			class="z-10 hidden bg-black divide-y divide-gray-100 rounded-lg shadow-sm w-44"
+		<!-- Guardar -->
+		<button
+			mat-button
+			[matMenuTriggerFor]="guardarMenu"
+			class="text-white hover:text-purple-300 gap-1 border-r-2 border-gray-900 pr-2"
 		>
-			<ul
-				class="py-2 text-sm text-gray-700 dark:text-gray-200"
-				aria-labelledby="dropdownDefaultButton"
-			>
-				<li>
-					<a
-						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-						>Nuevo...</a
-					>
-				</li>
-				<li>
-					<button
-						id="doubleDropdownButton"
-						data-dropdown-toggle="openFrom"
-						data-dropdown-placement="right-start"
-						type="button"
-						class="flex items-center justify-between w-full px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-					>
-						Abrir desde...<svg
-							class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 6 10"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="m1 9 4-4-4-4"
-							/>
-						</svg>
-					</button>
-					<div
-						id="openFrom"
-						class="z-10 hidden rounded-lg shadow-sm w-44 bg-black"
-					>
-						<ul
-							class="py-2 text-sm text-gray-700 dark:text-gray-200"
-							aria-labelledby="doubleDropdownButton"
-						>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Overview</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>My downloads</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Billing</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Rewards</a
-								>
-							</li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<button
-						id="doubleDropdownButton"
-						data-dropdown-toggle="openRecent"
-						data-dropdown-placement="right-start"
-						type="button"
-						class="flex items-center justify-between w-full px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-					>
-						Recientes...<svg
-							class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 6 10"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="m1 9 4-4-4-4"
-							/>
-						</svg>
-					</button>
-					<div
-						id="openRecent"
-						class="z-10 hidden rounded-lg shadow-sm w-44 bg-black"
-					>
-						<ul
-							class="py-2 text-sm text-gray-700 dark:text-gray-200"
-							aria-labelledby="doubleDropdownButton"
-						>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Overview</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>My downloads</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Billing</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Rewards</a
-								>
-							</li>
-						</ul>
-					</div>
-				</li>
+			<fa-icon size="lg" [icon]="['fas', 'floppy-disk']"></fa-icon>
+			<label class="text-sm cursor-pointer mx-1">Guardar</label>
+			<fa-icon size="xs" [icon]="['fas', 'chevron-down']"></fa-icon>
+		</button>
+		<mat-menu #guardarMenu="matMenu" class="bg-black text-white">
+			<button mat-menu-item (click)="save()">Guardar</button>
+			<button mat-menu-item (click)="saveAS()">Guardar como…</button>
+		</mat-menu>
 
-				<li>
-					<a
-						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-						>Guardar</a
-					>
-				</li>
-				<li>
-					<a
-						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-						>Guardar como...</a
-					>
-				</li>
-
-				<li>
-					<a
-						class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-						>Renombrar...</a
-					>
-				</li>
-
-				<li>
-					<button
-						id="doubleDropdownButton"
-						data-dropdown-toggle="exportAs"
-						data-dropdown-placement="right-start"
-						type="button"
-						class="flex items-center justify-between w-full px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-					>
-						Exportar como...<svg
-							class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 6 10"
-						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="m1 9 4-4-4-4"
-							/>
-						</svg>
-					</button>
-					<div
-						id="exportAs"
-						class="z-10 hidden rounded-lg shadow-sm w-44 bg-black"
-					>
-						<ul
-							class="py-2 text-sm text-gray-700 dark:text-gray-200"
-							aria-labelledby="doubleDropdownButton"
-						>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Overview</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>My downloads</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Billing</a
-								>
-							</li>
-							<li>
-								<a
-									class="block px-4 py-2 hover:bg-purple-900 text-white rounded-sm cursor-pointer"
-									>Rewards</a
-								>
-							</li>
-						</ul>
-					</div>
-				</li>
-			</ul>
-		</div>
-
-		<!-- <p class="text-white">Estilo</p>
-		<p class="text-white">Fuente</p>
-		<p class="text-white">Tamaño</p>
-		<p class="text-white">Negrita</p>
-		<p class="text-white">Cursiva</p>
-		<p class="text-white">Subrayado</p>
-		<p class="text-white">Alineación</p> -->
+		<!-- Exportar -->
+		<button
+			mat-button
+			[matMenuTriggerFor]="exportarMenu"
+			class="text-white hover:text-purple-300 gap-1 border-r-2 border-gray-900 pr-2"
+		>
+			<fa-icon size="lg" [icon]="['fas', 'file-export']"></fa-icon>
+			<label class="text-sm cursor-pointer mx-1">Exportar</label>
+			<fa-icon size="xs" [icon]="['fas', 'chevron-down']"></fa-icon>
+		</button>
+		<mat-menu #exportarMenu="matMenu" class="bg-black text-white">
+			<button mat-menu-item (click)="exportPNG()">
+				<mat-icon>image</mat-icon>
+				<span>PNG</span>
+			</button>
+			<button mat-menu-item (click)="exportPDF()">
+				<mat-icon>picture_as_pdf</mat-icon>
+				<span>PDF</span>
+			</button>
+		</mat-menu>
 	</div>
 </nav>
