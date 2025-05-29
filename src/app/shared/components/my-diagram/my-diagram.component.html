@@ -1,4 +1,4 @@
-<app-navbar [diagram]="this.diagramInstance" />
+<app-navbar [diagram]="this.diagram" />
 <div class="h-dvh w-full flex flex-row">
 	<!-- Paleta del diagrama -->
 	<div class="h-dvh w-60 bg-black overflow-hidden border-x-1 border-gray-900">
@@ -15,7 +15,7 @@
 	<div class="h-full w-full">
 		<gojs-diagram
 			#myDiagram
-			[initDiagram]="initDiagram"
+			[initDiagram]="initDiagram2"
 			divClassName="h-dvh w-full bg-black"
 			[nodeDataArray]="state.diagramNodeData"
 			[modelData]="state.diagramModelData"
