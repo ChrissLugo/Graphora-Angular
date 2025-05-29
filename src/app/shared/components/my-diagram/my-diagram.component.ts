@@ -16,6 +16,12 @@ import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 
+interface ModelJson {
+	modelData: any;
+	nodeDataArray: any[];
+	linkDataArray: any[];
+}
+
 @Component({
 	selector: 'app-my-diagram',
 	imports: [
@@ -39,37 +45,107 @@ export default class MyDiagramComponent {
 	public observedDiagram: any = null;
 	public diagram!: go.Diagram;
 
-	constructor(private cdr: ChangeDetectorRef) {
-		this.initDiagram2 = this.initDiagram2.bind(this);
-	}
-
-	public state = {
-		diagramNodeData: [
+	public diagramJSON = {
+		class: 'GraphLinksModel',
+		linkKeyProperty: 'key',
+		linkFromPortIdProperty: 'fromPort',
+		linkToPortIdProperty: 'toPort',
+		modelData: {
+			prop: 'value',
+		},
+		nodeDataArray: [
 			{
 				key: 1,
 				category: 'TextNode',
-				text: 'Texto',
+				text: 'Quieres ser mi novia?',
 				color: '#ffffff',
-				textBgColor: null,
-				font: '16px Adamina',
-				borderWidth: 1,
+				textBgColor: '#dc8add',
+				font: '27px Agbalumo',
+				borderWidth: 6,
+				loc: '-9.891668319702163 -258.5',
+				borderColor: '#ffffff',
+				borderStyle: [6, 4],
+				shapeBgColor: '#dc8add',
 			},
 			{
 				key: 2,
 				category: 'DiamondNode',
-				text: 'Texto',
+				text: 'Si',
 				color: '#ffffff',
 				textBgColor: null,
 				font: '16px Adamina',
 				borderWidth: 1,
+				loc: '-204.57715097581314 14.003333663940431',
+			},
+			{
+				key: -3,
+				category: 'DiamondNode',
+				text: 'No',
+				color: '#ffffff',
+				textBgColor: null,
+				font: '16px Adamina',
+				borderWidth: 1,
+				loc: '181.42284902418686 14.003333663940431',
 			},
 		],
+		linkDataArray: [
+			{
+				from: 1,
+				to: 2,
+				fromPort: 'B',
+				toPort: 'T',
+				key: -1,
+				points: [
+					-9.891668319702163, -202.26142374915395, -9.891668319702163,
+					-192.26142374915395, -9.891668319702163,
+					-103.37987845859186, -204.57715097581314,
+					-103.37987845859186, -204.57715097581314,
+					-14.498333168029784, -204.57715097581314,
+					-4.4983331680297844,
+				],
+			},
+			{
+				from: 1,
+				to: -3,
+				fromPort: 'B',
+				toPort: 'T',
+				key: -2,
+				points: [
+					-9.891668319702163, -202.26142374915395, -9.891668319702163,
+					-192.26142374915395, -9.891668319702163,
+					-103.37987845859186, 181.42284902418686,
+					-103.37987845859186, 181.42284902418686,
+					-14.498333168029784, 181.42284902418686,
+					-4.4983331680297844,
+				],
+			},
+		],
+	};
 
-		diagramLinkData: [],
-		diagramModelData: { prop: 'value' },
+	public state = {
+		diagramNodeData: [] as any,
+		diagramLinkData: [] as any,
+		diagramModelData: {},
 		skipsDiagramUpdate: false,
 		selectedNodeData: null,
 	};
+
+	public loadJson(): void {
+		// Obtenemos el JSON que ya tienes definido en la clase
+		const json = this.diagramJSON as ModelJson;
+
+		// Actualizamos el state con immer
+		this.state = produce(this.state, (draft) => {
+			draft.diagramNodeData = json.nodeDataArray;
+			draft.diagramLinkData = json.linkDataArray;
+			draft.diagramModelData = json.modelData;
+			draft.skipsDiagramUpdate = false; // forzamos actualización del diagrama
+		});
+	}
+
+	constructor(private cdr: ChangeDetectorRef) {
+		this.initDiagram2 = this.initDiagram2.bind(this);
+	}
 
 	public getTemplateNodes = () => {
 		const sharedTemplateMap = new go.Map<string, go.Node>();
