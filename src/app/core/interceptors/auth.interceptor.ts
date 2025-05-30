@@ -7,39 +7,40 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 	const tokenService = inject(TokenService);
 
 	const authToken = tokenService.getAuthToken();
+	const refreshToken = tokenService.getRefreshToken();
 
 	const authReq = req.clone({
 		setHeaders: {
-			Authorization: authToken,
-
+			Authorization: `Bearer ${authToken}`,
 		}
 	})
 
 	return next(authReq).pipe(
 		catchError((error) => {
-			return tokenService.refreshToken().pipe(
-				switchMap((res) => {
-					// Guarda el nuevo token en el servicio
-					localStorage.setItem('authToken', res.accessToken);
+			if(error.status === 401) { 
+				return tokenService.refreshToken().pipe(
+					switchMap((res) => {
+						// Guarda el nuevo token en el servicio
+						localStorage.setItem('authToken', res.accessToken);
+						localStorage.setItem('refreshToken', res.refreshToken);
+	
+						const newReq = req.clone({
+							setHeaders: {
+								Authorization: `Bearer ${res.accessToken}`
+							}
+						});
+	
+						return next(newReq);
+					}),
+					catchError((refreshError) => {
+						tokenService.removeTokens();
+						window.location.href = '/login'; // Redirige forzosamente
+						return throwError(() => refreshError);
+					})
+				)
+			}
 
-					const newReq = req.clone({
-						setHeaders: {
-							Authorization: res.accessToken,
-						}
-					});
-
-					return next(newReq);
-				}),
-				catchError((refreshError) => {
-					const finalError = new Error(refreshError);
-
-					tokenService.removeTokens(); // Elimina los tokens de localStorage
-					// Aquí puedes redirigir al usuario a la página de login o mostrar un mensaje
-					// this.router.navigate(['/login']);
-
-					return throwError(() => finalError)
-				})
-			)
+			return throwError(() => error);
 		})
 	);
 };

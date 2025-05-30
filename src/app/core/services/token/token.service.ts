@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
 	providedIn: 'root'
@@ -38,5 +39,14 @@ export class TokenService {
 		const body = { refreshToken: refreshToken };
 
 		return this.http.post<any>(`${environment.API_URL}${this.refreshUrl}`, body);
+	}
+
+	getUserIdFromToken(): string | null {
+		const token = this.getAuthToken();
+		if (token) {
+			const decodedToken: any = jwtDecode(token);
+			return decodedToken.userId || null;
+		}
+		return null;
 	}
 }
