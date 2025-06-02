@@ -11,11 +11,23 @@
 
 ::ng-deep .mat-mdc-menu-item:hover,
 ::ng-deep .mdc-button__label:hover {
-	color: #7204c1 !important;
-	background: transparent !important;
+	color: oklch(62.7% 0.265 303.9) !important;
+}
+
+::ng-deep .mat-focus-indicator:hover {
+	background: oklch(38.1% 0.176 304.987) !important;
 }
 
 ::ng-deep .mat-mdc-menu-item-text,
 ::ng-deep .mat-icon {
 	color: white !important;
+}
+
+::ng-deep button.mat-button:hover {
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+
+.my-button {
+	--mat-text-button-state-layer-color: none;
 }

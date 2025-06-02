@@ -56,8 +56,9 @@
 		<!-- Archivo -->
 		<button
 			mat-button
+			[disableRipple]="true"
+			class="my-button"
 			[matMenuTriggerFor]="archivoMenu"
-			class="text-white hover:text-purple-300 border-r-2 border-gray-900 pr-2"
 		>
 			<fa-icon size="lg" [icon]="['fas', 'file']"></fa-icon>
 			<label class="text-sm cursor-pointer mx-1">Archivo</label>
@@ -65,18 +66,28 @@
 		</button>
 
 		<mat-menu #archivoMenu="matMenu" class="bg-black text-white">
-			<button mat-menu-item (click)="newFile()">Nuevo…</button>
+			<button mat-menu-item (click)="newFile()">
+				<mat-icon>note_add</mat-icon>
+				<span>Nuevo…</span>
+			</button>
 
-			<button mat-menu-item (click)="openFromFile()">Abrir desde…</button>
+			<button mat-menu-item (click)="openFromFile()">
+				<mat-icon>folder_open</mat-icon>
+				<span>Abrir desde…</span>
+			</button>
 
-			<button mat-menu-item (click)="renameFile()">Renombrar</button>
+			<button mat-menu-item (click)="renameFile()">
+				<mat-icon>edit</mat-icon>
+				<span>Renombrar</span>
+			</button>
 		</mat-menu>
 
 		<!-- Exportar -->
 		<button
 			mat-button
 			[matMenuTriggerFor]="exportarMenu"
-			class="text-white hover:text-purple-300 gap-1 border-r-2 border-gray-900 pr-2"
+			[disableRipple]="true"
+			class="my-button"
 		>
 			<fa-icon size="lg" [icon]="['fas', 'file-export']"></fa-icon>
 			<label class="text-sm cursor-pointer mx-1">Exportar</label>
@@ -90,6 +101,10 @@
 			<button mat-menu-item (click)="exportPDF()">
 				<mat-icon>picture_as_pdf</mat-icon>
 				<span>PDF</span>
+			</button>
+			<button mat-menu-item (click)="exportSVG()">
+				<mat-icon>crop_5_4</mat-icon>
+				<span>SVG</span>
 			</button>
 			<button mat-menu-item (click)="exportJSON()" class="flex flex-row">
 				<mat-icon>data_object</mat-icon>

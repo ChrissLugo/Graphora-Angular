@@ -185,6 +185,10 @@ export class NavbarComponent {
 		throw new Error('Method not implemented.');
 	}
 
+	exportSVG() {
+		throw new Error('Method not implemented.');
+	}
+
 	exportPNG() {
 		Swal.fire({
 			title: 'Color de fondo',
