@@ -15,6 +15,7 @@ import { EmptyNode } from '../../../core/models/nodes/empty-node';
 import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 interface ModelJson {
 	modelData: any;
@@ -44,83 +45,31 @@ export default class MyDiagramComponent {
 	public selectedNodeData!: go.ObjectData;
 	public observedDiagram: any = null;
 	public diagram!: go.Diagram;
+	public diagramJSON!: any;
+	public hasChanges: boolean = false;
+	public openFile: boolean = false;
+	private isLoading: boolean = false;
 
-	public diagramJSON = {
-		class: 'GraphLinksModel',
-		linkKeyProperty: 'key',
-		linkFromPortIdProperty: 'fromPort',
-		linkToPortIdProperty: 'toPort',
-		modelData: {
-			prop: 'value',
-		},
-		nodeDataArray: [
-			{
-				key: 1,
-				category: 'TextNode',
-				text: 'Quieres ser mi novia?',
-				color: '#ffffff',
-				textBgColor: '#dc8add',
-				font: '27px Agbalumo',
-				borderWidth: 6,
-				loc: '-9.891668319702163 -258.5',
-				borderColor: '#ffffff',
-				borderStyle: [6, 4],
-				shapeBgColor: '#dc8add',
-			},
-			{
-				key: 2,
-				category: 'DiamondNode',
-				text: 'Si',
-				color: '#ffffff',
-				textBgColor: null,
-				font: '16px Adamina',
-				borderWidth: 1,
-				loc: '-204.57715097581314 14.003333663940431',
-			},
-			{
-				key: -3,
-				category: 'DiamondNode',
-				text: 'No',
-				color: '#ffffff',
-				textBgColor: null,
-				font: '16px Adamina',
-				borderWidth: 1,
-				loc: '181.42284902418686 14.003333663940431',
-			},
-		],
-		linkDataArray: [
-			{
-				from: 1,
-				to: 2,
-				fromPort: 'B',
-				toPort: 'T',
-				key: -1,
-				points: [
-					-9.891668319702163, -202.26142374915395, -9.891668319702163,
-					-192.26142374915395, -9.891668319702163,
-					-103.37987845859186, -204.57715097581314,
-					-103.37987845859186, -204.57715097581314,
-					-14.498333168029784, -204.57715097581314,
-					-4.4983331680297844,
-				],
-			},
-			{
-				from: 1,
-				to: -3,
-				fromPort: 'B',
-				toPort: 'T',
-				key: -2,
-				points: [
-					-9.891668319702163, -202.26142374915395, -9.891668319702163,
-					-192.26142374915395, -9.891668319702163,
-					-103.37987845859186, 181.42284902418686,
-					-103.37987845859186, 181.42284902418686,
-					-14.498333168029784, 181.42284902418686,
-					-4.4983331680297844,
-				],
-			},
-		],
-	};
+	public hasChangesChange(event: any) {
+		this.hasChanges = event;
+	}
+
+	public onFileLoaded(json: ModelJson) {
+		this.isLoading = true;
+		this.diagramJSON = json;
+
+		this.state = produce(this.state, (draft) => {
+			draft.diagramNodeData = json.nodeDataArray;
+			draft.diagramLinkData = json.linkDataArray;
+			draft.diagramModelData = json.modelData;
+			draft.skipsDiagramUpdate = false;
+		});
+		this.cdr.markForCheck();
+		setTimeout(() => {
+			this.isLoading = false;
+		}, 0);
+		this.openFile = true;
+	}
 
 	public state = {
 		diagramNodeData: [] as any,
@@ -130,21 +79,8 @@ export default class MyDiagramComponent {
 		selectedNodeData: null,
 	};
 
-	public loadJson(): void {
-		// Obtenemos el JSON que ya tienes definido en la clase
-		const json = this.diagramJSON as ModelJson;
-
-		// Actualizamos el state con immer
-		this.state = produce(this.state, (draft) => {
-			draft.diagramNodeData = json.nodeDataArray;
-			draft.diagramLinkData = json.linkDataArray;
-			draft.diagramModelData = json.modelData;
-			draft.skipsDiagramUpdate = false; // forzamos actualización del diagrama
-		});
-	}
-
 	constructor(private cdr: ChangeDetectorRef) {
-		this.initDiagram2 = this.initDiagram2.bind(this);
+		this.initDiagram = this.initDiagram.bind(this);
 	}
 
 	public getTemplateNodes = () => {
@@ -156,7 +92,7 @@ export default class MyDiagramComponent {
 		return sharedTemplateMap;
 	};
 
-	public initDiagram2() {
+	public initDiagram() {
 		this.diagram = new go.Diagram({
 			'undoManager.isEnabled': true,
 			'animationManager.isEnabled': true,
@@ -286,12 +222,28 @@ export default class MyDiagramComponent {
 	}
 
 	public diagramModelChange = (changes: go.IncrementalData) => {
-		if (!changes) return;
+		// Si estamos cargando desde archivo, ignoramos todos los cambios hasta que termine la carga.
+		if (this.isLoading) {
+			return;
+		}
+
+		if (!changes) {
+			this.hasChanges = false;
+			return;
+		}
+
+		this.hasChanges = true;
+
+		console.log(this.hasChanges);
+
+		// Nos “guardamos” antes los datos sincronizados y le decimos a Angular que, cuando
+		// re-renderice, NO vuelva a pasárselos al diagrama (skipsDiagramUpdate = true)
 		const appComp = this;
 		this.state = produce(this.state, (draft: any) => {
-			// set skipsDiagramUpdate: true since GoJS already has this update
-			// this way, we don't log an unneeded transaction in the Diagram's undoManager history
+			// IMPORTANTE: indicamos que el siguiente ciclo no debe re-enviar nada al diagrama
 			draft.skipsDiagramUpdate = true;
+
+			// Sincronizamos datos con el modelo actual del Diagrama
 			draft.diagramNodeData = DataSyncService.syncNodeData(
 				changes,
 				draft.diagramNodeData,
@@ -306,7 +258,8 @@ export default class MyDiagramComponent {
 				changes,
 				draft.diagramModelData
 			);
-			// If one of the modified nodes was the selected node used by the inspector, update the inspector selectedNodeData object
+
+			// Si el nodo seleccionado cambió, actualizamos selectedNodeData
 			const modifiedNodeData = changes.modifiedNodeData;
 			if (modifiedNodeData && draft.selectedNodeData) {
 				for (let i = 0; i < modifiedNodeData.length; i++) {

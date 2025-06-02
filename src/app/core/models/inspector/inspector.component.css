@@ -12,3 +12,24 @@
 ::ng-deep .font-picker .size-select {
 	height: 25px !important;
 }
+
+::ng-deep .search-field,
+::ng-deep .style-select,
+::ng-deep .size-select {
+	border-bottom: gray solid 1px !important;
+}
+
+::ng-deep .font-options {
+	border-top: gray solid 1px !important;
+}
+
+::ng-deep .search-field,
+::ng-deep .group-text,
+::ng-deep .style-select,
+::ng-deep .size-select {
+	color: white !important;
+}
+
+::ng-deep .font-name {
+	color: gray !important;
+}

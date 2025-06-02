@@ -4,18 +4,18 @@
 	border: gray solid 1px;
 }
 
-::ng-deep .mdc-button__label {
-	color: white;
-}
-
+::ng-deep .mdc-button__label,
 ::ng-deep .mat-mdc-menu-item {
-	color: white;
+	color: white !important;
 }
 
+::ng-deep .mat-mdc-menu-item:hover,
 ::ng-deep .mdc-button__label:hover {
-	color: #7204c1;
+	color: #7204c1 !important;
+	background: transparent !important;
 }
 
-::ng-deep .mat-mdc-menu-item:hover {
-	color: #7204c1;
+::ng-deep .mat-mdc-menu-item-text,
+::ng-deep .mat-icon {
+	color: white !important;
 }

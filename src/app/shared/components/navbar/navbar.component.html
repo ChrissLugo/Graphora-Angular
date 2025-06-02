@@ -18,34 +18,41 @@
 		<button
 			class="flex items-center md:h-7 text-white md:p-2 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full"
 		>
-			<svg
-				class="w-5 h-5"
-				fill="#ffffff"
-				viewBox="0 0 32 32"
-				version="1.1"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-				<g
-					id="SVGRepo_tracerCarrier"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				></g>
-				<g id="SVGRepo_iconCarrier">
-					<title>share</title>
-					<path
-						d="M0 25.472q0 2.368 1.664 4.032t4.032 1.664h18.944q2.336 0 4-1.664t1.664-4.032v-8.192l-3.776 3.168v5.024q0 0.8-0.544 1.344t-1.344 0.576h-18.944q-0.8 0-1.344-0.576t-0.544-1.344v-18.944q0-0.768 0.544-1.344t1.344-0.544h9.472v-3.776h-9.472q-2.368 0-4.032 1.664t-1.664 4v18.944zM5.696 19.808q0 2.752 1.088 5.28 0.512-2.944 2.24-5.344t4.288-3.872 5.632-1.664v5.6l11.36-9.472-11.36-9.472v5.664q-2.688 0-5.152 1.056t-4.224 2.848-2.848 4.224-1.024 5.152zM32 22.080v0 0 0z"
-					></path>
-				</g>
-			</svg>
+			<fa-icon size="lg" [icon]="['fas', 'share-from-square']"></fa-icon>
 			<span class="ml-2 tex-nomal">Compartir</span>
 		</button>
 	</div>
 
 	<!-- Opciones -->
 	<div
-		class="flex items-center w-full h-10 border-y-1 border-gray-900 space-x-5"
+		class="flex items-center w-full h-10 border-y-1 px-4 border-gray-900 gap-5"
 	>
+		<!-- Nube -->
+		<button
+			class="text-white hover:text-purple-300 cursor-pointer"
+			title="Guardar en la nube"
+		>
+			<fa-icon size="xl" [icon]="['fas', 'cloud']"></fa-icon>
+			<fa-icon
+				class="text-green-600 absolute left-6 bottom-[7px]"
+				*ngIf="false"
+				size="xs"
+				[icon]="['fas', 'circle-check']"
+			></fa-icon>
+			<fa-icon
+				class="text-red-500 absolute left-6 bottom-[7px]"
+				*ngIf="false"
+				size="xs"
+				[icon]="['fas', 'circle-xmark']"
+			></fa-icon>
+			<fa-icon
+				class="text-black animate-spin absolute left-6 bottom-[7px]"
+				*ngIf="true"
+				size="xs"
+				[icon]="['fas', 'spinner']"
+			></fa-icon>
+		</button>
+
 		<!-- Archivo -->
 		<button
 			mat-button
@@ -56,25 +63,13 @@
 			<label class="text-sm cursor-pointer mx-1">Archivo</label>
 			<fa-icon size="xs" [icon]="['fas', 'chevron-down']"></fa-icon>
 		</button>
+
 		<mat-menu #archivoMenu="matMenu" class="bg-black text-white">
 			<button mat-menu-item (click)="newFile()">Nuevo…</button>
-			<button mat-menu-item (click)="openFromFile()">Abrir desde…</button>
-			<button mat-menu-item (click)="renameFile()">Renombrar</button>
-		</mat-menu>
 
-		<!-- Guardar -->
-		<button
-			mat-button
-			[matMenuTriggerFor]="guardarMenu"
-			class="text-white hover:text-purple-300 gap-1 border-r-2 border-gray-900 pr-2"
-		>
-			<fa-icon size="lg" [icon]="['fas', 'floppy-disk']"></fa-icon>
-			<label class="text-sm cursor-pointer mx-1">Guardar</label>
-			<fa-icon size="xs" [icon]="['fas', 'chevron-down']"></fa-icon>
-		</button>
-		<mat-menu #guardarMenu="matMenu" class="bg-black text-white">
-			<button mat-menu-item (click)="save()">Guardar</button>
-			<button mat-menu-item (click)="saveAS()">Guardar como…</button>
+			<button mat-menu-item (click)="openFromFile()">Abrir desde…</button>
+
+			<button mat-menu-item (click)="renameFile()">Renombrar</button>
 		</mat-menu>
 
 		<!-- Exportar -->
@@ -95,6 +90,10 @@
 			<button mat-menu-item (click)="exportPDF()">
 				<mat-icon>picture_as_pdf</mat-icon>
 				<span>PDF</span>
+			</button>
+			<button mat-menu-item (click)="exportJSON()" class="flex flex-row">
+				<mat-icon>data_object</mat-icon>
+				<span>JSON</span>
 			</button>
 		</mat-menu>
 	</div>

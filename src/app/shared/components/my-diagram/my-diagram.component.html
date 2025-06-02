@@ -1,4 +1,9 @@
-<app-navbar [diagram]="this.diagram" />
+<app-navbar
+	[diagram]="this.diagram"
+	[hasChanges]="this.hasChanges"
+	(fileLoaded)="onFileLoaded($event)"
+	(hasChangesChange)="hasChangesChange($event)"
+/>
 <div class="h-dvh w-full flex flex-row">
 	<!-- Paleta del diagrama -->
 	<div class="h-dvh w-60 bg-black overflow-hidden border-x-1 border-gray-900">
@@ -15,12 +20,13 @@
 	<div class="h-full w-full">
 		<gojs-diagram
 			#myDiagram
-			[initDiagram]="initDiagram2"
+			[initDiagram]="initDiagram"
 			divClassName="h-dvh w-full bg-black"
 			[nodeDataArray]="state.diagramNodeData"
 			[modelData]="state.diagramModelData"
 			[linkDataArray]="state.diagramLinkData"
 			(modelChange)="diagramModelChange($event)"
+			[skipsDiagramUpdate]="state.skipsDiagramUpdate"
 		>
 			>
 		</gojs-diagram>
@@ -52,8 +58,4 @@
 			divClassName="w-full h-full"
 		></gojs-overview>
 	</div>
-
-	<button (click)="loadJson()" class="hover:bg-amber-50 cursor-pointer">
-		Cargar Json
-	</button>
 </div>
