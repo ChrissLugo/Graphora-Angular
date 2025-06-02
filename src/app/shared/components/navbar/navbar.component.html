@@ -94,15 +94,15 @@
 			<fa-icon size="xs" [icon]="['fas', 'chevron-down']"></fa-icon>
 		</button>
 		<mat-menu #exportarMenu="matMenu" class="bg-black text-white">
-			<button mat-menu-item (click)="exportPNG()">
+			<button mat-menu-item (click)="exportPNG_SVG_PDF('png')">
 				<mat-icon>image</mat-icon>
 				<span>PNG</span>
 			</button>
-			<button mat-menu-item (click)="exportPDF()">
+			<button mat-menu-item (click)="exportPNG_SVG_PDF('pdf')">
 				<mat-icon>picture_as_pdf</mat-icon>
 				<span>PDF</span>
 			</button>
-			<button mat-menu-item (click)="exportSVG()">
+			<button mat-menu-item (click)="exportPNG_SVG_PDF('svg')">
 				<mat-icon>crop_5_4</mat-icon>
 				<span>SVG</span>
 			</button>

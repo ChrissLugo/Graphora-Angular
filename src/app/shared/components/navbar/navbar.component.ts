@@ -23,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import go from 'gojs';
+import jsPDF from 'jspdf';
 
 interface ModelJson {
 	modelData: any;
@@ -181,24 +182,77 @@ export class NavbarComponent {
 		this.hasChangesChange.emit(false);
 	}
 
-	exportPDF() {
-		throw new Error('Method not implemented.');
+	public makePDF(background: 'black' | 'white' | 'transparent') {
+		const svgElement = this.diagram.makeSvg({
+			scale: 1,
+			background: background,
+		});
+		const svgString = new XMLSerializer().serializeToString(svgElement!);
+		const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+		const url = URL.createObjectURL(svgBlob);
+
+		const img = new Image();
+		img.onload = () => {
+			const origWidth = img.width;
+			const origHeight = img.height;
+
+			// 3) Crear canvas de alta resolución para el diagrama (scaleFactor = 2)
+			const scaleFactor = 2;
+			const canvas = document.createElement('canvas');
+			canvas.width = origWidth * scaleFactor;
+			canvas.height = origHeight * scaleFactor;
+			const ctx = canvas.getContext('2d')!;
+			ctx.scale(scaleFactor, scaleFactor);
+			ctx.drawImage(img, 0, 0);
+
+			const imgData = canvas.toDataURL('image/png'); // PNG de alta resolución
+
+			// 4) Crear PDF del tamaño exacto del diagrama
+			const pdf = new jsPDF({
+				unit: 'px',
+				format: [origWidth, origHeight],
+				orientation: origWidth > origHeight ? 'landscape' : 'portrait',
+			});
+
+			// 5) Dibujar el PNG a tamaño completo (0,0) sin márgenes
+			pdf.addImage(imgData, 'PNG', 0, 0, origWidth, origHeight);
+
+			const baseName = (this.fileName || 'diagrama').replace(
+				/\.json$/i,
+				''
+			);
+			pdf.save(`${baseName}.pdf`);
+
+			URL.revokeObjectURL(url);
+		};
+
+		img.onerror = () => {
+			Swal.fire({
+				title: 'Error al generar PDF',
+				text: 'Ocurrió un problema al convertir el diagrama a PDF.',
+				icon: 'error',
+				theme: 'dark',
+			});
+			URL.revokeObjectURL(url);
+		};
+
+		img.src = url;
 	}
 
-	exportSVG() {
-		throw new Error('Method not implemented.');
-	}
+	public exportPNG_SVG_PDF(type: 'png' | 'svg' | 'pdf') {
+		const opcionesFondo: Record<string, string> = {
+			white: 'Blanco',
+			black: 'Negro',
+		};
 
-	exportPNG() {
+		if (type !== 'pdf') {
+			opcionesFondo['transparent'] = 'Transparente';
+		}
 		Swal.fire({
 			title: 'Color de fondo',
 			theme: 'dark',
 			input: 'radio',
-			inputOptions: {
-				white: 'Blanco',
-				transparent: 'Transparente',
-				black: 'Negro',
-			},
+			inputOptions: opcionesFondo,
 			inputValidator: (value) => {
 				return new Promise((resolve) => {
 					if (value) {
@@ -209,7 +263,7 @@ export class NavbarComponent {
 				});
 			},
 			confirmButtonColor: '#7204c1',
-			confirmButtonText: 'Descargar PNG',
+			confirmButtonText: `Descargar ${type.toUpperCase()}`,
 			cancelButtonText: 'Cancelar',
 			showCancelButton: true,
 			preConfirm: (value) => {
@@ -217,18 +271,29 @@ export class NavbarComponent {
 			},
 		}).then((result) => {
 			if (result.isConfirmed) {
-				this.diagram.makeImageData({
-					background: result.value,
-					returnType: 'blob',
-					callback: (blob: any) => this.saveImage(blob, 'png'),
-				});
+				if (type === 'png') {
+					this.diagram.makeImageData({
+						background: result.value,
+						returnType: 'blob',
+						callback: (blob: any) => this.makePNG_SVG(blob, 'png'),
+					});
+				} else if (type === 'svg') {
+					let svg = this.diagram.makeSvg({
+						scale: 1,
+						background: result.value,
+					});
+					let svgstr = new XMLSerializer().serializeToString(svg!);
+					let blob = new Blob([svgstr], { type: 'image/svg+xml' });
+					this.makePNG_SVG(blob, 'svg');
+				} else {
+					this.makePDF(result.value);
+				}
 			}
 		});
 	}
 
-	private saveImage(blob: Blob, type: string) {
-		const extension = type.toLowerCase();
-		const filename = `diagrama.${extension}`;
+	private makePNG_SVG(blob: Blob, type: 'png' | 'svg') {
+		const filename = `diagrama.${type}`;
 
 		if ((window.navigator as any).msSaveOrOpenBlob) {
 			(window.navigator as any).msSaveOrOpenBlob(blob, filename);
