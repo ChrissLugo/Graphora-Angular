@@ -9,13 +9,12 @@ export class EmptyNode {
 		}).add(
 			new go.Shape('RoundedRectangle', {
 				fill: 'transparent',
-				stroke: 'white',
 				strokeWidth: 0,
 			}),
 			// Bloque de texto en color blanco
 			new go.TextBlock('', {
 				margin: 5,
-				stroke: 'white', // color del texto
+
 				editable: true,
 			})
 		);

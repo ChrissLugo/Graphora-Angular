@@ -3,6 +3,7 @@
 	[hasChanges]="this.hasChanges"
 	(fileLoaded)="onFileLoaded($event)"
 	(hasChangesChange)="hasChangesChange($event)"
+	(typeTheme)="changeTheme($event)"
 />
 <div class="h-dvh w-full flex flex-row">
 	<!-- Paleta del diagrama -->
@@ -17,11 +18,11 @@
 	</div>
 
 	<!-- Diagrama -->
-	<div class="h-full w-full">
+	<div id="diagram" class="h-full w-full bg-[#E0DBD9] dark:bg-black">
 		<gojs-diagram
 			#myDiagram
 			[initDiagram]="initDiagram"
-			divClassName="h-dvh w-full bg-black"
+			divClassName="h-dvh w-full "
 			[nodeDataArray]="state.diagramNodeData"
 			[modelData]="state.diagramModelData"
 			[linkDataArray]="state.diagramLinkData"
@@ -50,7 +51,7 @@
 
 	<!-- Vista previa -->
 	<div
-		class="absolute z-50 bottom-1 right-2.5 w-52 h-30 bg-black border border-gray-600 rounded-md"
+		class="absolute z-50 bottom-1 right-2.5 w-52 h-30 bg-[#E0DBD9] dark:bg-black border border-gray-600 rounded-md"
 	>
 		<gojs-overview
 			#myOverview

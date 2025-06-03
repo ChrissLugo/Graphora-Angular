@@ -129,8 +129,34 @@ export class TextNode {
 				editable: false,
 				isMultiline: true,
 			})
+
 				.bind(new go.Binding('text', 'text').makeTwoWay())
-				.bind(new go.Binding('stroke', 'color').makeTwoWay())
+				.bind(
+					new go.Binding(
+						'stroke',
+						'color',
+						(valorColor: string, obj: go.GraphObject) => {
+							const c = (valorColor || '').toLowerCase();
+							// Si no es blanco o nego devolvemos el color
+							if (
+								c !== '#000' &&
+								c !== '#000000' &&
+								c !== '#fff' &&
+								c !== '#ffffff'
+							) {
+								return valorColor;
+							}
+							// Si es negro o blanco cargamos el color del tema
+							if (obj.diagram) {
+								return obj.diagram.themeManager.findValue(
+									'text',
+									'colors'
+								);
+							}
+							return valorColor;
+						}
+					)
+				)
 				.bind(new go.Binding('background', 'textBgColor').makeTwoWay())
 				.bind(new go.Binding('font', 'font').makeTwoWay())
 				.bind(new go.Binding('alignment', 'alignment').makeTwoWay()),

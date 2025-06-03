@@ -16,6 +16,7 @@ import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import { faL } from '@fortawesome/free-solid-svg-icons';
+import { every } from 'rxjs';
 
 interface ModelJson {
 	modelData: any;
@@ -49,9 +50,43 @@ export default class MyDiagramComponent {
 	public hasChanges: boolean = false;
 	public openFile: boolean = false;
 	private isLoading: boolean = false;
+	private theme = 'dark';
 
 	public hasChangesChange(event: any) {
 		this.hasChanges = event;
+	}
+
+	changeTheme(theme: string) {
+		this.theme = theme;
+		console.log(this.theme);
+		this.diagram.themeManager.currentTheme = theme;
+		if (theme === 'dark') {
+			this.diagram.grid = new go.Panel('Grid', {
+				gridCellSize: new go.Size(10, 10),
+			}).add(
+				new go.Shape('LineH', { stroke: '#1b1b1b' }),
+				new go.Shape('LineV', { stroke: '#1b1b1b' }),
+				new go.Shape('LineH', { stroke: '#2a2a2a', interval: 5 }),
+				new go.Shape('LineV', { stroke: '#2a2a2a', interval: 5 })
+			);
+		} else {
+			this.diagram.grid = new go.Panel('Grid', {
+				gridCellSize: new go.Size(10, 10),
+			}).add(
+				new go.Shape('LineH', { stroke: '#DAD0CD' }),
+				new go.Shape('LineV', { stroke: '#DAD0CD' }),
+				new go.Shape('LineH', { stroke: '#C6C1BF', interval: 5 }),
+				new go.Shape('LineV', { stroke: '#C6C1BF', interval: 5 })
+			);
+		}
+		this.updateDiagram();
+	}
+
+	private updateDiagram(): void {
+		this.diagram.startTransaction();
+		this.diagram.updateAllRelationshipsFromData();
+		this.diagram.updateAllTargetBindings();
+		this.diagram.commitTransaction('update');
 	}
 
 	public onFileLoaded(json: ModelJson) {
@@ -118,6 +153,22 @@ export default class MyDiagramComponent {
 				linkKeyProperty: 'key',
 			}),
 		});
+		// this.diagram.themeManager.currentTheme = this.theme;
+		// this.diagram.themeManager.changesDivBackground = true;
+		this.diagram.themeManager.currentTheme = 'dark';
+
+		this.diagram.themeManager.set('light', {
+			colors: {
+				text: '#000',
+				arrow: '#000000',
+			},
+		});
+		this.diagram.themeManager.set('dark', {
+			colors: {
+				text: '#fff',
+				arrow: '#ffffff',
+			},
+		});
 
 		//Agregar la plantilla de nodos
 		this.diagram.nodeTemplateMap = this.getTemplateNodes();
@@ -138,7 +189,7 @@ export default class MyDiagramComponent {
 			});
 		}
 
-		// Configurar la cuadricula personalizada
+		// Configurar la cuadricula personalizada dependiendo el tema
 		this.diagram.grid = new go.Panel('Grid', {
 			gridCellSize: new go.Size(10, 10),
 		}).add(
@@ -210,13 +261,17 @@ export default class MyDiagramComponent {
 				new go.Shape({
 					isPanelMain: true,
 					strokeWidth: 2,
-					stroke: 'white',
-				}),
+					stroke: null,
+				})
+					.theme('fill', 'arrow')
+					.theme('stroke', 'arrow'),
 				new go.Shape({
 					toArrow: 'Standard',
 					stroke: 'white',
 					fill: 'white',
 				})
+					.theme('fill', 'arrow')
+					.theme('stroke', 'arrow')
 			);
 		return this.diagram;
 	}
