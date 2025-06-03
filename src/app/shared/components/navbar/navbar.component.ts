@@ -285,6 +285,11 @@ export class NavbarComponent {
 			},
 		}).then((result) => {
 			if (result.isConfirmed) {
+				if (result.value === 'black') {
+					this.diagram.themeManager.currentTheme = 'dark';
+				} else {
+					this.diagram.themeManager.currentTheme = 'light';
+				}
 				if (type === 'png') {
 					this.diagram.makeImageData({
 						background: result.value,
@@ -302,6 +307,7 @@ export class NavbarComponent {
 				} else {
 					this.makePDF(result.value);
 				}
+				this.diagram.themeManager.currentTheme = this.theme;
 			}
 		});
 	}
@@ -324,90 +330,4 @@ export class NavbarComponent {
 		URL.revokeObjectURL(url);
 		document.body.removeChild(a);
 	}
-
-	// Esta función recorre todos los objetos gráficos de tipo Shape / TextBlock
-	// e invierte el stroke, el fill y el textFill (cuando existan).
-	// invertirColoresDeDiagrama(diagram: go.Diagram) {
-	// 	diagram.startTransaction('Invertir Colores');
-
-	// 	// Recorremos **todos** los Part (nodos, enlaces, etc.)
-	// 	diagram.parts.each((part) => {
-	// 		// 1) Si el part tiene un panel con shapes/textblocks, los buscamos dentro
-	// 		part.findObject((obj: go.GraphObject) => {
-	// 			// Para cada GraphObject que sea Shape, invertimos stroke y fill
-	// 			if (obj instanceof go.Shape) {
-	// 				const shape = obj as go.Shape;
-	// 				// Invertir stroke
-	// 				if (shape.stroke) {
-	// 					shape.stroke = this.invertirColor(
-	// 						shape.stroke.toString()
-	// 					);
-	// 				}
-	// 				// Invertir fill (en caso de que sea un color sólido)
-	// 				if (shape.fill) {
-	// 					shape.fill = this.invertirColor(shape.fill.toString());
-	// 				}
-	// 			}
-	// 			// Para cada GraphObject que sea TextBlock, invertimos el textFill
-	// 			else if (obj instanceof go.TextBlock) {
-	// 				const tb = obj as go.TextBlock;
-	// 				if (tb.stroke) {
-	// 					tb.stroke = this.invertirColor(tb.stroke.toString());
-	// 				}
-	// 				if (tb.color) {
-	// 					// En GoJS, `TextBlock.color` y `TextBlock.stroke` pueden usarse
-	// 					// Ambos pueden marcar el color del texto, depende de tu template
-	// 					tb.color = this.invertirColor(tb.color.toString());
-	// 				}
-	// 			}
-	// 			// Retornar false para recorridos completos; true si queremos detenernos
-	// 			return false;
-	// 		});
-	// 	});
-
-	// 	diagram.commitTransaction('Invertir Colores');
-	// }
-
-	// /**
-	//  * Recibe un string estilo "#rrggbb" o "rgb(r,g,b)" y devuelve el color invertido
-	//  * en el mismo formato. Si el formado no es reconocido, lo devuelve tal cual.
-	//  */
-	// invertirColor(c: string): string {
-	// 	// Si viene como "#rrggbb"
-	// 	if (c.charAt(0) === '#' && (c.length === 7 || c.length === 4)) {
-	// 		let r: number, g: number, b: number;
-	// 		// Expandir formato #rgb a #rrggbb
-	// 		if (c.length === 4) {
-	// 			r = parseInt(c.charAt(1) + c.charAt(1), 16);
-	// 			g = parseInt(c.charAt(2) + c.charAt(2), 16);
-	// 			b = parseInt(c.charAt(3) + c.charAt(3), 16);
-	// 		} else {
-	// 			r = parseInt(c.substr(1, 2), 16);
-	// 			g = parseInt(c.substr(3, 2), 16);
-	// 			b = parseInt(c.substr(5, 2), 16);
-	// 		}
-	// 		// Invertir cada canal
-	// 		const rr = (255 - r).toString(16).padStart(2, '0');
-	// 		const gg = (255 - g).toString(16).padStart(2, '0');
-	// 		const bb = (255 - b).toString(16).padStart(2, '0');
-	// 		return `#${rr}${gg}${bb}`;
-	// 	}
-
-	// 	// Si viene como "rgb(r,g,b)"
-	// 	const rgbMatch = c.match(
-	// 		/rgb\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)/i
-	// 	);
-	// 	if (rgbMatch) {
-	// 		const r = parseInt(rgbMatch[1], 10);
-	// 		const g = parseInt(rgbMatch[2], 10);
-	// 		const b = parseInt(rgbMatch[3], 10);
-	// 		const rr = 255 - r;
-	// 		const gg = 255 - g;
-	// 		const bb = 255 - b;
-	// 		return `rgb(${rr},${gg},${bb})`;
-	// 	}
-
-	// 	// Si no coincide con ningún patrón, devolvemos tal cual (no sabemos cómo invertirlo)
-	// 	return c;
-	// }
 }
