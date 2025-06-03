@@ -130,7 +130,32 @@ export class DiamondNode {
 				isMultiline: true,
 			})
 				.bind(new go.Binding('text', 'text').makeTwoWay())
-				.bind(new go.Binding('stroke', 'color').makeTwoWay())
+				.bind(
+					new go.Binding(
+						'stroke',
+						'color',
+						(valorColor: string, obj: go.GraphObject) => {
+							const c = (valorColor || '').toLowerCase();
+							// Si no es blanco o nego devolvemos el color
+							if (
+								c !== '#000' &&
+								c !== '#000000' &&
+								c !== '#fff' &&
+								c !== '#ffffff'
+							) {
+								return valorColor;
+							}
+							// Si es negro o blanco cargamos el color del tema
+							if (obj.diagram) {
+								return obj.diagram.themeManager.findValue(
+									'text',
+									'colors'
+								);
+							}
+							return valorColor;
+						}
+					)
+				)
 				.bind(new go.Binding('background', 'textBgColor').makeTwoWay())
 				.bind(new go.Binding('font', 'font').makeTwoWay())
 				.bind(new go.Binding('alignment', 'alignment').makeTwoWay()),
@@ -139,6 +164,20 @@ export class DiamondNode {
 			makePort('R', go.Spot.Right, true, true),
 			makePort('B', go.Spot.Bottom, true, true)
 		);
+
+		const shape = this.node.findObject('SHAPE');
+		if (shape) {
+			shape.bind(new go.Binding('stroke', 'borderColor').makeTwoWay());
+			shape.bind(
+				new go.Binding('strokeWidth', 'borderWidth', (val) =>
+					Number(val)
+				).makeTwoWay()
+			);
+			shape.bind(
+				new go.Binding('strokeDashArray', 'borderStyle').makeTwoWay()
+			);
+			shape.bind(new go.Binding('fill', 'shapeBgColor').makeTwoWay());
+		}
 
 		function showSmallPorts(node: any, show: any) {
 			node.ports.each((port: any) => {

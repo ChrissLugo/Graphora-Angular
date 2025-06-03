@@ -11,12 +11,12 @@ import { TextNode } from '../../../core/models/nodes/text-node';
 import { InspectorComponent } from '../../../core/models/inspector/inspector.component';
 import { CommonModule } from '@angular/common';
 import { produce } from 'immer';
-import { EmptyNode } from '../../../core/models/nodes/empty-node';
 import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import { faL } from '@fortawesome/free-solid-svg-icons';
 import { every } from 'rxjs';
+import { NodePalette } from '../../../core/models/palettes/palette';
 
 interface ModelJson {
 	modelData: any;
@@ -120,9 +120,7 @@ export default class MyDiagramComponent {
 
 	public getTemplateNodes = () => {
 		const sharedTemplateMap = new go.Map<string, go.Node>();
-		sharedTemplateMap.add('EmptyNode', new EmptyNode().getNode());
 		sharedTemplateMap.add('TextNode', new TextNode().getNode());
-
 		sharedTemplateMap.add('DiamondNode', new DiamondNode().getNode());
 		return sharedTemplateMap;
 	};
@@ -288,7 +286,6 @@ export default class MyDiagramComponent {
 		}
 
 		this.hasChanges = true;
-
 		console.log(this.hasChanges);
 
 		// Nos “guardamos” antes los datos sincronizados y le decimos a Angular que, cuando
@@ -334,9 +331,34 @@ export default class MyDiagramComponent {
 
 	public initPalette = (): go.Palette => {
 		const palette = new go.Palette();
+		// const $ = go.GraphObject.make;
+		// palette.nodeTemplateMap.add(
+		// 	'TextNode',
+		// 	$(
+		// 		go.Node,
+		// 		'Auto',
+		// 		$(go.Shape, 'Rectangle', {
+		// 			fill: '#ACE600',
+		// 			stroke: '#333',
+		// 			strokeWidth: 2,
+		// 		}),
+		// 		$(
+		// 			go.TextBlock,
+		// 			{
+		// 				margin: 8,
+		// 				editable: false,
+		// 				stroke: '#fffff9',
+		// 				font: '14px sans-serif',
+		// 			},
+		// 			new go.Binding('text')
+		// 		)
+		// 	)
+		// );
+
+		palette.nodeTemplateMap = new NodePalette().getTemplates();
 
 		//Se asigna la plantilla de los nodos
-		palette.nodeTemplateMap = this.getTemplateNodes();
+		// palette.nodeTemplateMap = this.NodePalette();
 
 		return palette;
 	};
@@ -374,9 +396,11 @@ export default class MyDiagramComponent {
 		paletteNodeData: [
 			{ category: 'EmptyNode' },
 			{ category: 'EmptyNode' },
-
-			{ key: 1, category: 'TextNode', text: 'Texto', color: '#fff' },
-			{ key: 2, category: 'DiamondNode', text: 'Texto', color: '#fff' },
+			{ category: 'Triangle' },
+			{ category: 'DiamondNode', text: 'Texto', color: '#ffffff' },
+			{ category: 'Rectangle', text: 'Texto', color: '#ffffff' },
+			{ category: 'TextNode', text: 'Texto', color: '#ffffff' },
+			{ category: 'Rectangle', text: 'Texto', color: '#ffffff' },
 		],
 		paletteModelData: { prop: 'val' },
 	};

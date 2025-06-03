@@ -123,8 +123,35 @@ export class TextNode {
 				name: 'SHAPE',
 				fill: 'transparent',
 				stroke: null,
-			}),
+			}).bind(
+				new go.Binding(
+					'fill',
+					'shapeBgColor',
+					(hex: string, obj: go.GraphObject) => {
+						const c = (hex || '').toLowerCase();
+						// Si el usuario definió un color distinto a blanco/#fff o negro/#000, lo respetamos:
+						if (
+							c !== '#000' &&
+							c !== '#000000' &&
+							c !== '#fff' &&
+							c !== '#ffffff'
+						) {
+							return hex;
+						}
+						// Si es blanco o negro puro (o viene vacío), buscamos el color default del tema:
+						if (obj.diagram) {
+							return obj.diagram.themeManager.findValue(
+								'shape',
+								'background'
+							);
+						}
+						// Si ni siquiera hay diagram (edge case), devolvemos el mismo valor:
+						return hex;
+					}
+				).makeTwoWay()
+			),
 			new go.TextBlock('Texto', {
+				name: 'TEXTBLOCK',
 				margin: 8,
 				editable: false,
 				isMultiline: true,
@@ -134,29 +161,46 @@ export class TextNode {
 				.bind(
 					new go.Binding(
 						'stroke',
-						'color',
-						(valorColor: string, obj: go.GraphObject) => {
-							const c = (valorColor || '').toLowerCase();
-							// Si no es blanco o nego devolvemos el color
+						'',
+						(_: any, tb: go.GraphObject) => {
+							const data =
+								(tb.part && tb.part.data) || ({} as any);
+							const userColor = (data.color || '')
+								.toString()
+								.toLowerCase();
 							if (
-								c !== '#000' &&
-								c !== '#000000' &&
-								c !== '#fff' &&
-								c !== '#ffffff'
+								userColor !== '#000' &&
+								userColor !== '#000000' &&
+								userColor !== '#fff' &&
+								userColor !== '#ffffff'
 							) {
-								return valorColor;
+								return data.color;
 							}
-							// Si es negro o blanco cargamos el color del tema
-							if (obj.diagram) {
-								return obj.diagram.themeManager.findValue(
+							const textBgHex =
+								(data.textBgColor as string) || '';
+							if (textBgHex) {
+								return isColorLight(textBgHex)
+									? '#000000'
+									: '#FFFFFF';
+							}
+							const shapeBgHex =
+								(data.shapeBgColor as string) || '';
+							if (shapeBgHex) {
+								return isColorLight(shapeBgHex)
+									? '#000000'
+									: '#FFFFFF';
+							}
+							if (tb.diagram) {
+								return tb.diagram.themeManager.findValue(
 									'text',
 									'colors'
 								);
 							}
-							return valorColor;
+							return '#000000';
 						}
-					)
+					).makeTwoWay()
 				)
+				.bind(new go.Binding('text', 'text').makeTwoWay())
 				.bind(new go.Binding('background', 'textBgColor').makeTwoWay())
 				.bind(new go.Binding('font', 'font').makeTwoWay())
 				.bind(new go.Binding('alignment', 'alignment').makeTwoWay()),
@@ -178,6 +222,28 @@ export class TextNode {
 				new go.Binding('strokeDashArray', 'borderStyle').makeTwoWay()
 			);
 			shape.bind(new go.Binding('fill', 'shapeBgColor').makeTwoWay());
+		}
+
+		function isColorLight(hexColor: string): boolean {
+			let hex = hexColor.replace(/^#/, '').toLowerCase();
+
+			if (hex.length === 3) {
+				hex = hex
+					.split('')
+					.map((ch) => ch + ch)
+					.join('');
+			}
+			if (hex.length !== 6) {
+				return true;
+			}
+
+			const r = parseInt(hex.substring(0, 2), 16);
+			const g = parseInt(hex.substring(2, 4), 16);
+			const b = parseInt(hex.substring(4, 6), 16);
+
+			const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+
+			return luminance > 186;
 		}
 
 		function showSmallPorts(node: any, show: any) {
