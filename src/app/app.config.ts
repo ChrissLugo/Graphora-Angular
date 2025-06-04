@@ -9,7 +9,7 @@ import {
 	FontPickerConfigInterface,
 	FontPickerService,
 } from 'ngx-font-picker';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app.routes';
 
@@ -21,6 +21,7 @@ export const appConfig: ApplicationConfig = {
 	providers: [
 		provideZoneChangeDetection({ eventCoalescing: true }),
 		provideRouter(routes),
+		provideHttpClient(),
 
 		importProvidersFrom(HttpClientModule),
 		FontPickerService,

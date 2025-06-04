@@ -123,33 +123,34 @@ export class TextNode {
 				name: 'SHAPE',
 				fill: 'transparent',
 				stroke: null,
-			}).bind(
-				new go.Binding(
-					'fill',
-					'shapeBgColor',
-					(hex: string, obj: go.GraphObject) => {
-						const c = (hex || '').toLowerCase();
-						// Si el usuario definió un color distinto a blanco/#fff o negro/#000, lo respetamos:
-						if (
-							c !== '#000' &&
-							c !== '#000000' &&
-							c !== '#fff' &&
-							c !== '#ffffff'
-						) {
-							return hex;
-						}
-						// Si es blanco o negro puro (o viene vacío), buscamos el color default del tema:
-						if (obj.diagram) {
-							return obj.diagram.themeManager.findValue(
-								'shape',
-								'background'
-							);
-						}
-						// Si ni siquiera hay diagram (edge case), devolvemos el mismo valor:
-						return hex;
-					}
-				).makeTwoWay()
-			),
+			}),
+			// .bind(
+			// 	new go.Binding(
+			// 		'fill',
+			// 		'shapeBgColor',
+			// 		(hex: string, obj: go.GraphObject) => {
+			// 			const c = (hex || '').toLowerCase();
+			// 			// Si el usuario definió un color distinto a blanco/#fff o negro/#000, lo respetamos:
+			// 			if (
+			// 				c !== '#000' &&
+			// 				c !== '#000000' &&
+			// 				c !== '#fff' &&
+			// 				c !== '#ffffff'
+			// 			) {
+			// 				return hex;
+			// 			}
+			// 			// Si es blanco o negro puro (o viene vacío), buscamos el color default del tema:
+			// 			if (obj.diagram) {
+			// 				return obj.diagram.themeManager.findValue(
+			// 					'shape',
+			// 					'background'
+			// 				);
+			// 			}
+			// 			// Si ni siquiera hay diagram (edge case), devolvemos el mismo valor:
+			// 			return hex;
+			// 		}
+			// 	).makeTwoWay()
+			// ),
 			new go.TextBlock('Texto', {
 				name: 'TEXTBLOCK',
 				margin: 8,

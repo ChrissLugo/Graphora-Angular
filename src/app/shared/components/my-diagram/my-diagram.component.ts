@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import * as go from 'gojs';
 import {
@@ -14,9 +14,9 @@ import { produce } from 'immer';
 import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
-import { faL } from '@fortawesome/free-solid-svg-icons';
-import { every } from 'rxjs';
 import { NodePalette } from '../../../core/models/palettes/palette';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TemplatesService } from '../../../services/API/Templates.Service';
 
 interface ModelJson {
 	modelData: any;
@@ -37,7 +37,7 @@ interface ModelJson {
 	templateUrl: './my-diagram.component.html',
 	styleUrl: './my-diagram.component.css',
 })
-export default class MyDiagramComponent {
+export default class MyDiagramComponent implements OnInit {
 	@ViewChild('myDiagram', { static: true })
 	public myDiagramComponent!: DiagramComponent;
 	@ViewChild('myPalette', { static: true })
@@ -51,6 +51,41 @@ export default class MyDiagramComponent {
 	public openFile: boolean = false;
 	private isLoading: boolean = false;
 	private theme = 'dark';
+	private templateID: number;
+
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private activatedRoute: ActivatedRoute,
+		public TemplatesService: TemplatesService
+	) {
+		this.initDiagram = this.initDiagram.bind(this);
+		this.templateID = this.activatedRoute.snapshot.params['id'];
+	}
+
+	ngOnInit(): void {
+		this.getTemplateById();
+	}
+
+	public loadJson(json: any): void {
+		this.state = produce(this.state, (draft) => {
+			draft.diagramNodeData = json.nodeDataArray;
+			draft.diagramLinkData = json.linkDataArray;
+			draft.diagramModelData = json.modelData;
+			draft.skipsDiagramUpdate = false;
+		});
+	}
+
+	getTemplateById() {
+		this.TemplatesService.getTemplateById(this.templateID).subscribe({
+			next: (data: any) => {
+				this.TemplatesService.template = data.diagram;
+				this.loadJson(this.TemplatesService.template.template_data);
+			},
+			error: (err) => {
+				console.error(err);
+			},
+		});
+	}
 
 	public hasChangesChange(event: any) {
 		this.hasChanges = event;
@@ -114,10 +149,6 @@ export default class MyDiagramComponent {
 		selectedNodeData: null,
 	};
 
-	constructor(private cdr: ChangeDetectorRef) {
-		this.initDiagram = this.initDiagram.bind(this);
-	}
-
 	public getTemplateNodes = () => {
 		const sharedTemplateMap = new go.Map<string, go.Node>();
 		sharedTemplateMap.add('TextNode', new TextNode().getNode());
@@ -157,13 +188,13 @@ export default class MyDiagramComponent {
 
 		this.diagram.themeManager.set('light', {
 			colors: {
-				text: '#000',
+				text: '#000000',
 				arrow: '#000000',
 			},
 		});
 		this.diagram.themeManager.set('dark', {
 			colors: {
-				text: '#fff',
+				text: '#ffffff',
 				arrow: '#ffffff',
 			},
 		});
@@ -331,35 +362,7 @@ export default class MyDiagramComponent {
 
 	public initPalette = (): go.Palette => {
 		const palette = new go.Palette();
-		// const $ = go.GraphObject.make;
-		// palette.nodeTemplateMap.add(
-		// 	'TextNode',
-		// 	$(
-		// 		go.Node,
-		// 		'Auto',
-		// 		$(go.Shape, 'Rectangle', {
-		// 			fill: '#ACE600',
-		// 			stroke: '#333',
-		// 			strokeWidth: 2,
-		// 		}),
-		// 		$(
-		// 			go.TextBlock,
-		// 			{
-		// 				margin: 8,
-		// 				editable: false,
-		// 				stroke: '#fffff9',
-		// 				font: '14px sans-serif',
-		// 			},
-		// 			new go.Binding('text')
-		// 		)
-		// 	)
-		// );
-
 		palette.nodeTemplateMap = new NodePalette().getTemplates();
-
-		//Se asigna la plantilla de los nodos
-		// palette.nodeTemplateMap = this.NodePalette();
-
 		return palette;
 	};
 
@@ -424,7 +427,7 @@ export default class MyDiagramComponent {
 			);
 			if (idx >= 0) {
 				draft.diagramNodeData[idx] = data;
-				draft.skipsDiagramUpdate = false; // we need to sync GoJS data with this new app state, so do not skips Diagram update
+				draft.skipsDiagramUpdate = false;
 			}
 		});
 	}

@@ -258,10 +258,10 @@ export class NavbarComponent {
 			white: 'Blanco',
 			black: 'Negro',
 		};
-
 		if (type !== 'pdf') {
 			opcionesFondo['transparent'] = 'Transparente';
 		}
+
 		Swal.fire({
 			title: 'Color de fondo',
 			theme: 'dark',
@@ -269,45 +269,61 @@ export class NavbarComponent {
 			inputOptions: opcionesFondo,
 			inputValidator: (value) => {
 				return new Promise((resolve) => {
-					if (value) {
-						resolve();
-					} else {
-						resolve('Elija un color de fondo para continuar');
-					}
+					if (value) resolve();
+					else resolve('Elija un color de fondo para continuar');
 				});
 			},
 			confirmButtonColor: '#7204c1',
 			confirmButtonText: `Descargar ${type.toUpperCase()}`,
 			cancelButtonText: 'Cancelar',
 			showCancelButton: true,
-			preConfirm: (value) => {
-				return value;
-			},
+			preConfirm: (value) => value,
 		}).then((result) => {
-			if (result.isConfirmed) {
-				if (result.value === 'black') {
-					this.diagram.themeManager.currentTheme = 'dark';
-				} else {
-					this.diagram.themeManager.currentTheme = 'light';
-				}
-				if (type === 'png') {
-					this.diagram.makeImageData({
-						background: result.value,
-						returnType: 'blob',
-						callback: (blob: any) => this.makePNG_SVG(blob, 'png'),
-					});
-				} else if (type === 'svg') {
-					let svg = this.diagram.makeSvg({
-						scale: 1,
-						background: result.value,
-					});
-					let svgstr = new XMLSerializer().serializeToString(svg!);
-					let blob = new Blob([svgstr], { type: 'image/svg+xml' });
-					this.makePNG_SVG(blob, 'svg');
-				} else {
-					this.makePDF(result.value);
-				}
+			if (!result.isConfirmed) return;
+			const nuevoFondo = result.value as
+				| 'white'
+				| 'black'
+				| 'transparent';
+
+			this.diagram.startTransaction('CambioTemaParaExport');
+			if (nuevoFondo === 'black') {
+				this.diagram.themeManager.currentTheme = 'dark';
+			} else {
+				this.diagram.themeManager.currentTheme = 'light';
+			}
+			this.diagram.updateAllTargetBindings();
+			this.diagram.commitTransaction('CambioTemaParaExport');
+			if (type === 'png') {
+				this.diagram.makeImageData({
+					background: nuevoFondo,
+					returnType: 'blob',
+					callback: (blob: Blob) => {
+						this.makePNG_SVG(blob, 'png');
+						this.diagram.startTransaction('RestaurarTemaOriginal');
+						this.diagram.themeManager.currentTheme = this.theme;
+						this.diagram.updateAllTargetBindings();
+						this.diagram.commitTransaction('RestaurarTemaOriginal');
+					},
+				});
+			} else if (type === 'svg') {
+				const svg = this.diagram.makeSvg({
+					scale: 1,
+					background: nuevoFondo,
+				});
+				const svgStr = new XMLSerializer().serializeToString(svg!);
+				const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+				this.makePNG_SVG(blob, 'svg');
+				this.diagram.startTransaction('RestaurarTemaOriginal');
 				this.diagram.themeManager.currentTheme = this.theme;
+				this.diagram.updateAllTargetBindings();
+				this.diagram.commitTransaction('RestaurarTemaOriginal');
+			} else {
+				// PDF
+				this.makePDF(nuevoFondo);
+				this.diagram.startTransaction('RestaurarTemaOriginal');
+				this.diagram.themeManager.currentTheme = this.theme;
+				this.diagram.updateAllTargetBindings();
+				this.diagram.commitTransaction('RestaurarTemaOriginal');
 			}
 		});
 	}

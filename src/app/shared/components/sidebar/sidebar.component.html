@@ -31,9 +31,7 @@
 		</a>
 	</div>
 
-	<div
-		class="overflow-y-auto overflow-y-hidden flex flex-col justify-between flex-grow"
-	>
+	<div class="overflow-y-hidden flex flex-col justify-between flex-grow">
 		<ul class="flex flex-col py-2 space-y-1 p-4">
 			<!-- INICIO -->
 			<li (click)="selected('home')">
@@ -107,7 +105,7 @@
 								'font-bold': selectedFilter === 'documents'
 							}"
 							class="ml-2 text-sm"
-							>Documentos</span
+							>Mis diagramas</span
 						>
 					</div>
 				</a>
@@ -298,9 +296,7 @@
 						alt="avatar"
 					/>
 				</div>
-				<div
-					class="flex hidden md:block justify-start flex-col items-start"
-				>
+				<div class="flex md:block justify-start flex-col items-start">
 					<p class="text-sm leading-5 text-white">
 						{{ user?.name ?? "User" }}
 						{{ user?.lastname ?? "Lastname" }}
