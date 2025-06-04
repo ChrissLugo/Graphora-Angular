@@ -11,9 +11,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // Servicios
-import { UserService } from '../../../core/services/users/user.service';
-import { TokenService } from '../../../core/services/token/token.service';
-import { AuthService } from '../../../core/services/auth/auth.service';
+import { UserService } from '../../../core/services/API/user/user.service';
+import { TokenService } from '../../../core/services/API/auth/token/token.service';
+import { AuthService } from '../../../core/services/API/auth/login/login.service';
 import { SwalMessageService } from '../../../core/services/messages/swal-message.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserStateService } from '../../../core/services/user-state/user-state.service';

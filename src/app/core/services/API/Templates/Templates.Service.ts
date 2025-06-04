@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment.prod';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,10 +16,10 @@ export class TemplatesService {
 	}
 
 	getTemplates() {
-		return this.http.get<any[]>(`${this.API_URL}/templates`);
+		return this.http.get<any[]>(`${this.API_URL}/diagram/templates`);
 	}
 
 	getTemplateById(id: number) {
-		return this.http.get<any[]>(`${this.API_URL}/templates/${id}`);
+		return this.http.get<any[]>(`${this.API_URL}/diagram/templates/${id}`);
 	}
 }

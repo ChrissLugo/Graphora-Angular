@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DiagramMakerService } from '../../core/services/diagram/diagram-maker.service';
 import { RouterModule } from '@angular/router';
-import { TemplatesService } from '../../services/API/Templates.Service';
 import {
 	FaIconLibrary,
 	FontAwesomeModule,
@@ -10,6 +8,7 @@ import {
 	faArrowRotateLeft,
 	faRotateLeft,
 } from '@fortawesome/free-solid-svg-icons';
+import { TemplatesService } from '../../core/services/API/Templates/Templates.Service';
 
 @Component({
 	selector: 'app-home',
@@ -19,7 +18,6 @@ import {
 })
 export default class HomeComponent implements OnInit {
 	constructor(
-		private diagraMaker: DiagramMakerService,
 		public TemplatesService: TemplatesService,
 		icons: FaIconLibrary
 	) {
@@ -36,7 +34,7 @@ export default class HomeComponent implements OnInit {
 				this.TemplatesService.allTemplates = data.templates;
 				console.log('Templates', this.TemplatesService.allTemplates);
 			},
-			error: (err) => {
+			error: (err: any) => {
 				console.error(err);
 			},
 		});

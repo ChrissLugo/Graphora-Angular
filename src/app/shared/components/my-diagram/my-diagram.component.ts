@@ -16,7 +16,7 @@ import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import { NodePalette } from '../../../core/models/palettes/palette';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TemplatesService } from '../../../services/API/Templates.Service';
+import { TemplatesService } from '../../../core/services/API/Templates/Templates.Service';
 
 interface ModelJson {
 	modelData: any;
@@ -81,7 +81,7 @@ export default class MyDiagramComponent implements OnInit {
 				this.TemplatesService.template = data.diagram;
 				this.loadJson(this.TemplatesService.template.template_data);
 			},
-			error: (err) => {
+			error: (err: any) => {
 				console.error(err);
 			},
 		});

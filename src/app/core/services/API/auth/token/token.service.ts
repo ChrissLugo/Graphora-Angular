@@ -1,19 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
-	providedIn: 'root'
+	providedIn: 'root',
 })
 export class TokenService {
-	private apiURL = environment.API_URL;
+	private apiURL = environment.apiUrl;
 	private refreshUrl: string;
 	private readonly ACCESS_TOKEN_KEY = 'authToken';
 	private readonly REFRESH_TOKEN = 'refreshToken';
 
-	constructor(private http: HttpClient) { 
-		this.refreshUrl = "auth/refresh"
+	constructor(private http: HttpClient) {
+		this.refreshUrl = '/auth/refresh';
 	}
 
 	saveTokens(accessToken: string, refreshToken: string): void {
@@ -27,18 +27,18 @@ export class TokenService {
 	}
 
 	getAuthToken() {
-        return localStorage.getItem(this.ACCESS_TOKEN_KEY) || '';
-    }
+		return localStorage.getItem(this.ACCESS_TOKEN_KEY) || '';
+	}
 
-    getRefreshToken() {
-        return localStorage.getItem(this.REFRESH_TOKEN) || '';
-    }
+	getRefreshToken() {
+		return localStorage.getItem(this.REFRESH_TOKEN) || '';
+	}
 
 	refreshToken() {
 		const refreshToken = this.getRefreshToken();
 		const body = { refreshToken: refreshToken };
 
-		return this.http.post<any>(`${environment.API_URL}${this.refreshUrl}`, body);
+		return this.http.post<any>(`${this.apiURL}${this.refreshUrl}`, body);
 	}
 
 	getUserIdFromToken(): string | null {
