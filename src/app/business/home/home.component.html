@@ -1,38 +1,94 @@
-<h1 class="text-white font-semibold text-xl">
-	¡Explora, experimenta y diseña! 🚀 Elige una plantilla y lleva tus ideas al
-	siguiente nivel. ✨🎨
-</h1>
-
-<h2 class="text-white font-semibold mt-4">Plantillas:</h2>
-<div class="flex flex-row mt-2 space-x-4">
-	@for (template of TemplatesService.allTemplates; track $index) {
-	<div
-		[routerLink]="['/diagram', template.template_id]"
-		class="rounded-md hover:scale-105 transition duration-300 easy-in-out border border-gray-600 hover:cursor-pointer"
-		[title]="template.description"
+<div class="flex w-full items-center bg-black">
+	<span
+		class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl box-content font-extrabold text-transparent text-center select-none"
 	>
-		<a class="flex flex-col items-center">
-			<img
-				class="rounded-md w-40 h-35"
-				src="images/class_diagram.png"
-				alt="diagram class"
-			/>
-			<h1 class="text-white font-semibold p-2">{{ template.name }}</h1>
-		</a>
+		🎨 ¡Explora, experimenta y diseña! 🚀
+	</span>
+	<h1
+		class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent text-center select-auto"
+	>
+		🎨 ¡Explora, experimenta y diseña! 🚀
+	</h1>
+</div>
+<fa-icon [icon]="['fas', 'arrow-rotate-left']"></fa-icon>
+<div class="space-y-4">
+	<!-- Continuar trabajo -->
+	<div class="p-4">
+		<div class="flex w-full items-center bg-black">
+			<span
+				class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-white via-white to-white bg-clip-text text-xl box-content font-extrabold text-transparent text-center select-none"
+			>
+				Continuar trabajo
+			</span>
+			<h1
+				class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-white via-white to-white bg-clip-text text-xl font-extrabold text-transparent text-center select-auto"
+			>
+				🔄 Continuar trabajo
+			</h1>
+		</div>
+		<p class="text-white">
+			Sigue desarrollando tu diagrama desde donde lo dejaste y dale forma
+			a tus ideas.
+		</p>
+		<div class="flex flex-row mt-2 space-x-4">
+			@for (template of TemplatesService.allTemplates; track $index) {
+			<div
+				[routerLink]="['/diagram', template.template_id]"
+				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+				[title]="template.description"
+			>
+				<a class="flex flex-col items-center">
+					<img
+						class="rounded-md w-40 h-35"
+						src="images/class_diagram.png"
+						alt="diagram class"
+					/>
+					<h1 class="text-white font-semibold p-2">
+						{{ template.name }}
+					</h1>
+				</a>
+			</div>
+			}
+		</div>
 	</div>
-	}
 
-	<!-- <div
-		[routerLink]="['/diagram', 'flow']"
-		class="rounded-md hover:scale-105 transition duration-300 easy-in-out border border-gray-600 hover:cursor-pointer"
-	>
-		<a class="flex flex-col items-center">
-			<img
-				class="rounded-md w-40 h-35"
-				src="images/flow_diagram.png"
-				alt="diagram class"
-			/>
-			<h1 class="text-white font-semibold p-2">Diagrama de flujo</h1>
-		</a>
-	</div> -->
+	<!-- Nuevo con plantilla -->
+	<div class="p-4 mt-10">
+		<div class="flex w-full items-center bg-black">
+			<span
+				class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-white via-white to-white bg-clip-text text-xl box-content font-extrabold text-transparent text-center select-none"
+			>
+				🆕 Nuevo con plantilla
+			</span>
+			<h1
+				class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-white via-white to-white bg-clip-text text-xl font-extrabold text-transparent text-center select-auto"
+			>
+				🆕 Nuevo con plantilla
+			</h1>
+		</div>
+		<p class="text-white">
+			Comienza un nuevo diagrama usando una de nuestras plantillas como
+			punto de partida.
+		</p>
+		<div class="flex flex-row mt-2 space-x-4">
+			@for (template of TemplatesService.allTemplates; track $index) {
+			<div
+				[routerLink]="['/diagram', template.template_id]"
+				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+				[title]="template.description"
+			>
+				<a class="flex flex-col items-center">
+					<img
+						class="rounded-md w-40 h-35"
+						src="images/class_diagram.png"
+						alt="diagram class"
+					/>
+					<h1 class="text-white font-semibold p-2">
+						{{ template.name }}
+					</h1>
+				</a>
+			</div>
+			}
+		</div>
+	</div>
 </div>
