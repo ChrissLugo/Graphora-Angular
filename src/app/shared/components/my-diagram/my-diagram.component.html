@@ -1,0 +1,62 @@
+<app-navbar
+	[diagram]="this.diagram"
+	[hasChanges]="this.hasChanges"
+	(fileLoaded)="onFileLoaded($event)"
+	(hasChangesChange)="hasChangesChange($event)"
+	(typeTheme)="changeTheme($event)"
+/>
+<div class="h-dvh w-full flex flex-row">
+	<!-- Paleta del diagrama -->
+	<div class="h-dvh w-60 bg-black overflow-hidden border-x-1 border-gray-900">
+		<gojs-palette
+			#myPalette
+			[initPalette]="initPalette"
+			divClassName="h-full mt-2 p-20"
+			[nodeDataArray]="allPaletteState.paletteNodeData"
+			[modelData]="allPaletteState.paletteModelData"
+		></gojs-palette>
+	</div>
+
+	<!-- Diagrama -->
+	<div id="diagram" class="h-full w-full bg-[#E0DBD9] dark:bg-black">
+		<gojs-diagram
+			#myDiagram
+			[initDiagram]="initDiagram"
+			divClassName="h-dvh w-full "
+			[nodeDataArray]="state.diagramNodeData"
+			[modelData]="state.diagramModelData"
+			[linkDataArray]="state.diagramLinkData"
+			(modelChange)="diagramModelChange($event)"
+			[skipsDiagramUpdate]="state.skipsDiagramUpdate"
+		>
+			>
+		</gojs-diagram>
+	</div>
+
+	<!-- Propiedades de los elementos (inspector) -->
+	<div
+		*ngIf="state.selectedNodeData"
+		class="absolute z-9999 bottom-33 right-2.5 lg:h-[20rem] xl:h-[27.5rem] 2xl:h-[76%] bg-black rounded-md border border-gray-600 animate-fade-left animate-duration-300 py-2"
+	>
+		<div class="overflow-y-auto max-h-full">
+			<h1 class="text-white font-bold mb-4 text-xl text-center">
+				Propiedades
+			</h1>
+			<app-inspector
+				[nodeData]="state.selectedNodeData"
+				(onInspectorChange)="handleInspectorChange($event)"
+			></app-inspector>
+		</div>
+	</div>
+
+	<!-- Vista previa -->
+	<div
+		class="absolute z-50 bottom-1 right-2.5 w-52 h-30 bg-[#E0DBD9] dark:bg-black border border-gray-600 rounded-md"
+	>
+		<gojs-overview
+			#myOverview
+			[observedDiagram]="observedDiagram"
+			divClassName="w-full h-full"
+		></gojs-overview>
+	</div>
+</div>

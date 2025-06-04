@@ -3,6 +3,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+	faArrowRightFromBracket,
+	faGear,
+	faBell,
+} from '@fortawesome/free-solid-svg-icons';
 
 // Servicios
 import { UserService } from '../../../core/services/users/user.service';
@@ -18,18 +24,22 @@ import { User } from '../../../core/interfaces/user';
 	selector: 'app-sidebar',
 	standalone: true,
 	imports: [
-		FormsModule, 
-		NgClass, 
-		CommonModule, 
-		RouterLink
+		FormsModule,
+		NgClass,
+		CommonModule,
+		RouterLink,
+		FontAwesomeModule,
 	],
 	templateUrl: './sidebar.component.html',
 	styleUrls: ['./sidebar.component.css'],
 })
-
 export class SidebarComponent {
 	selectedFilter: string = '';
 	notification!: boolean;
+	//icons
+	faArrowRightFromBracket = faArrowRightFromBracket;
+	faGear = faGear;
+	faBell = faBell;
 	userData$: Observable<User | null>;
 
 	constructor(
@@ -45,7 +55,10 @@ export class SidebarComponent {
 	}
 
 	ngOnInit(): void {
-		if(this._tokenService.getAuthToken() && !this._userStateService.currentUserValue) {
+		if (
+			this._tokenService.getAuthToken() &&
+			!this._userStateService.currentUserValue
+		) {
 			this.loadUserData();
 		}
 	}
@@ -53,19 +66,21 @@ export class SidebarComponent {
 	private loadUserData(): void {
 		const userId = this._tokenService.getUserIdFromToken();
 
-		if(!userId) {
-			this._messageService.messageIcon("No se pudo obtener el ID del usuario", 'error');
-			return
+		if (!userId) {
+			this._messageService.messageIcon(
+				'No se pudo obtener el ID del usuario',
+				'error'
+			);
+			return;
 		}
 
 		this._userService.getUserData(userId).subscribe({
 			next: (user) => this._userStateService.setUserData(user),
 			error: () => {
-				this._tokenService.removeTokens()
+				this._tokenService.removeTokens();
 				this.router.navigate(['/auth/login']);
-			} 
-				
-		})
+			},
+		});
 	}
 
 	selected(selected: string): void {

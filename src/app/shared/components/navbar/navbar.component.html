@@ -1,0 +1,144 @@
+<nav
+	class="flex flex-row fixed top-0 left-0 w-screen h-20 z-50 bg-gradient-to-b from-purple-950 from-5% to-black to-99% border-b-[1px] border-gray-800 items-center"
+>
+	<!-- Logo -->
+	<img class="h-14 w-14 ml-4 mb-2" src="images/logo.png" alt="Logo" />
+	<div class="w-full flex-col items-center px-4 justify-between">
+		<!-- Barra superior -->
+		<div class="flex flex-row justify-between">
+			<h2 class="text-lg font-semibold text-white">
+				{{ this.fileName }}
+			</h2>
+			<!-- Compartir -->
+			<button
+				class="flex items-center md:h-7 text-white md:p-2 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full"
+			>
+				<fa-icon
+					size="lg"
+					[icon]="['fas', 'share-from-square']"
+				></fa-icon>
+				<span class="ml-2 tex-nomal">Compartir</span>
+			</button>
+		</div>
+
+		<div class="flex flex-row justify-between items-center">
+			<!-- Opciones -->
+			<div class="flex items-center w-full h-fit gap-5">
+				<!-- Nube -->
+				<button
+					class="text-white hover:text-purple-300 relative cursor-pointer"
+					title="Guardar en la nube"
+				>
+					<fa-icon size="xl" [icon]="['fas', 'cloud']"></fa-icon>
+					<fa-icon
+						class="text-green-600 absolute left-2 bottom-0"
+						*ngIf="false"
+						size="xs"
+						[icon]="['fas', 'circle-check']"
+					></fa-icon>
+					<fa-icon
+						class="text-red-500 absolute left-2 bottom-0"
+						*ngIf="false"
+						size="xs"
+						[icon]="['fas', 'circle-xmark']"
+					></fa-icon>
+					<fa-icon
+						class="text-black absolute left-2 bottom-0 animate-spin"
+						*ngIf="true"
+						size="xs"
+						[icon]="['fas', 'spinner']"
+					></fa-icon>
+				</button>
+
+				<!-- Archivo -->
+				<button
+					mat-button
+					[disableRipple]="true"
+					class="my-button"
+					[matMenuTriggerFor]="archivoMenu"
+				>
+					<fa-icon size="lg" [icon]="['fas', 'file']"></fa-icon>
+					<label class="text-sm cursor-pointer mx-1">Archivo</label>
+					<fa-icon
+						size="xs"
+						[icon]="['fas', 'chevron-down']"
+					></fa-icon>
+				</button>
+
+				<mat-menu #archivoMenu="matMenu" class="bg-black text-white">
+					<button mat-menu-item (click)="newFile()">
+						<mat-icon>note_add</mat-icon>
+						<span>Nuevo…</span>
+					</button>
+
+					<button mat-menu-item (click)="openFromFile()">
+						<mat-icon>folder_open</mat-icon>
+						<span>Abrir desde…</span>
+					</button>
+
+					<button mat-menu-item (click)="renameFile()">
+						<mat-icon>edit</mat-icon>
+						<span>Renombrar</span>
+					</button>
+				</mat-menu>
+
+				<!-- Exportar -->
+				<button
+					mat-button
+					[matMenuTriggerFor]="exportarMenu"
+					[disableRipple]="true"
+					class="my-button"
+				>
+					<fa-icon
+						size="lg"
+						[icon]="['fas', 'file-export']"
+					></fa-icon>
+					<label class="text-sm cursor-pointer mx-1">Exportar</label>
+					<fa-icon
+						size="xs"
+						[icon]="['fas', 'chevron-down']"
+					></fa-icon>
+				</button>
+				<mat-menu #exportarMenu="matMenu" class="bg-black text-white">
+					<button mat-menu-item (click)="exportPNG_SVG_PDF('png')">
+						<mat-icon>image</mat-icon>
+						<span>PNG</span>
+					</button>
+					<button mat-menu-item (click)="exportPNG_SVG_PDF('pdf')">
+						<mat-icon>picture_as_pdf</mat-icon>
+						<span>PDF</span>
+					</button>
+					<button mat-menu-item (click)="exportPNG_SVG_PDF('svg')">
+						<mat-icon>crop_5_4</mat-icon>
+						<span>SVG</span>
+					</button>
+					<button
+						mat-menu-item
+						(click)="exportJSON()"
+						class="flex flex-row"
+					>
+						<mat-icon>data_object</mat-icon>
+						<span>JSON</span>
+					</button>
+				</mat-menu>
+			</div>
+
+			<button
+				class="cursor-pointer items-center flex"
+				title="Cambiar tema de la cuadrícula"
+				(click)="changeTheme()"
+			>
+				<mat-icon
+					*ngIf="this.theme === 'light'"
+					class="!text-white hover:animate-rotate-y !animate-once !animate-duration-500"
+					>dark_mode</mat-icon
+				>
+				<mat-icon
+					*ngIf="this.theme === 'dark'"
+					class="!text-white hover:animate-spin !animate-once !animate-duration-350"
+					>light_mode</mat-icon
+				>
+			</button>
+		</div>
+	</div>
+</nav>
