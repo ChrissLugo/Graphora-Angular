@@ -15,7 +15,6 @@ import { UserService } from '../../../core/services/API/user/user.service';
 import { TokenService } from '../../../core/services/API/auth/token/token.service';
 import { AuthService } from '../../../core/services/API/auth/login/login.service';
 import { SwalMessageService } from '../../../core/services/messages/swal-message.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { UserStateService } from '../../../core/services/user-state/user-state.service';
 import { Observable } from 'rxjs';
 import { User } from '../../../core/interfaces/user';
@@ -76,9 +75,8 @@ export class SidebarComponent {
 
 		this._userService.getUserData(userId).subscribe({
 			next: (user) => this._userStateService.setUserData(user),
-			error: () => {
-				this._tokenService.removeTokens();
-				this.router.navigate(['/auth/login']);
+			error: (err: any) => {
+				console.log(err);
 			},
 		});
 	}

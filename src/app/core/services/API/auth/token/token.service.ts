@@ -41,6 +41,16 @@ export class TokenService {
 		return this.http.post<any>(`${this.apiURL}${this.refreshUrl}`, body);
 	}
 
+	isAuthenticated(): boolean {
+		const token = this.getAuthToken();
+		if (!token) {
+			return false;
+		}
+		const payload = JSON.parse(atob(token.split('.')[1]));
+		const exp = payload.exp * 1000;
+		return Date.now() < exp;
+	}
+
 	getUserIdFromToken(): string | null {
 		const token = this.getAuthToken();
 		if (token) {

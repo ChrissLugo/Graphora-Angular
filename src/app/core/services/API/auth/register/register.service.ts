@@ -12,7 +12,7 @@ export class RegisterService {
 	private registerUrl: string;
 
 	constructor(private http: HttpClient) {
-		this.registerUrl = '/users'; // Asegúrate de definir la ruta correcta
+		this.registerUrl = '/users';
 	}
 
 	register(userData: any): Observable<any> {
