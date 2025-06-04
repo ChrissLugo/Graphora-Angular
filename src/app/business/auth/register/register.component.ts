@@ -78,22 +78,24 @@ export default class RegisterComponent {
 
 	onSubmit() {
 		if (this.registerForm.valid) {
-			const formData = { ...this.registerForm.value};
+			const formData = { ...this.registerForm.value };
 			delete formData.confirmPassword;
-			
+
 			const { name, lastName, email, password } = formData;
-		    this.registerService.register({ name, lastName, email, password }).subscribe({
-		        next: (response) => {
-		            this.router.navigate(['/login']);
-		        },
-		        error: (e: HttpErrorResponse) => {
-		            console.log("Error: ", e);
-		            alert("Error: " + e.error.message);
-		        }
-		    })
+			this.registerService
+				.register({ name, lastName, email, password })
+				.subscribe({
+					next: (response) => {
+						this.router.navigate(['/login']);
+					},
+					error: (e: HttpErrorResponse) => {
+						console.log('Error: ', e);
+						alert('Error: ' + e.error.message);
+					},
+				});
 		} else {
-		  alert("Las contraseñas no coinciden o faltan datos");
-		  this.registerForm.markAllAsTouched();
+			alert('Las contraseñas no coinciden o faltan datos');
+			this.registerForm.markAllAsTouched();
 		}
 	}
 }
