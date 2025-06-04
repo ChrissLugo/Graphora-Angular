@@ -28,6 +28,7 @@
     "@tailwindcss/postcss": "^4.0.3",
     "gojs": "^3.0.19",
     "gojs-angular": "^2.1.2",
+    "jspdf": "^3.0.1",
     "jwt-decode": "4.0.0",
     "lightningcss": "^1.29.2",
     "ngx-font-picker": "^19.0.0",
