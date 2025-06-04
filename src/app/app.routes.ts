@@ -55,7 +55,7 @@ export const routes: Routes = [
 		],
 	},
 	{
-		path: 'diagram/:id',
+		path: 'diagram',
 		loadComponent: () =>
 			import('./shared/components/my-diagram/my-diagram.component'),
 		canActivate: [authGuard],

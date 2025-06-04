@@ -33,7 +33,7 @@
 		<div class="flex flex-row mt-2 space-x-4">
 			@for (template of TemplatesService.allTemplates; track $index) {
 			<div
-				[routerLink]="['/diagram', template.template_id]"
+				(click)="sendDiagramJSON(template.template_id)"
 				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
 				[title]="template.description"
 			>
@@ -73,9 +73,9 @@
 		<div class="flex flex-row mt-2 space-x-4">
 			@for (template of TemplatesService.allTemplates; track $index) {
 			<div
-				[routerLink]="['/diagram', template.template_id]"
 				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
 				[title]="template.description"
+				(click)="sendTemplateJSON(template.template_id)"
 			>
 				<a class="flex flex-col items-center">
 					<img

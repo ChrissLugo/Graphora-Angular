@@ -10,13 +10,15 @@ import {
 import { TextNode } from '../../../core/models/nodes/text-node';
 import { InspectorComponent } from '../../../core/models/inspector/inspector.component';
 import { CommonModule } from '@angular/common';
-import { produce } from 'immer';
+import { current, produce } from 'immer';
 import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import { NodePalette } from '../../../core/models/palettes/palette';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TemplatesService } from '../../../core/services/API/Templates/Templates.Service';
+import { DiagramsTransferService } from '../../../core/services/Data Transfer/DiagramsTransfer.service';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 interface ModelJson {
 	modelData: any;
@@ -47,23 +49,23 @@ export default class MyDiagramComponent implements OnInit {
 	public observedDiagram: any = null;
 	public diagram!: go.Diagram;
 	public diagramJSON!: any;
-	public hasChanges: boolean = false;
+	public diagramName!: string;
 	public openFile: boolean = false;
-	private isLoading: boolean = false;
+	private isLoading: boolean = true;
 	private theme = 'dark';
-	private templateID: number;
+	//Variables Autosave
+	public isSave!: boolean;
+	public isSaving: boolean = true;
 
 	constructor(
 		private cdr: ChangeDetectorRef,
-		private activatedRoute: ActivatedRoute,
-		public TemplatesService: TemplatesService
+		private DiagramTransferSrv: DiagramsTransferService
 	) {
 		this.initDiagram = this.initDiagram.bind(this);
-		this.templateID = this.activatedRoute.snapshot.params['id'];
 	}
 
 	ngOnInit(): void {
-		this.getTemplateById();
+		this.getDiagram();
 	}
 
 	public loadJson(json: any): void {
@@ -75,20 +77,54 @@ export default class MyDiagramComponent implements OnInit {
 		});
 	}
 
-	getTemplateById() {
-		this.TemplatesService.getTemplateById(this.templateID).subscribe({
-			next: (data: any) => {
-				this.TemplatesService.template = data.diagram;
-				this.loadJson(this.TemplatesService.template.template_data);
-			},
-			error: (err: any) => {
-				console.error(err);
-			},
+	getDiagram() {
+		this.DiagramTransferSrv.currentJson.subscribe((data) => {
+			if (!data || !data.template_data) {
+				console.warn('No hay datos válidos en el servicio');
+				return;
+			}
+			this.saveDiagramLocalStorage(
+				data.template_data,
+				data.name,
+				data.description
+			);
 		});
+		const dataDiagram = localStorage.getItem('currentDiagram');
+		if (dataDiagram) {
+			const currentDiagram = JSON.parse(dataDiagram);
+			this.loadJson(currentDiagram.data);
+			this.diagramName = currentDiagram.name;
+			this.isLoading = false;
+		}
 	}
 
-	public hasChangesChange(event: any) {
-		this.hasChanges = event;
+	saveDiagramLocalStorage(data: any, name: any, description: any) {
+		const currentDiagram = {
+			data: data,
+			name: name,
+			description: description,
+		};
+		localStorage.setItem('currentDiagram', JSON.stringify(currentDiagram));
+	}
+
+	autosaveDiagram() {
+		this.isSaving = true;
+		console.log('El diagrama se está autoguardando...');
+		let diagramObj: any;
+
+		const diagramJSONString: string = this.diagram.model.toJson();
+
+		try {
+			diagramObj = JSON.parse(diagramJSONString);
+		} catch (e) {
+			console.error('No pude parsear el JSON del diagrama:', e);
+			return;
+		}
+
+		console.log('diagrama de autosave (objeto):', diagramObj);
+		this.saveDiagramLocalStorage(diagramObj, 'name', 'description');
+		this.isSaving = false;
+		this.isSave = true;
 	}
 
 	changeTheme(theme: string) {
@@ -182,8 +218,7 @@ export default class MyDiagramComponent implements OnInit {
 				linkKeyProperty: 'key',
 			}),
 		});
-		// this.diagram.themeManager.currentTheme = this.theme;
-		// this.diagram.themeManager.changesDivBackground = true;
+
 		this.diagram.themeManager.currentTheme = 'dark';
 
 		this.diagram.themeManager.set('light', {
@@ -311,13 +346,9 @@ export default class MyDiagramComponent implements OnInit {
 			return;
 		}
 
-		if (!changes) {
-			this.hasChanges = false;
-			return;
-		}
-
-		this.hasChanges = true;
-		console.log(this.hasChanges);
+		this.isSaving = true;
+		this.isSave = false;
+		this.autosaveDiagram();
 
 		// Nos “guardamos” antes los datos sincronizados y le decimos a Angular que, cuando
 		// re-renderice, NO vuelva a pasárselos al diagrama (skipsDiagramUpdate = true)

@@ -7,7 +7,7 @@
 		<!-- Barra superior -->
 		<div class="flex flex-row justify-between">
 			<h2 class="text-lg font-semibold text-white">
-				{{ this.fileName }}
+				{{ this.diagramName }}
 			</h2>
 			<!-- Compartir -->
 			<button
@@ -32,7 +32,7 @@
 					<fa-icon size="xl" [icon]="['fas', 'cloud']"></fa-icon>
 					<fa-icon
 						class="text-green-600 absolute left-2 bottom-0"
-						*ngIf="false"
+						*ngIf="isSave"
 						size="xs"
 						[icon]="['fas', 'circle-check']"
 					></fa-icon>
@@ -44,7 +44,7 @@
 					></fa-icon>
 					<fa-icon
 						class="text-black absolute left-2 bottom-0 animate-spin"
-						*ngIf="true"
+						*ngIf="isSaving"
 						size="xs"
 						[icon]="['fas', 'spinner']"
 					></fa-icon>

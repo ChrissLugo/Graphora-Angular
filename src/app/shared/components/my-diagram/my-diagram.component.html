@@ -1,9 +1,10 @@
 <app-navbar
 	[diagram]="this.diagram"
-	[hasChanges]="this.hasChanges"
 	(fileLoaded)="onFileLoaded($event)"
-	(hasChangesChange)="hasChangesChange($event)"
 	(typeTheme)="changeTheme($event)"
+	[diagramName]="this.diagramName"
+	[isSave]="this.isSave"
+	[isSaving]="this.isSaving"
 />
 <div class="h-dvh w-full flex flex-row">
 	<!-- Paleta del diagrama -->

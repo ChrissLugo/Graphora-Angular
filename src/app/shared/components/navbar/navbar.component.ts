@@ -45,12 +45,13 @@ interface ModelJson {
 	styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-	@Input() fileName: string | null = 'Nuevo Documento';
+	@Input() diagramName: string | null = 'Nuevo Documento';
 	@Input() diagram!: go.Diagram;
-	@Input() hasChanges!: boolean;
-	@Output() hasChangesChange = new EventEmitter<any>();
 	@Output() fileLoaded = new EventEmitter<any>();
 	@Output() typeTheme = new EventEmitter<string>();
+	@Input() isSave: boolean = false;
+	@Input() isSaving: boolean = true;
+
 	public theme = 'dark';
 
 	constructor(icons: FaIconLibrary) {
@@ -85,7 +86,7 @@ export class NavbarComponent {
 		Swal.fire({
 			title: 'Renombrar archivo',
 			input: 'text',
-			inputValue: this.fileName || '',
+			inputValue: this.diagramName || '',
 			showCancelButton: true,
 			confirmButtonText: 'Renombrar',
 			cancelButtonText: 'Cancelar',
@@ -100,7 +101,7 @@ export class NavbarComponent {
 			},
 		}).then((result) => {
 			if (result.isConfirmed && result.value) {
-				this.fileName = result.value;
+				this.diagramName = result.value;
 			}
 		});
 	}
@@ -112,7 +113,7 @@ export class NavbarComponent {
 		}
 
 		const file = input.files[0];
-		this.fileName = file.name;
+		this.diagramName = file.name;
 
 		const reader = new FileReader();
 		reader.onload = () => {
@@ -122,9 +123,6 @@ export class NavbarComponent {
 			try {
 				const parsed = JSON.parse(text) as ModelJson;
 				this.fileLoaded.emit(parsed);
-
-				this.hasChanges = false;
-				this.hasChangesChange.emit(false);
 			} catch (err) {
 				Swal.fire({
 					title: 'JSON inválido',
@@ -165,9 +163,7 @@ export class NavbarComponent {
 			theme: 'dark',
 		}).then((result) => {
 			if (result.isConfirmed) {
-				this.fileName = null;
-				this.hasChanges = false;
-				this.hasChangesChange.emit(false);
+				this.diagramName = null;
 				this.fileLoaded.emit({
 					modelData: {},
 					nodeDataArray: [],
@@ -186,14 +182,11 @@ export class NavbarComponent {
 
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = this.fileName || 'mi-diagrama.json';
+		a.download = this.diagramName || 'mi-diagrama.json';
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
-
-		this.hasChanges = false;
-		this.hasChangesChange.emit(false);
 	}
 
 	public makePDF(background: 'black' | 'white' | 'transparent') {
@@ -231,7 +224,7 @@ export class NavbarComponent {
 			// 5) Dibujar el PNG a tamaño completo (0,0) sin márgenes
 			pdf.addImage(imgData, 'PNG', 0, 0, origWidth, origHeight);
 
-			const baseName = (this.fileName || 'diagrama').replace(
+			const baseName = (this.diagramName || 'diagrama').replace(
 				/\.json$/i,
 				''
 			);

@@ -34,7 +34,8 @@ export class AuthService {
 	logout(): void {
 		localStorage.removeItem('authToken');
 		localStorage.removeItem('refreshToken');
+		localStorage.removeItem('currentDiagram');
 
-		this.router.navigate(['/']);
+		this.router.navigate(['/login']);
 	}
 }
