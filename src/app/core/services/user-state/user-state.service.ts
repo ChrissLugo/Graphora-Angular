@@ -12,7 +12,6 @@ export class UserStateService {
 	constructor() { }
 
 	get currentUserValue(): any {
-		console.log(this.userDataSubject.value);
 		return this.userDataSubject.value;
 	}
 	
