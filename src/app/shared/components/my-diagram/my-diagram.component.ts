@@ -49,13 +49,16 @@ export default class MyDiagramComponent implements OnInit {
 	public observedDiagram: any = null;
 	public diagram!: go.Diagram;
 	public diagramJSON!: any;
-	public diagramName!: string;
 	public openFile: boolean = false;
 	private isLoading: boolean = true;
 	private theme = 'dark';
 	//Variables Autosave
 	public isSave!: boolean;
 	public isSaving: boolean = true;
+	//datos del diagrama
+	public diagramId!: number;
+	public diagramName!: string;
+	public diagramDescription!: string;
 
 	constructor(
 		private cdr: ChangeDetectorRef,
@@ -83,10 +86,14 @@ export default class MyDiagramComponent implements OnInit {
 				console.warn('No hay datos válidos en el servicio');
 				return;
 			}
+			this.diagramId = data.template_id;
+			this.diagramName = data.name;
+			this.diagramDescription = data.description;
 			this.saveDiagramLocalStorage(
+				this.diagramId,
 				data.template_data,
-				data.name,
-				data.description
+				this.diagramName,
+				this.diagramDescription
 			);
 		});
 		const dataDiagram = localStorage.getItem('currentDiagram');
@@ -98,7 +105,7 @@ export default class MyDiagramComponent implements OnInit {
 		}
 	}
 
-	saveDiagramLocalStorage(data: any, name: any, description: any) {
+	saveDiagramLocalStorage(id: any, data: any, name: any, description: any) {
 		const currentDiagram = {
 			data: data,
 			name: name,
@@ -120,11 +127,16 @@ export default class MyDiagramComponent implements OnInit {
 			console.error('No pude parsear el JSON del diagrama:', e);
 			return;
 		}
-
-		console.log('diagrama de autosave (objeto):', diagramObj);
-		this.saveDiagramLocalStorage(diagramObj, 'name', 'description');
+		//Guardar en el localhost
+		this.saveDiagramLocalStorage(
+			this.diagramId,
+			diagramObj,
+			this.diagramName,
+			this.diagramDescription
+		);
 		this.isSaving = false;
 		this.isSave = true;
+		//Guardar en la bdd
 	}
 
 	changeTheme(theme: string) {

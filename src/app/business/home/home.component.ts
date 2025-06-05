@@ -12,6 +12,7 @@ import { TemplatesService } from '../../core/services/API/Templates/Templates.Se
 import { DiagramsTransferService } from '../../core/services/Data Transfer/DiagramsTransfer.service';
 import { SwalMessageService } from '../../core/services/messages/swal-message.service';
 import Swal from 'sweetalert2';
+import { UserDiagramsService } from '../../core/services/API/user/UserDiagrams.service';
 
 @Component({
 	selector: 'app-home',
@@ -22,6 +23,7 @@ import Swal from 'sweetalert2';
 export default class HomeComponent implements OnInit {
 	constructor(
 		public TemplatesService: TemplatesService,
+		public UserDiagramsSrv: UserDiagramsService,
 		public DiagramTransferSrv: DiagramsTransferService,
 		private router: Router,
 		public messageService: SwalMessageService,
@@ -32,6 +34,7 @@ export default class HomeComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.getTemplates();
+		this.getUserDiagrams();
 	}
 
 	sendTemplateJSON(id: number) {
@@ -50,13 +53,40 @@ export default class HomeComponent implements OnInit {
 		});
 	}
 
-	sendDiagramJSON(id: number) {}
+	sendDiagramJSON(id: number) {
+		this.messageService.loadMessage();
+		//Obtenemos los datos del diagrama, los enviamos y redigimos al usuario
+		this.UserDiagramsSrv.getDiagramById(id).subscribe({
+			next: (data: any) => {
+				this.UserDiagramsSrv.currentDiagram = data.templates;
+				this.DiagramTransferSrv.changeJSON(
+					this.UserDiagramsSrv.currentDiagram
+				);
+				Swal.close();
+				this.router.navigate(['/diagram']);
+			},
+			error: (err: any) => console.error(err),
+		});
+	}
+
+	getUserDiagrams() {
+		this.UserDiagramsSrv.getDiagrams().subscribe({
+			next: (data: any) => {
+				console.log('dataaa', data);
+				this.UserDiagramsSrv.allDiagrams = data.templates;
+				// console.log('Diagrams', this.TemplatesService.allTemplates);
+			},
+			error: (err: any) => {
+				console.error(err);
+			},
+		});
+	}
 
 	getTemplates() {
 		this.TemplatesService.getTemplates().subscribe({
 			next: (data: any) => {
 				this.TemplatesService.allTemplates = data.templates;
-				console.log('Templates', this.TemplatesService.allTemplates);
+				// console.log('Templates', this.TemplatesService.allTemplates);
 			},
 			error: (err: any) => {
 				console.error(err);
