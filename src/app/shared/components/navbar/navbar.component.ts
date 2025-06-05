@@ -49,6 +49,7 @@ export class NavbarComponent {
 	@Input() diagram!: go.Diagram;
 	@Output() fileLoaded = new EventEmitter<any>();
 	@Output() typeTheme = new EventEmitter<string>();
+	@Output() rnmFile = new EventEmitter<string>();
 	@Input() isSave: boolean = false;
 	@Input() isSaving: boolean = true;
 
@@ -102,6 +103,7 @@ export class NavbarComponent {
 		}).then((result) => {
 			if (result.isConfirmed && result.value) {
 				this.diagramName = result.value;
+				this.rnmFile.emit(result.value);
 			}
 		});
 	}

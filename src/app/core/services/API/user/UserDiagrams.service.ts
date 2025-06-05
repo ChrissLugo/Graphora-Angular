@@ -42,7 +42,11 @@ export class UserDiagramsService {
 		return this.http.post<any>(`${this.API_URL}/diagram/me`, data);
 	}
 
-	updateDiagram(payload: { id: number; data: any }): void {
-		this._updateDiagramSubject.next(payload);
+	updateDiagramTime(data: { id: number; data: any }): void {
+		this._updateDiagramSubject.next(data);
+	}
+
+	updateDiagramNormal(data: any, id: number) {
+		return this.http.put(`${this.API_URL}/diagram/me/${id}`, data);
 	}
 }

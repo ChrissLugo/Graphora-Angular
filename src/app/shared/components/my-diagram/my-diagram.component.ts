@@ -104,17 +104,21 @@ export default class MyDiagramComponent implements OnInit {
 				this.diagramDescription
 			);
 		});
-		const dataDiagram = localStorage.getItem('currentDiagram');
+		const dataDiagram = this.getDataFromLocalStorage('currentDiagram');
+		// localStorage.getItem('currentDiagram');
 		if (dataDiagram) {
-			const currentDiagram = JSON.parse(dataDiagram);
-			this.loadJson(currentDiagram.data);
-			this.diagramName = currentDiagram.name;
-			this.isLoading = false;
+			// const currentDiagram = JSON.parse(dataDiagram);
+			this.loadJson(dataDiagram.data);
+			this.diagramName = dataDiagram.name;
+			this.diagramId = dataDiagram.id;
+			(this.diagramDescription = dataDiagram.description),
+				(this.isLoading = false);
 		}
 	}
 
 	saveDiagramLocalStorage(id: any, data: any, name: any, description: any) {
 		const currentDiagram = {
+			id: id,
 			data: data,
 			name: name,
 			description: description,
@@ -158,10 +162,45 @@ export default class MyDiagramComponent implements OnInit {
 			},
 			error: () => {
 				// this.UserDiagramsSrv.updateDiagram;
-				this.UserDiagramsSrv.updateDiagram({
+				this.UserDiagramsSrv.updateDiagramTime({
 					id: this.diagramId,
 					data: dataDiagram,
 				});
+			},
+		});
+	}
+
+	getDataFromLocalStorage(key: string) {
+		const dataDiagram = localStorage.getItem(key);
+		let currentDiagram;
+		if (dataDiagram) {
+			currentDiagram = JSON.parse(dataDiagram);
+		}
+		return currentDiagram;
+	}
+
+	renameFile(newName: string) {
+		const diagramData = this.getDataFromLocalStorage('currentDiagram');
+		const dataDiagram = {
+			name: newName,
+			description: this.diagramDescription,
+			// category_id: null, // (por el momento puede ser null)
+			template_data: diagramData.data,
+		};
+		this.UserDiagramsSrv.updateDiagramNormal(
+			dataDiagram,
+			this.diagramId
+		).subscribe({
+			next: (value) => {
+				this.saveDiagramLocalStorage(
+					this.diagramId,
+					diagramData.data,
+					newName,
+					this.diagramDescription
+				);
+			},
+			error: (err) => {
+				console.log('MOSTRAR ERROR AL RENOMBRAR DIAGRAMA CON SWAY');
 			},
 		});
 	}
