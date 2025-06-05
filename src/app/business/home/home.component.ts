@@ -4,10 +4,7 @@ import {
 	FaIconLibrary,
 	FontAwesomeModule,
 } from '@fortawesome/angular-fontawesome';
-import {
-	faArrowRotateLeft,
-	faRotateLeft,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowRotateLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TemplatesService } from '../../core/services/API/Templates/Templates.Service';
 import { DiagramsTransferService } from '../../core/services/Data Transfer/DiagramsTransfer.service';
 import { SwalMessageService } from '../../core/services/messages/swal-message.service';
@@ -29,7 +26,7 @@ export default class HomeComponent implements OnInit {
 		public messageService: SwalMessageService,
 		icons: FaIconLibrary
 	) {
-		icons.addIcons(faArrowRotateLeft);
+		icons.addIcons(faArrowRotateLeft, faPlus);
 	}
 
 	ngOnInit(): void {
@@ -58,7 +55,7 @@ export default class HomeComponent implements OnInit {
 		//Obtenemos los datos del diagrama, los enviamos y redigimos al usuario
 		this.UserDiagramsSrv.getDiagramById(id).subscribe({
 			next: (data: any) => {
-				this.UserDiagramsSrv.currentDiagram = data.templates;
+				this.UserDiagramsSrv.currentDiagram = data.diagram;
 				this.DiagramTransferSrv.changeJSON(
 					this.UserDiagramsSrv.currentDiagram
 				);
@@ -72,9 +69,7 @@ export default class HomeComponent implements OnInit {
 	getUserDiagrams() {
 		this.UserDiagramsSrv.getDiagrams().subscribe({
 			next: (data: any) => {
-				console.log('dataaa', data);
-				this.UserDiagramsSrv.allDiagrams = data.templates;
-				// console.log('Diagrams', this.TemplatesService.allTemplates);
+				this.UserDiagramsSrv.allDiagrams = data.diagrams;
 			},
 			error: (err: any) => {
 				console.error(err);
@@ -86,7 +81,6 @@ export default class HomeComponent implements OnInit {
 		this.TemplatesService.getTemplates().subscribe({
 			next: (data: any) => {
 				this.TemplatesService.allTemplates = data.templates;
-				// console.log('Templates', this.TemplatesService.allTemplates);
 			},
 			error: (err: any) => {
 				console.error(err);

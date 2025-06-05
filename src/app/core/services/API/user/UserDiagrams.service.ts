@@ -1,27 +1,48 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.prod';
+import { Subject, Observable, EMPTY } from 'rxjs';
+import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class UserDiagramsService {
 	readonly API_URL = environment.apiUrl;
-	allDiagrams: any;
-	currentDiagram: any;
+	allDiagrams: any[] = [];
+	currentDiagram: any = [];
 
-	constructor(private http: HttpClient) {
-		this.allDiagrams = [];
-		this.currentDiagram = [];
+	private _updateDiagramSubject = new Subject<{ id: number; data: any }>();
+
+	updateDiagram$: Observable<any> = this._updateDiagramSubject.pipe(
+		debounceTime(3500),
+		switchMap((payload) => {
+			const { id, data } = payload;
+			return this.http
+				.put<any>(`${this.API_URL}/diagram/me/${id}`, data)
+				.pipe(
+					catchError((err) => {
+						return EMPTY;
+					})
+				);
+		})
+	);
+
+	constructor(private http: HttpClient) {}
+
+	getDiagrams(): Observable<any[]> {
+		return this.http.get<any[]>(`${this.API_URL}/diagram/me`);
 	}
 
-	getDiagrams() {
-		return this.http.get<any[]>(`${this.API_URL}/diagram/templates`); // Cambiar url
+	getDiagramById(id: number): Observable<any> {
+		return this.http.get<any>(`${this.API_URL}/diagram/me/${id}`);
 	}
 
-	getDiagramById(id: number) {
-		return this.http.get<any[]>(`${this.API_URL}/diagram/templates/${id}`); // Cambiar url
+	saveDiagram(data: any): Observable<any> {
+		return this.http.post<any>(`${this.API_URL}/diagram/me`, data);
 	}
 
-	updateDiagram() {}
+	updateDiagram(payload: { id: number; data: any }): void {
+		this._updateDiagramSubject.next(payload);
+	}
 }

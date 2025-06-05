@@ -31,6 +31,26 @@
 			a tus ideas.
 		</p>
 		<div class="flex flex-row mt-2 space-x-4">
+			<div
+				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer h-fit w-fit"
+				title="Crear un diagrama nuevo desde 0."
+			>
+				<!-- (click)="" -->
+				<a class="flex flex-col items-center">
+					<div
+						class="flex bg-white w-35 h-40 rounded items-center justify-center"
+					>
+						<fa-icon
+							[icon]="['fas', 'plus']"
+							[size]="'2xl'"
+							class="text-gray-500"
+						></fa-icon>
+					</div>
+					<h1 class="text-white font-semibold text-sm p-2">
+						Nuevo diagrama
+					</h1>
+				</a>
+			</div>
 			@for (diagram of UserDiagramsSrv.allDiagrams; track $index) {
 			<div
 				(click)="sendDiagramJSON(diagram.template_id)"
@@ -38,12 +58,12 @@
 				[title]="diagram.description"
 			>
 				<a class="flex flex-col items-center">
-					<img
-						class="rounded-md w-40 h-35"
-						src="images/class_diagram.png"
-						alt="diagram class"
-					/>
-					<h1 class="text-white font-semibold p-2">
+					<div
+						class="flex bg-white w-35 h-40 rounded items-center justify-center"
+					></div>
+					<h1
+						class="text-white font-bold text-xs p-2 truncate w-full text-center"
+					>
 						{{ diagram.name }}
 					</h1>
 				</a>
@@ -52,7 +72,6 @@
 		</div>
 	</div>
 
-	<!-- Nuevo con plantilla -->
 	<div class="p-4 mt-10">
 		<div class="flex w-full items-center bg-black">
 			<span
@@ -73,17 +92,23 @@
 		<div class="flex flex-row mt-2 space-x-4">
 			@for (template of TemplatesService.allTemplates; track $index) {
 			<div
-				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+				class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer h-fit"
 				[title]="template.description"
 				(click)="sendTemplateJSON(template.template_id)"
 			>
-				<a class="flex flex-col items-center">
-					<img
-						class="rounded-md w-40 h-35"
-						src="images/class_diagram.png"
-						alt="diagram class"
-					/>
-					<h1 class="text-white font-semibold p-2">
+				<a class="flex flex-col items-center truncate">
+					<div
+						class="flex bg-white w-35 h-40 rounded items-center justify-center"
+					>
+						<img class="hidden" src="classDiagram.png" alt="" />
+						<img class="hidden" src="useCases.png" alt="" />
+						<img class="hidden" src="secuence.png" alt="" />
+						<img class="hidden" src="packageDiagram.png" alt="" />
+						<img class="" src="components.png" alt="" />
+					</div>
+					<h1
+						class="text-white font-bold text-xs p-2 truncate w-full text-center"
+					>
 						{{ template.name }}
 					</h1>
 				</a>

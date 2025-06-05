@@ -10,15 +10,13 @@ import {
 import { TextNode } from '../../../core/models/nodes/text-node';
 import { InspectorComponent } from '../../../core/models/inspector/inspector.component';
 import { CommonModule } from '@angular/common';
-import { current, produce } from 'immer';
+import { produce } from 'immer';
 import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import { NodePalette } from '../../../core/models/palettes/palette';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TemplatesService } from '../../../core/services/API/Templates/Templates.Service';
 import { DiagramsTransferService } from '../../../core/services/Data Transfer/DiagramsTransfer.service';
-import { faL } from '@fortawesome/free-solid-svg-icons';
+import { UserDiagramsService } from '../../../core/services/API/user/UserDiagrams.service';
 
 interface ModelJson {
 	modelData: any;
@@ -62,13 +60,23 @@ export default class MyDiagramComponent implements OnInit {
 
 	constructor(
 		private cdr: ChangeDetectorRef,
-		private DiagramTransferSrv: DiagramsTransferService
+		private DiagramTransferSrv: DiagramsTransferService,
+		public UserDiagramsSrv: UserDiagramsService
 	) {
 		this.initDiagram = this.initDiagram.bind(this);
 	}
 
 	ngOnInit(): void {
 		this.getDiagram();
+		this.UserDiagramsSrv.updateDiagram$.subscribe({
+			next: () => {
+				this.isSaving = false;
+				this.isSave = true;
+			},
+			error: () => {
+				this.isSaving = false;
+			},
+		});
 	}
 
 	public loadJson(json: any): void {
@@ -116,7 +124,6 @@ export default class MyDiagramComponent implements OnInit {
 
 	autosaveDiagram() {
 		this.isSaving = true;
-		console.log('El diagrama se está autoguardando...');
 		let diagramObj: any;
 
 		const diagramJSONString: string = this.diagram.model.toJson();
@@ -134,14 +141,34 @@ export default class MyDiagramComponent implements OnInit {
 			this.diagramName,
 			this.diagramDescription
 		);
-		this.isSaving = false;
-		this.isSave = true;
+
+		const dataDiagram = {
+			name: this.diagramName,
+			description: this.diagramDescription, // (puede ser null)
+			// category_id: null, // (por el momento puede ser null)
+			template_data: diagramObj, // (este tiene que ser un json)
+		};
+
 		//Guardar en la bdd
+		this.UserDiagramsSrv.saveDiagram(dataDiagram).subscribe({
+			next: () => {
+				this.UserDiagramsSrv.currentDiagram = dataDiagram;
+				this.isSaving = false;
+				this.isSave = true;
+			},
+			error: () => {
+				// this.UserDiagramsSrv.updateDiagram;
+				this.UserDiagramsSrv.updateDiagram({
+					id: this.diagramId,
+					data: dataDiagram,
+				});
+			},
+		});
 	}
 
 	changeTheme(theme: string) {
 		this.theme = theme;
-		console.log(this.theme);
+
 		this.diagram.themeManager.currentTheme = theme;
 		if (theme === 'dark') {
 			this.diagram.grid = new go.Panel('Grid', {
@@ -459,7 +486,6 @@ export default class MyDiagramComponent implements OnInit {
 	public handleInspectorChange(changedPropAndVal: any) {
 		const path = changedPropAndVal.prop;
 		const value = changedPropAndVal.newVal;
-		console.log('datos recibidos', changedPropAndVal);
 
 		this.state = produce(this.state, (draft: any) => {
 			var data = draft.selectedNodeData;

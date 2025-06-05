@@ -1,34 +1,14 @@
 <div
-	class="bg-gradient-to-b from-black from-10% via-purple-950 via-30% to-black to-90% fixed flex flex-col left-0 w-14 md:w-60 bg-black h-full text-white transition-all duration-300 border-none z-10 sidebar group"
+	class="bg-gradient-to-b from-black from-10% via-purple-950 via-30% to-black to-90% fixed flex flex-col left-0 w-14 md:w-60 bg-black h-full text-white transition-all duration-300 border-none z-10 sidebar group gap-17"
 >
 	<div
 		routerLink="/start"
-		class="flex justify-center mt-4 tracking-wide truncate cursor-pointer"
+		class="flex justify-center mt-25 tracking-wide truncate cursor-pointer"
 	>
-		<img class="h-8 w-8" src="images/logo.png" alt="Logo" />
-		<span class="ml-2 text-xl font-bold text-white hidden md:block">
+		<img class="h-9 w-9" src="images/logo.png" alt="Logo" />
+		<span class="ml-2 text-2xl font-bold text-white hidden md:block">
 			Graphora
 		</span>
-	</div>
-
-	<!-- NUEVO -->
-	<div
-		(click)="selected('new')"
-		routerLink="/diagram"
-		class="w-full flex justify-center mt-2"
-	>
-		<a
-			class="relative px-2 flex flex-row items-center md:h-9 text-white md:p-3 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 md:mt-6"
-		>
-			<div
-				class="flex flex-row w-full tracking-wide truncate items-center justify-center"
-			>
-				<b class="font-bold text-2xl">+</b>
-				<span class="ml-2 text-sm font-semibold hidden md:block"
-					>Nuevo</span
-				>
-			</div>
-		</a>
 	</div>
 
 	<div class="overflow-y-hidden flex flex-col justify-between flex-grow">
