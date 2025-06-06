@@ -1,0 +1,101 @@
+<div
+	class="flex flex-col bg-black pt-22 w-12 h-full px-2 border-r-1 border-gray-900 gap-4"
+>
+	<button
+		class="rounded transition duration-250 ease-in-out cursor-pointer active:scale-90"
+		title="Todas las figuras"
+		(click)="handleOption('all', 'Todas las Figuras')"
+		[ngClass]="
+			opc === 'all'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/all.svg" alt="" />
+	</button>
+
+	<button
+		class="rounded hover:scale-105 hover:bg-purple-800 transition duration-250 ease-in-out cursor-pointer active:scale-90"
+		title="Conectores"
+		(click)="handleOption('connectors', 'Conectores')"
+		[ngClass]="
+			opc === 'connectors'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/all.svg" alt="" />
+	</button>
+	<button
+		class="rounded hover:scale-105 hover:bg-purple-800 transition duration-250 ease-in-out cursor-pointer active:scale-90 p-0"
+		title="Figuras Geométricas"
+		(click)="handleOption('figures', 'Figuras Geométricas')"
+		[ngClass]="
+			opc === 'figures'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/figures.svg" alt="" />
+	</button>
+	<button
+		class="rounded hover:scale-105 hover:bg-purple-800 transition duration-250 ease-in-out cursor-pointer active:scale-90 p-[2px]"
+		title="Diagrama casos de uso"
+		(click)="handleOption('cu', 'Diagrama Casos de Uso')"
+		[ngClass]="
+			opc === 'cu'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/usesCase.svg" alt="" />
+	</button>
+	<button
+		class="rounded hover:scale-105 hover:bg-purple-800 transition duration-250 ease-in-out cursor-pointer active:scale-90 p-[2px]"
+		title="Diagrama de Paquetes"
+		(click)="handleOption('packages', 'Diagrama de Paquetes')"
+		[ngClass]="
+			opc === 'packages'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/package.svg" alt="" />
+	</button>
+	<button
+		class="rounded hover:scale-105 hover:bg-purple-800 transition duration-250 ease-in-out cursor-pointer active:scale-90 p-[2px]"
+		title="Diagrama de Secuencia"
+		(click)="handleOption('sequence', 'Diagrama de Secuencia')"
+		[ngClass]="
+			opc === 'sequence'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/package.svg" alt="" />
+	</button>
+	<button
+		class="rounded hover:scale-105 hover:bg-purple-800 transition duration-250 ease-in-out cursor-pointer active:scale-90 p-[2px]"
+		title="Diagrama de Clases"
+		(click)="handleOption('classes', 'Diagrama de Clases')"
+		[ngClass]="
+			opc === 'classes'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/package.svg" alt="" />
+	</button>
+	<button
+		class="rounded hover:scale-105 hover:bg-purple-800 transition duration-250 ease-in-out cursor-pointer active:scale-90 p-[2px]"
+		title="Diagrama de Componentes"
+		(click)="handleOption('components', 'Diagrama de Componentes')"
+		[ngClass]="
+			opc === 'components'
+				? 'scale-105 bg-purple-800'
+				: 'hover:scale-105 hover:bg-purple-800'
+		"
+	>
+		<img src="/svg/sidebarPalette/package.svg" alt="" />
+	</button>
+</div>

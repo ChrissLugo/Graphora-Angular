@@ -14,12 +14,14 @@ import { produce } from 'immer';
 import { DiamondNode } from '../../../core/models/nodes/diamond-node';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
-import { NodePalette } from '../../../core/models/palettes/palette';
+import { AllPalette } from '../../../core/models/palettes/allPalette';
 import { DiagramsTransferService } from '../../../core/services/Data Transfer/DiagramsTransfer.service';
 import { UserDiagramsService } from '../../../core/services/API/user/UserDiagrams.service';
 import { CircleNode } from '../../../core/models/nodes/circle-node';
 import { ContainerNode } from '../../../core/models/nodes/container-node';
 import { ActorNode } from '../../../core/models/nodes/actor-node';
+import { SidebarPaletteComponent } from '../sidebar-palette/sidebar-palette.component';
+import { CUPalette } from '../../../core/models/palettes/CUPalette';
 
 interface ModelJson {
 	modelData: any;
@@ -36,6 +38,7 @@ interface ModelJson {
 		OverviewComponent,
 		InspectorComponent,
 		CommonModule,
+		SidebarPaletteComponent,
 	],
 	templateUrl: './my-diagram.component.html',
 	styleUrl: './my-diagram.component.css',
@@ -60,6 +63,8 @@ export default class MyDiagramComponent implements OnInit {
 	public diagramId!: number;
 	public diagramName!: string;
 	public diagramDescription!: string;
+	//datos de la paleta
+	public titlePalette: string = 'Sin Título';
 
 	constructor(
 		private cdr: ChangeDetectorRef,
@@ -206,6 +211,10 @@ export default class MyDiagramComponent implements OnInit {
 				console.log('MOSTRAR ERROR AL RENOMBRAR DIAGRAMA CON SWAY');
 			},
 		});
+	}
+
+	public setPaletteTitle(title: any) {
+		this.titlePalette = title;
 	}
 
 	changeTheme(theme: string) {
@@ -477,12 +486,6 @@ export default class MyDiagramComponent implements OnInit {
 		});
 	};
 
-	public initPalette = (): go.Palette => {
-		const palette = new go.Palette();
-		palette.nodeTemplateMap = new NodePalette().getTemplates();
-		return palette;
-	};
-
 	public ngAfterViewInit() {
 		if (this.observedDiagram) return;
 		this.observedDiagram = this.myDiagramComponent.diagram;
@@ -513,17 +516,30 @@ export default class MyDiagramComponent implements OnInit {
 	}
 
 	//Template
-	public allPaletteState = {
-		paletteNodeData: [
-			{ category: 'EmptyNode' },
-			{ category: 'EmptyNode' },
-			{ category: 'DiamondNode', text: 'Texto', color: '#ffffff' },
-			{ category: 'ContainerNode', text: 'Contenedor', color: '#ffffff' },
-			{ category: 'TextNode', text: 'Texto', color: '#ffffff' },
-			{ category: 'CircleNode', text: 'CU', color: '#ffffff' },
-			{ category: 'ActorNode', text: 'Actor', color: '#ffffff' },
-		],
-		paletteModelData: { prop: 'val' },
+	public allPaletteState!: any;
+	public templates!: any;
+
+	public setPalette(opc: any) {
+		console.log('Esta es la opcion de la paleta', opc);
+		switch (opc) {
+			case 'all':
+				this.templates = new AllPalette().getTemplates();
+				this.allPaletteState = new AllPalette().getPalette();
+				break;
+			case 'cu':
+				this.templates = new CUPalette().getTemplates();
+				this.allPaletteState = new CUPalette().getPalette();
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	public initPalette = (): go.Palette => {
+		const palette = new go.Palette();
+		palette.nodeTemplateMap = this.templates;
+		return palette;
 	};
 
 	public initOverview(): go.Overview {

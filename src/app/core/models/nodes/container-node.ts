@@ -126,7 +126,7 @@ export class ContainerNode {
 				stroke: '#fff',
 				strokeWidth: 4,
 				// desiredSize: new go.Size(300, 400),
-			}),
+			}).theme('stroke', 'arrow'),
 			new go.TextBlock('Texto', {
 				name: 'TEXTBLOCK',
 				editable: false,

@@ -104,7 +104,7 @@ export class CircleNode {
 			})
 		);
 
-		this.node = new go.Node('Auto', {
+		this.node = new go.Node('Spot', {
 			locationSpot: go.Spot.Center,
 			rotatable: true,
 			rotateAdornmentTemplate: nodeRotateAdornmentTemplate,
@@ -125,6 +125,11 @@ export class CircleNode {
 				fill: '#970FF7',
 				stroke: null,
 			}),
+			makePort('T', go.Spot.Top, true, true),
+			makePort('L', go.Spot.Left, true, true),
+			makePort('R', go.Spot.Right, true, true),
+			makePort('B', go.Spot.Bottom, true, true),
+
 			new go.TextBlock('Texto', {
 				name: 'TEXTBLOCK',
 				margin: 8,
@@ -178,11 +183,7 @@ export class CircleNode {
 				.bind(new go.Binding('text', 'text').makeTwoWay())
 				.bind(new go.Binding('background', 'textBgColor').makeTwoWay())
 				.bind(new go.Binding('font', 'font').makeTwoWay())
-				.bind(new go.Binding('alignment', 'alignment').makeTwoWay()),
-			makePort('T', go.Spot.Top, true, true),
-			makePort('L', go.Spot.Left, true, true),
-			makePort('R', go.Spot.Right, true, true),
-			makePort('B', go.Spot.Bottom, true, true)
+				.bind(new go.Binding('alignment', 'alignment').makeTwoWay())
 		);
 
 		const shape = this.node.findObject('PANEL');

@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 
-export class NodePalette {
+export class AllPalette {
 	itemtemplates = new go.Map<any, any>();
 
 	constructor() {
@@ -18,9 +18,9 @@ export class NodePalette {
 				go.Node,
 				'Auto',
 				$(go.Shape, 'RoundedRectangle', {
-					fill: 'transparent',
+					fill: null,
 					stroke: null,
-					desiredSize: new go.Size(80, 60),
+					desiredSize: new go.Size(80, 120),
 				}),
 				$(
 					go.TextBlock,
@@ -83,6 +83,8 @@ export class NodePalette {
 			)
 		);
 
+		// DIAGRAMA CASOS DE USO
+
 		this.itemtemplates.add(
 			'ContainerNode',
 			$(
@@ -135,28 +137,72 @@ export class NodePalette {
 			$(
 				go.Node,
 				'Spot',
-				$(go.Shape, 'Ellipse', {
-					fill: '#fff',
-					strokeWidth: 2,
-					desiredSize: new go.Size(80, 60),
+				new go.Shape('Circle', {
+					name: 'HEAD',
+					width: 20,
+					height: 20,
+					stroke: 'white',
+					fill: null,
+					strokeWidth: 4,
+					alignment: go.Spot.Top,
+					alignmentFocus: go.Spot.Top,
 				}),
-				$(
-					go.TextBlock,
-					{
-						alignment: go.Spot.Center,
-						editable: false,
-						stroke: '#fff',
-						font: '13px sans-serif',
-					},
-					new go.Binding('text')
-				)
+				//Cuerpo
+				new go.Shape({
+					geometry: go.Geometry.parse('F M0 20 L0 48'),
+					stroke: '#fff',
+					strokeWidth: 4,
+					alignment: go.Spot.Top,
+					alignmentFocus: go.Spot.Top,
+				}),
+				// Brazos
+				new go.Shape({
+					geometry: go.Geometry.parse('F M0 26 L25 26'),
+					stroke: '#fff',
+					strokeWidth: 4,
+					alignment: go.Spot.Top,
+					alignmentFocus: go.Spot.Top,
+				}),
+				// // Pierna derecha
+				new go.Shape({
+					geometry: go.Geometry.parse('F M10 48 L20 70'),
+					stroke: '#fff',
+					strokeWidth: 4,
+					alignment: go.Spot.Top,
+					alignmentFocus: go.Spot.Top,
+				}),
+				// Pierna izquierda
+				new go.Shape({
+					geometry: go.Geometry.parse('F M-10 48 L-20 70'),
+					stroke: '#fff',
+					strokeWidth: 4,
+					alignment: go.Spot.Top,
+					alignmentFocus: go.Spot.Top,
+				})
 			)
 		);
 	}
 
-	/**
-	 * Devuelve la instancia de go.Palette creada.
-	 */
+	public getPalette() {
+		const palette = {
+			paletteNodeData: [
+				{ category: 'EmptyNode' },
+				{ category: 'EmptyNode' },
+				{ category: 'DiamondNode', text: 'Texto', color: '#ffffff' },
+				{
+					category: 'ContainerNode',
+					text: 'Contenedor',
+					color: '#ffffff',
+				},
+				{ category: 'TextNode', text: 'Texto', color: '#ffffff' },
+				{ category: 'CircleNode', text: 'CU', color: '#ffffff' },
+				{ category: 'ActorNode', text: 'Actor', color: '#ffffff' },
+			],
+			paletteModelData: { prop: 'val' },
+		};
+		return palette;
+	}
+
 	public getTemplates() {
 		return this.itemtemplates;
 	}
