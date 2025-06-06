@@ -84,36 +84,36 @@ export class NodePalette {
 		);
 
 		this.itemtemplates.add(
-			'Rectangle',
+			'ContainerNode',
 			$(
 				go.Node,
 				'Auto',
-				$(go.Shape, 'Rectangle', {
-					fill: '#ACE600',
-					stroke: '#333',
+				// 1) la forma de fondo
+				$(go.Shape, 'RoundedRectangle', {
+					fill: '#000',
+					stroke: '#fff',
 					strokeWidth: 2,
+					desiredSize: new go.Size(70, 70),
 				}),
-				$(
-					go.TextBlock,
-					{
-						margin: 8,
-						editable: false,
-						stroke: '#111',
-						font: '14px sans-serif',
-					},
-					new go.Binding('text')
-				)
+				// 2) el TextBlock anclado arriba-dentro de la forma
+				$(go.TextBlock, new go.Binding('text'), {
+					alignment: go.Spot.Top, // ancla el TextBlock al borde superior del contenedor
+					alignmentFocus: go.Spot.Top, // el punto de referencia del TextBlock es su propio tope
+					margin: new go.Margin(2, 0, 0, 0), // deja 2px de separación entre texto y borde
+					editable: false,
+					stroke: '#fff',
+					font: '10px sans-serif',
+				})
 			)
 		);
 
 		this.itemtemplates.add(
-			'Triangle',
+			'CircleNode',
 			$(
 				go.Node,
 				'Spot',
-				$(go.Shape, 'Triangle', {
-					fill: '#1ABC9C',
-					stroke: '#333',
+				$(go.Shape, 'Ellipse', {
+					fill: '#970FF7',
 					strokeWidth: 2,
 					desiredSize: new go.Size(80, 60),
 				}),
@@ -122,7 +122,30 @@ export class NodePalette {
 					{
 						alignment: go.Spot.Center,
 						editable: false,
-						stroke: '#111',
+						stroke: '#fff',
+						font: '13px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.itemtemplates.add(
+			'ActorNode',
+			$(
+				go.Node,
+				'Spot',
+				$(go.Shape, 'Ellipse', {
+					fill: '#fff',
+					strokeWidth: 2,
+					desiredSize: new go.Size(80, 60),
+				}),
+				$(
+					go.TextBlock,
+					{
+						alignment: go.Spot.Center,
+						editable: false,
+						stroke: '#fff',
 						font: '13px sans-serif',
 					},
 					new go.Binding('text')

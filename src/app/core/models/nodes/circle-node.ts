@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 
-export class TextNode {
+export class CircleNode {
 	protected node: go.Node;
 	constructor() {
 		function makePort(name: any, spot: any, output: any, input: any) {
@@ -112,6 +112,7 @@ export class TextNode {
 			resizeObjectName: 'PANEL',
 			resizeAdornmentTemplate: nodeResizeAdornmentTemplate,
 			selectable: true,
+			minSize: new go.Size(150, 100),
 			selectionAdornmentTemplate: nodeSelectionAdornmentTemplate,
 			mouseEnter: (e, node) => showSmallPorts(node, true),
 			mouseLeave: (e, node) => showSmallPorts(node, false),
@@ -119,9 +120,9 @@ export class TextNode {
 			.bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify)
 			.bindTwoWay('angle');
 		this.node.add(
-			new go.Shape('RoundedRectangle', {
+			new go.Shape('Ellipse', {
 				name: 'PANEL',
-				fill: 'transparent',
+				fill: '#970FF7',
 				stroke: null,
 			}),
 			new go.TextBlock('Texto', {

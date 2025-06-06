@@ -17,6 +17,9 @@ import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import { NodePalette } from '../../../core/models/palettes/palette';
 import { DiagramsTransferService } from '../../../core/services/Data Transfer/DiagramsTransfer.service';
 import { UserDiagramsService } from '../../../core/services/API/user/UserDiagrams.service';
+import { CircleNode } from '../../../core/models/nodes/circle-node';
+import { ContainerNode } from '../../../core/models/nodes/container-node';
+import { ActorNode } from '../../../core/models/nodes/actor-node';
 
 interface ModelJson {
 	modelData: any;
@@ -263,10 +266,15 @@ export default class MyDiagramComponent implements OnInit {
 		selectedNodeData: null,
 	};
 
+	//Template
 	public getTemplateNodes = () => {
 		const sharedTemplateMap = new go.Map<string, go.Node>();
 		sharedTemplateMap.add('TextNode', new TextNode().getNode());
 		sharedTemplateMap.add('DiamondNode', new DiamondNode().getNode());
+		sharedTemplateMap.add('ContainerNode', new ContainerNode().getNode());
+		sharedTemplateMap.add('CircleNode', new CircleNode().getNode());
+		sharedTemplateMap.add('ActorNode', new ActorNode().getNode());
+
 		return sharedTemplateMap;
 	};
 
@@ -504,15 +512,16 @@ export default class MyDiagramComponent implements OnInit {
 		);
 	}
 
+	//Template
 	public allPaletteState = {
 		paletteNodeData: [
 			{ category: 'EmptyNode' },
 			{ category: 'EmptyNode' },
-			{ category: 'Triangle' },
 			{ category: 'DiamondNode', text: 'Texto', color: '#ffffff' },
-			{ category: 'Rectangle', text: 'Texto', color: '#ffffff' },
+			{ category: 'ContainerNode', text: 'Contenedor', color: '#ffffff' },
 			{ category: 'TextNode', text: 'Texto', color: '#ffffff' },
-			{ category: 'Rectangle', text: 'Texto', color: '#ffffff' },
+			{ category: 'CircleNode', text: 'CU', color: '#ffffff' },
+			{ category: 'ActorNode', text: 'Actor', color: '#ffffff' },
 		],
 		paletteModelData: { prop: 'val' },
 	};
