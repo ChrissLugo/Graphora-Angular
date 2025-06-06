@@ -22,6 +22,7 @@ import { ContainerNode } from '../../../core/models/nodes/container-node';
 import { ActorNode } from '../../../core/models/nodes/actor-node';
 import { SidebarPaletteComponent } from '../sidebar-palette/sidebar-palette.component';
 import { CUPalette } from '../../../core/models/palettes/CUPalette';
+import { FiguresPalette } from '../../../core/models/palettes/figuresPalette';
 
 interface ModelJson {
 	modelData: any;
@@ -530,8 +531,15 @@ export default class MyDiagramComponent implements OnInit {
 				this.templates = new CUPalette().getTemplates();
 				this.allPaletteState = new CUPalette().getPalette();
 				break;
-
+			case 'figures':
+				this.templates = new FiguresPalette().getTemplates();
+				this.allPaletteState = new FiguresPalette().getPalette();
+				break;
 			default:
+				this.allPaletteState = {
+					paletteNodeData: [],
+					paletteModelData: { prop: 'val' },
+				};
 				break;
 		}
 	}

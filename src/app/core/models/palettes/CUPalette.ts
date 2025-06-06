@@ -111,49 +111,56 @@ export class CUPalette {
 			'ActorNode',
 			$(
 				go.Node,
-				'Spot',
-				new go.Shape('Circle', {
-					name: 'HEAD',
-					width: 20,
-					height: 20,
-					stroke: 'white',
-					fill: null,
-					strokeWidth: 4,
-					alignment: go.Spot.Top,
-					alignmentFocus: go.Spot.Top,
-				}),
-				//Cuerpo
-				new go.Shape({
-					geometry: go.Geometry.parse('F M0 20 L0 48'),
-					stroke: '#fff',
-					strokeWidth: 4,
-					alignment: go.Spot.Top,
-					alignmentFocus: go.Spot.Top,
-				}),
-				// Brazos
-				new go.Shape({
-					geometry: go.Geometry.parse('F M0 26 L25 26'),
-					stroke: '#fff',
-					strokeWidth: 4,
-					alignment: go.Spot.Top,
-					alignmentFocus: go.Spot.Top,
-				}),
-				// // Pierna derecha
-				new go.Shape({
-					geometry: go.Geometry.parse('F M10 48 L20 70'),
-					stroke: '#fff',
-					strokeWidth: 4,
-					alignment: go.Spot.Top,
-					alignmentFocus: go.Spot.Top,
-				}),
-				// Pierna izquierda
-				new go.Shape({
-					geometry: go.Geometry.parse('F M-10 48 L-20 70'),
-					stroke: '#fff',
-					strokeWidth: 4,
-					alignment: go.Spot.Top,
-					alignmentFocus: go.Spot.Top,
-				})
+				'Auto',
+				{ background: 'transparent' },
+				new go.Panel('Spot', {
+					defaultAlignment: go.Spot.Center,
+					margin: new go.Margin(0, 30, 0, 30),
+					background: 'transparent',
+				}).add(
+					new go.Shape('Circle', {
+						name: 'HEAD',
+						width: 20,
+						height: 20,
+						stroke: 'white',
+						fill: null,
+						strokeWidth: 4,
+						alignment: go.Spot.Top,
+						alignmentFocus: go.Spot.Top,
+					}),
+					//Cuerpo
+					new go.Shape({
+						geometry: go.Geometry.parse('F M0 20 L0 48'),
+						stroke: '#fff',
+						strokeWidth: 4,
+						alignment: go.Spot.Top,
+						alignmentFocus: go.Spot.Top,
+					}),
+					// Brazos
+					new go.Shape({
+						geometry: go.Geometry.parse('F M0 26 L25 26'),
+						stroke: '#fff',
+						strokeWidth: 4,
+						alignment: go.Spot.Top,
+						alignmentFocus: go.Spot.Top,
+					}),
+					// // Pierna derecha
+					new go.Shape({
+						geometry: go.Geometry.parse('F M10 48 L20 70'),
+						stroke: '#fff',
+						strokeWidth: 4,
+						alignment: go.Spot.Top,
+						alignmentFocus: go.Spot.Top,
+					}),
+					// Pierna izquierda
+					new go.Shape({
+						geometry: go.Geometry.parse('F M-10 48 L-20 70'),
+						stroke: '#fff',
+						strokeWidth: 4,
+						alignment: go.Spot.Top,
+						alignmentFocus: go.Spot.Top,
+					})
+				)
 			)
 		);
 	}

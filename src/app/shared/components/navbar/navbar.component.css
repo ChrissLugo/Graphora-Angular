@@ -2,6 +2,7 @@
 	background-color: black !important;
 	border-radius: 5px;
 	border: gray solid 1px;
+	z-index: 200 !important;
 }
 
 ::ng-deep .mdc-button__label,
