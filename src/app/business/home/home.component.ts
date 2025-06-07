@@ -4,7 +4,11 @@ import {
 	FaIconLibrary,
 	FontAwesomeModule,
 } from '@fortawesome/angular-fontawesome';
-import { faArrowRotateLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+	faArrowRotateLeft,
+	faPlus,
+	faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { TemplatesService } from '../../core/services/API/Templates/Templates.Service';
 import { DiagramsTransferService } from '../../core/services/Data Transfer/DiagramsTransfer.service';
 import { SwalMessageService } from '../../core/services/messages/swal-message.service';
@@ -26,12 +30,34 @@ export default class HomeComponent implements OnInit {
 		public messageService: SwalMessageService,
 		icons: FaIconLibrary
 	) {
-		icons.addIcons(faArrowRotateLeft, faPlus);
+		icons.addIcons(faArrowRotateLeft, faPlus, faTrash);
 	}
 
 	ngOnInit(): void {
 		this.getTemplates();
 		this.getUserDiagrams();
+	}
+
+	sendRecicleBin() {
+		Swal.fire({
+			title: '¿Seguro que desea enviar este diagrama a la papelera?',
+			text: 'Luego podrá restaurarlo si así lo desea.',
+			icon: 'info',
+			theme: 'dark',
+			showCancelButton: true,
+			confirmButtonColor: '#8200DB',
+			cancelButtonColor: '#E92718',
+			confirmButtonText: 'Enviar a la papelera',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					title: 'Listo!',
+					theme: 'dark',
+					text: 'Puede ver el diagrama en la papelera',
+					icon: 'success',
+				});
+			}
+		});
 	}
 
 	sendTemplateJSON(id: number) {
