@@ -51,12 +51,6 @@ export class InspectorComponent {
 	}
 	ngOnInit(): void {
 		console.log('data enviada', this.nodeData);
-		console.log(
-			'dataa',
-			this.nodeData['borderStyle'],
-			'asdfasdf',
-			this.stringify(this.nodeData['borderStyle'])
-		);
 	}
 
 	alignmentText(position: string) {

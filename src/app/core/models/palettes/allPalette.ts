@@ -125,7 +125,7 @@ export class AllPalette {
 						alignment: go.Spot.Center,
 						editable: false,
 						stroke: '#fff',
-						font: '13px sans-serif',
+						font: '10px sans-serif',
 					},
 					new go.Binding('text')
 				)
@@ -202,7 +202,11 @@ export class AllPalette {
 					color: '#ffffff',
 				},
 				{ category: 'TextNode', text: 'Texto', color: '#ffffff' },
-				{ category: 'CircleNode', text: 'CU', color: '#ffffff' },
+				{
+					category: 'CircleNode',
+					text: 'Caso de Uso',
+					color: '#ffffff',
+				},
 				{ category: 'ActorNode', text: 'Actor', color: '#ffffff' },
 			],
 			paletteModelData: { prop: 'val' },

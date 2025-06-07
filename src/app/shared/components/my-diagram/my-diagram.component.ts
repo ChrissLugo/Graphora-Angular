@@ -521,7 +521,7 @@ export default class MyDiagramComponent implements OnInit {
 	public templates!: any;
 
 	public setPalette(opc: any) {
-		console.log('Esta es la opcion de la paleta', opc);
+		// console.log('Esta es la opcion de la paleta', opc);
 		switch (opc) {
 			case 'all':
 				this.templates = new AllPalette().getTemplates();

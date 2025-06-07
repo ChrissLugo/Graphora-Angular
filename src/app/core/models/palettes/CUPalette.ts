@@ -100,7 +100,7 @@ export class CUPalette {
 						alignment: go.Spot.Center,
 						editable: false,
 						stroke: '#fff',
-						font: '13px sans-serif',
+						font: '10px sans-serif',
 					},
 					new go.Binding('text')
 				)
@@ -175,7 +175,11 @@ export class CUPalette {
 					text: 'Contenedor',
 					color: '#ffffff',
 				},
-				{ category: 'CircleNode', text: 'CU', color: '#ffffff' },
+				{
+					category: 'CircleNode',
+					text: 'Caso de uso',
+					color: '#ffffff',
+				},
 				{ category: 'ActorNode', text: 'Actor', color: '#ffffff' },
 				{ category: 'TextNode', text: 'Texto', color: '#ffffff' },
 			],
