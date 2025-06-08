@@ -63,7 +63,10 @@
 					>
 						<button
 							class="absolute hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
-							(click)="sendRecicleBin(); $event.stopPropagation()"
+							(click)="
+								sendToRecyclingBin(diagram.template_id);
+								$event.stopPropagation()
+							"
 							title="Enviar a la papelera"
 						>
 							<fa-icon

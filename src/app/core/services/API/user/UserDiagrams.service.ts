@@ -49,4 +49,10 @@ export class UserDiagramsService {
 	updateDiagramNormal(data: any, id: number) {
 		return this.http.put(`${this.API_URL}/diagram/me/${id}`, data);
 	}
+
+	sendToRecyclingBin(id: number) {
+		return this.http.patch(`${this.API_URL}/diagram/me/delete/${id}`, {
+			status: 'I',
+		});
+	}
 }

@@ -38,7 +38,7 @@ export default class HomeComponent implements OnInit {
 		this.getUserDiagrams();
 	}
 
-	sendRecicleBin() {
+	sendToRecyclingBin(id: number) {
 		Swal.fire({
 			title: '¿Seguro que desea enviar este diagrama a la papelera?',
 			text: 'Luego podrá restaurarlo si así lo desea.',
@@ -50,6 +50,17 @@ export default class HomeComponent implements OnInit {
 			confirmButtonText: 'Enviar a la papelera',
 		}).then((result) => {
 			if (result.isConfirmed) {
+				this.UserDiagramsSrv.sendToRecyclingBin(id).subscribe({
+					next: (value) => {},
+					error(err) {
+						Swal.fire({
+							theme: 'dark',
+							title: 'Error al enviar a la papelera',
+							text: err,
+							icon: 'error',
+						});
+					},
+				});
 				Swal.fire({
 					title: 'Listo!',
 					theme: 'dark',

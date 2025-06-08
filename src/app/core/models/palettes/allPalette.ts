@@ -1,7 +1,8 @@
 import * as go from 'gojs';
 
 export class AllPalette {
-	itemtemplates = new go.Map<any, any>();
+	private nodeTemplates = new go.Map<any, any>();
+	private groupTemplates = new go.Map<any, any>();
 
 	constructor() {
 		this.createPalette();
@@ -12,7 +13,7 @@ export class AllPalette {
 
 		// === DEFINICIÓN DE NODE TEMPLATES ===
 
-		this.itemtemplates.add(
+		this.nodeTemplates.add(
 			'EmptyNode',
 			$(
 				go.Node,
@@ -33,7 +34,7 @@ export class AllPalette {
 			)
 		);
 
-		this.itemtemplates.add(
+		this.nodeTemplates.add(
 			'TextNode',
 			$(
 				go.Node,
@@ -58,7 +59,7 @@ export class AllPalette {
 			)
 		);
 
-		this.itemtemplates.add(
+		this.nodeTemplates.add(
 			'DiamondNode',
 			$(
 				go.Node,
@@ -85,7 +86,7 @@ export class AllPalette {
 
 		// DIAGRAMA CASOS DE USO
 
-		this.itemtemplates.add(
+		this.nodeTemplates.add(
 			'ContainerNode',
 			$(
 				go.Node,
@@ -109,7 +110,7 @@ export class AllPalette {
 			)
 		);
 
-		this.itemtemplates.add(
+		this.nodeTemplates.add(
 			'CircleNode',
 			$(
 				go.Node,
@@ -132,7 +133,7 @@ export class AllPalette {
 			)
 		);
 
-		this.itemtemplates.add(
+		this.nodeTemplates.add(
 			'ActorNode',
 			$(
 				go.Node,
@@ -188,6 +189,51 @@ export class AllPalette {
 				)
 			)
 		);
+
+		// DIAGRAMA DE SECUENCIA
+		this.groupTemplates.add(
+			'LifeLineNode',
+			$(
+				go.Group,
+				'Vertical',
+				{
+					// No hace falta interacción en la paleta
+					selectable: true,
+					resizable: false,
+					rotatable: false,
+					locationSpot: go.Spot.Center,
+					desiredSize: new go.Size(80, 70),
+				},
+				$(
+					go.Panel,
+					'Auto',
+					{ name: 'HEADER' },
+					$(go.Shape, 'Rectangle', {
+						name: 'PANEL',
+						// minSize: new go.Size(100, 40),
+						fill: 'transparent',
+						stroke: 'white',
+						strokeWidth: 2,
+					}),
+					$(go.TextBlock, {
+						name: 'TEXTBLOCK',
+						text: 'Objeto',
+						margin: 6,
+						stroke: 'white',
+						font: 'bold 10pt sans-serif',
+					})
+				),
+				$(go.Shape, {
+					figure: 'LineV',
+					stroke: 'gray',
+					strokeDashArray: [4, 4],
+					width: 4,
+					strokeWidth: 4,
+					height: 200,
+					alignment: go.Spot.Center,
+				})
+			)
+		);
 	}
 
 	public getPalette() {
@@ -208,13 +254,23 @@ export class AllPalette {
 					color: '#ffffff',
 				},
 				{ category: 'ActorNode', text: 'Actor', color: '#ffffff' },
+				{
+					category: 'LifeLineNode',
+					isGroup: true,
+					color: '#ffffff',
+					text: 'Objeto',
+				},
 			],
 			paletteModelData: { prop: 'val' },
 		};
 		return palette;
 	}
 
-	public getTemplates() {
-		return this.itemtemplates;
+	public getNodeTemplates() {
+		return this.nodeTemplates;
+	}
+
+	public getGroupTemplates() {
+		return this.groupTemplates;
 	}
 }

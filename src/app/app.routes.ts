@@ -52,6 +52,12 @@ export const routes: Routes = [
 					import('./business/settings/settings.component'),
 				canActivate: [authGuard],
 			},
+			{
+				path: 'recyclingBin',
+				loadComponent: () =>
+					import('./business/recycling-bin/recycling-bin.component'),
+				canActivate: [authGuard],
+			},
 		],
 	},
 	{

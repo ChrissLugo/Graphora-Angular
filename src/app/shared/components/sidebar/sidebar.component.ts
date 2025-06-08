@@ -3,11 +3,19 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+	FaIconLibrary,
+	FontAwesomeModule,
+} from '@fortawesome/angular-fontawesome';
 import {
 	faArrowRightFromBracket,
 	faGear,
 	faBell,
+	faTrash,
+	faUsers,
+	faStar,
+	faDiagramProject,
+	faHouse,
 } from '@fortawesome/free-solid-svg-icons';
 
 // Servicios
@@ -35,10 +43,6 @@ import { User } from '../../../core/interfaces/user';
 export class SidebarComponent {
 	selectedFilter: string = '';
 	notification!: boolean;
-	//icons
-	faArrowRightFromBracket = faArrowRightFromBracket;
-	faGear = faGear;
-	faBell = faBell;
 	userData$: Observable<User | null>;
 
 	constructor(
@@ -47,10 +51,22 @@ export class SidebarComponent {
 		private _tokenService: TokenService,
 		private _authService: AuthService,
 		private _messageService: SwalMessageService,
-		private _userStateService: UserStateService
+		private _userStateService: UserStateService,
+		icons: FaIconLibrary
 	) {
 		this.selectedFilter = this.router.url.replace(/\//g, '');
 		this.userData$ = this._userStateService.userData$;
+		icons.addIcons(
+			faGear,
+			faBell,
+			faArrowRightFromBracket,
+			faTrash,
+			faBell,
+			faUsers,
+			faStar,
+			faDiagramProject,
+			faHouse
+		);
 	}
 
 	ngOnInit(): void {

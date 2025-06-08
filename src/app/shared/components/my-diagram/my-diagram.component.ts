@@ -23,6 +23,7 @@ import { ActorNode } from '../../../core/models/nodes/actor-node';
 import { SidebarPaletteComponent } from '../sidebar-palette/sidebar-palette.component';
 import { CUPalette } from '../../../core/models/palettes/CUPalette';
 import { FiguresPalette } from '../../../core/models/palettes/figuresPalette';
+import { LifeLineNode } from '../../../core/models/nodes/sequenceObject-Node';
 
 interface ModelJson {
 	modelData: any;
@@ -278,14 +279,19 @@ export default class MyDiagramComponent implements OnInit {
 
 	//Template
 	public getTemplateNodes = () => {
-		const sharedTemplateMap = new go.Map<string, go.Node>();
-		sharedTemplateMap.add('TextNode', new TextNode().getNode());
-		sharedTemplateMap.add('DiamondNode', new DiamondNode().getNode());
-		sharedTemplateMap.add('ContainerNode', new ContainerNode().getNode());
-		sharedTemplateMap.add('CircleNode', new CircleNode().getNode());
-		sharedTemplateMap.add('ActorNode', new ActorNode().getNode());
+		const map = new go.Map<string, go.Node>();
+		map.add('TextNode', new TextNode().getNode());
+		map.add('DiamondNode', new DiamondNode().getNode());
+		map.add('ContainerNode', new ContainerNode().getNode());
+		map.add('CircleNode', new CircleNode().getNode());
+		map.add('ActorNode', new ActorNode().getNode());
+		return map;
+	};
 
-		return sharedTemplateMap;
+	public getGroupTemplates = () => {
+		const map = new go.Map<string, go.Group>();
+		map.add('LifeLineNode', new LifeLineNode().getNode());
+		return map;
 	};
 
 	public initDiagram() {
@@ -332,6 +338,7 @@ export default class MyDiagramComponent implements OnInit {
 
 		//Agregar la plantilla de nodos
 		this.diagram.nodeTemplateMap = this.getTemplateNodes();
+		this.diagram.groupTemplateMap = this.getGroupTemplates();
 
 		function makePort(id: string, spot: go.Spot) {
 			return new go.Shape('Circle', {
@@ -519,12 +526,14 @@ export default class MyDiagramComponent implements OnInit {
 	//Template
 	public allPaletteState!: any;
 	public templates!: any;
+	public groupTemplate!: any;
 
 	public setPalette(opc: any) {
 		// console.log('Esta es la opcion de la paleta', opc);
 		switch (opc) {
 			case 'all':
-				this.templates = new AllPalette().getTemplates();
+				this.templates = new AllPalette().getNodeTemplates();
+				this.groupTemplate = new AllPalette().getGroupTemplates();
 				this.allPaletteState = new AllPalette().getPalette();
 				break;
 			case 'cu':
@@ -545,8 +554,21 @@ export default class MyDiagramComponent implements OnInit {
 	}
 
 	public initPalette = (): go.Palette => {
-		const palette = new go.Palette();
-		palette.nodeTemplateMap = this.templates;
+		const $ = go.GraphObject.make;
+
+		const palette = $(go.Palette, {
+			nodeTemplateMap: this.templates,
+			groupTemplateMap: this.groupTemplate,
+			layout: $(go.GridLayout, {
+				wrappingColumn: 2, // Número de columnas deseadas
+				alignment: go.GridLayout.Position,
+				cellSize: new go.Size(1, 1),
+				spacing: new go.Size(10, 10),
+			}),
+			// Opcional: puedes configurar un ancho específico si no estás usando CSS para eso
+			// contentAlignment: go.Spot.TopLeft
+		});
+
 		return palette;
 	};
 
