@@ -202,7 +202,7 @@ export class AllPalette {
 					resizable: false,
 					rotatable: false,
 					locationSpot: go.Spot.Center,
-					desiredSize: new go.Size(80, 70),
+					desiredSize: new go.Size(90, 70),
 				},
 				$(
 					go.Panel,
@@ -217,7 +217,7 @@ export class AllPalette {
 					}),
 					$(go.TextBlock, {
 						name: 'TEXTBLOCK',
-						text: 'Objeto',
+						text: 'Linea Libre',
 						margin: 6,
 						stroke: 'white',
 						font: 'bold 10pt sans-serif',
@@ -232,6 +232,29 @@ export class AllPalette {
 					height: 200,
 					alignment: go.Spot.Center,
 				})
+			)
+		);
+
+		this.nodeTemplates.add(
+			'ActivityNode',
+			$(
+				go.Node,
+				'Spot',
+				$(go.Shape, 'Ellipse', {
+					fill: '#970FF7',
+					strokeWidth: 2,
+					desiredSize: new go.Size(80, 60),
+				}),
+				$(
+					go.TextBlock,
+					{
+						alignment: go.Spot.Center,
+						editable: false,
+						stroke: '#fff',
+						font: '10px sans-serif',
+					},
+					new go.Binding('text')
+				)
 			)
 		);
 	}
@@ -258,7 +281,13 @@ export class AllPalette {
 					category: 'LifeLineNode',
 					isGroup: true,
 					color: '#ffffff',
-					text: 'Objeto',
+					text: 'Linea libre',
+				},
+				{
+					category: 'ActivityNode',
+					text: 'Caso de Uso',
+					group: '',
+					color: 'gray',
 				},
 			],
 			paletteModelData: { prop: 'val' },

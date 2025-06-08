@@ -23,7 +23,9 @@ import { ActorNode } from '../../../core/models/nodes/actor-node';
 import { SidebarPaletteComponent } from '../sidebar-palette/sidebar-palette.component';
 import { CUPalette } from '../../../core/models/palettes/CUPalette';
 import { FiguresPalette } from '../../../core/models/palettes/figuresPalette';
-import { LifeLineNode } from '../../../core/models/nodes/sequenceObject-Node';
+import { LifeLineNode } from '../../../core/models/nodes/lifeLine-node';
+import { SequencePalette } from '../../../core/models/palettes/sequencePalette';
+import { ActivityNode } from '../../../core/models/nodes/activity-node';
 
 interface ModelJson {
 	modelData: any;
@@ -285,6 +287,7 @@ export default class MyDiagramComponent implements OnInit {
 		map.add('ContainerNode', new ContainerNode().getNode());
 		map.add('CircleNode', new CircleNode().getNode());
 		map.add('ActorNode', new ActorNode().getNode());
+		map.add('ActivityNode', new ActivityNode().getNode());
 		return map;
 	};
 
@@ -307,11 +310,12 @@ export default class MyDiagramComponent implements OnInit {
 			'draggingTool.guidelineWidth': 1,
 			'draggingTool.dragsLink': true,
 			'relinkingTool.isUnconnectedLinkValid': true,
-			'relinkingTool.portGravity': 20,
+			// 'relinkingTool.portGravity': 0,
 			'linkingTool.isUnconnectedLinkValid': true,
-			'linkingTool.portGravity': 20,
+			// 'linkingTool.portGravity': 0,
 			rotatingTool: new RotateMultipleTool(),
 			initialContentAlignment: go.Spot.Center,
+
 			allowLink: true,
 			allowRotate: true,
 			model: new go.GraphLinksModel({
@@ -320,6 +324,9 @@ export default class MyDiagramComponent implements OnInit {
 				linkKeyProperty: 'key',
 			}),
 		});
+
+		this.diagram.toolManager.linkingTool.portGravity = 0;
+		this.diagram.toolManager.relinkingTool.portGravity = 0;
 
 		this.diagram.themeManager.currentTheme = 'dark';
 
@@ -529,7 +536,7 @@ export default class MyDiagramComponent implements OnInit {
 	public groupTemplate!: any;
 
 	public setPalette(opc: any) {
-		// console.log('Esta es la opcion de la paleta', opc);
+		console.log('Esta es la opcion de la paleta', opc);
 		switch (opc) {
 			case 'all':
 				this.templates = new AllPalette().getNodeTemplates();
@@ -544,6 +551,12 @@ export default class MyDiagramComponent implements OnInit {
 				this.templates = new FiguresPalette().getTemplates();
 				this.allPaletteState = new FiguresPalette().getPalette();
 				break;
+			case 'sequence':
+				this.templates = new SequencePalette().getNodeTemplates();
+				this.groupTemplate = new SequencePalette().getGroupTemplates();
+				this.allPaletteState = new SequencePalette().getPalette();
+				break;
+
 			default:
 				this.allPaletteState = {
 					paletteNodeData: [],

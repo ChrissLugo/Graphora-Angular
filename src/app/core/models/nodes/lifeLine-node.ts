@@ -24,62 +24,62 @@ export class LifeLineNode {
 			locationSpot: go.Spot.Right,
 		}).add(
 			new go.Placeholder(),
-			new go.Shape({
-				alignment: go.Spot.TopLeft,
-				cursor: 'nw-resize',
-				desiredSize: new go.Size(6, 6),
-				fill: '#7204c1',
-				stroke: '#9710fa',
-			}),
-			new go.Shape({
-				alignment: go.Spot.Top,
-				cursor: 'n-resize',
-				desiredSize: new go.Size(6, 6),
-				fill: '#7204c1',
-				stroke: '#9710fa',
-			}),
-			new go.Shape({
-				alignment: go.Spot.TopRight,
-				cursor: 'ne-resize',
-				desiredSize: new go.Size(6, 6),
-				fill: '#7204c1',
-				stroke: '#9710fa',
-			}),
-			new go.Shape({
-				alignment: go.Spot.Left,
-				cursor: 'w-resize',
-				desiredSize: new go.Size(6, 6),
-				fill: '#7204c1',
-				stroke: '#9710fa',
-			}),
-			new go.Shape({
-				alignment: go.Spot.Right,
-				cursor: 'e-resize',
-				desiredSize: new go.Size(6, 6),
-				fill: '#7204c1',
-				stroke: '#9710fa',
-			}),
-			new go.Shape({
-				alignment: go.Spot.BottomLeft,
-				cursor: 'se-resize',
-				desiredSize: new go.Size(6, 6),
-				fill: '#7204c1',
-				stroke: '#9710fa',
-			}),
+			// new go.Shape({
+			// 	alignment: go.Spot.TopLeft,
+			// 	cursor: 'nw-resize',
+			// 	desiredSize: new go.Size(6, 6),
+			// 	fill: '#7204c1',
+			// 	stroke: '#9710fa',
+			// }),
+			// new go.Shape({
+			// 	alignment: go.Spot.Top,
+			// 	cursor: 'n-resize',
+			// 	desiredSize: new go.Size(6, 6),
+			// 	fill: '#7204c1',
+			// 	stroke: '#9710fa',
+			// }),
+			// new go.Shape({
+			// 	alignment: go.Spot.TopRight,
+			// 	cursor: 'ne-resize',
+			// 	desiredSize: new go.Size(6, 6),
+			// 	fill: '#7204c1',
+			// 	stroke: '#9710fa',
+			// }),
+			// new go.Shape({
+			// 	alignment: go.Spot.Left,
+			// 	cursor: 'w-resize',
+			// 	desiredSize: new go.Size(6, 6),
+			// 	fill: '#7204c1',
+			// 	stroke: '#9710fa',
+			// }),
+			// new go.Shape({
+			// 	alignment: go.Spot.Right,
+			// 	cursor: 'e-resize',
+			// 	desiredSize: new go.Size(6, 6),
+			// 	fill: '#7204c1',
+			// 	stroke: '#9710fa',
+			// }),
+			// new go.Shape({
+			// 	alignment: go.Spot.BottomLeft,
+			// 	cursor: 'se-resize',
+			// 	desiredSize: new go.Size(6, 6),
+			// 	fill: '#7204c1',
+			// 	stroke: '#9710fa',
+			// }),
 			new go.Shape({
 				alignment: go.Spot.Bottom,
 				cursor: 's-resize',
 				desiredSize: new go.Size(6, 6),
 				fill: '#7204c1',
 				stroke: '#9710fa',
-			}),
-			new go.Shape({
-				alignment: go.Spot.BottomRight,
-				cursor: 'sw-resize',
-				desiredSize: new go.Size(6, 6),
-				fill: '#7204c1',
-				stroke: '#9710fa',
 			})
+			// new go.Shape({
+			// 	alignment: go.Spot.BottomRight,
+			// 	cursor: 'sw-resize',
+			// 	desiredSize: new go.Size(6, 6),
+			// 	fill: '#7204c1',
+			// 	stroke: '#9710fa',
+			// })
 		);
 
 		var nodeRotateAdornmentTemplate = new go.Adornment({
@@ -112,9 +112,9 @@ export class LifeLineNode {
 		})
 			.bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify)
 			.add(
-				new go.Panel('Auto', { name: 'HEADER' }).add(
+				new go.Panel('Auto').add(
 					new go.Shape('Rectangle', {
-						name: 'PANEL',
+						// name: 'PANEL',
 
 						// fill: new go.Brush('Linear', {
 						// 	0: '#bbdefb',
@@ -123,6 +123,7 @@ export class LifeLineNode {
 						minSize: new go.Size(150, 50),
 						strokeWidth: 4,
 						fill: 'transparent',
+						// resizable: true,
 						stroke: '#ffffff',
 					}).theme('stroke', 'arrow'),
 					new go.TextBlock('Texto', {
@@ -192,7 +193,8 @@ export class LifeLineNode {
 						)
 				),
 				new go.Shape({
-					figure: 'LineV',
+					figure: 'Rectangle',
+					name: 'PANEL',
 					fill: null,
 					stroke: 'gray',
 					strokeDashArray: [4, 4],
@@ -205,8 +207,10 @@ export class LifeLineNode {
 					fromLinkableDuplicates: true,
 					toLinkable: true,
 					toLinkableDuplicates: true,
+					minSize: new go.Size(4, 4),
+					maxSize: new go.Size(4, Infinity),
 					cursor: 'pointer',
-				}).bind('height', 'duration', this.computeLifelineHeight)
+				})
 			);
 
 		const shape = this.node.findObject('PANEL');
