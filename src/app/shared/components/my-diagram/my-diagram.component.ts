@@ -80,6 +80,7 @@ export default class MyDiagramComponent implements OnInit {
 	public diagramId!: number;
 	public diagramName!: string;
 	public diagramDescription!: string;
+	public typeDiagram!: 'user' | 'template';
 	//datos de la paleta
 	public titlePalette: string = 'Sin Título';
 
@@ -114,6 +115,8 @@ export default class MyDiagramComponent implements OnInit {
 	}
 
 	getDiagram() {
+		const dataDiagram = this.getDataFromLocalStorage('currentDiagram');
+		this.typeDiagram = this.DiagramTransferSrv.getType();
 		this.DiagramTransferSrv.currentJson.subscribe((data) => {
 			if (!data || !data.template_data) {
 				console.warn('No hay datos válidos en el servicio');
@@ -126,51 +129,38 @@ export default class MyDiagramComponent implements OnInit {
 				this.diagramId,
 				data.template_data,
 				this.diagramName,
-				this.diagramDescription
+				this.diagramDescription,
+				this.typeDiagram
 			);
 		});
-		const dataDiagram = this.getDataFromLocalStorage('currentDiagram');
-		// localStorage.getItem('currentDiagram');
 		if (dataDiagram) {
-			// const currentDiagram = JSON.parse(dataDiagram);
 			this.loadJson(dataDiagram.data);
 			this.diagramName = dataDiagram.name;
 			this.diagramId = dataDiagram.id;
-			(this.diagramDescription = dataDiagram.description),
-				(this.isLoading = false);
+			this.diagramDescription = dataDiagram.description;
+			this.isLoading = false;
 		}
 	}
 
-	saveDiagramLocalStorage(id: any, data: any, name: any, description: any) {
+	saveDiagramLocalStorage(
+		id: any,
+		data: any,
+		name: any,
+		description: any,
+		type: string
+	) {
 		const currentDiagram = {
 			id: id,
 			data: data,
 			name: name,
 			description: description,
+			type: type,
 		};
 		localStorage.setItem('currentDiagram', JSON.stringify(currentDiagram));
 	}
 
-	autosaveDiagram() {
-		this.isSaving = true;
-		let diagramObj: any;
-
-		const diagramJSONString: string = this.diagram.model.toJson();
-
-		try {
-			diagramObj = JSON.parse(diagramJSONString);
-		} catch (e) {
-			console.error('No pude parsear el JSON del diagrama:', e);
-			return;
-		}
-		//Guardar en el localhost
-		this.saveDiagramLocalStorage(
-			this.diagramId,
-			diagramObj,
-			this.diagramName,
-			this.diagramDescription
-		);
-
+	getFormDataWithData() {
+		const diagramObj = this.getDiagramObj();
 		const dataDiagram = new FormData();
 		this.generateImg(this.diagram)
 			.then((file) => {
@@ -179,33 +169,55 @@ export default class MyDiagramComponent implements OnInit {
 			})
 			.catch((err) => console.error(err));
 
-		// const dataDiagram = {
-		// 	name: this.diagramName,
-		// 	description: this.diagramDescription, // (puede ser null)
-		// 	// category_id: null, // (por el momento puede ser null)
-		// 	template_data: diagramObj, // (este tiene que ser un json)
-		// };
-		console.log(diagramObj);
-
 		dataDiagram.append('name', this.diagramName);
 		dataDiagram.append('description', this.diagramDescription);
 		dataDiagram.append('template_data', JSON.stringify(diagramObj));
+		return dataDiagram;
+	}
 
-		//Guardar en la bdd
-		this.UserDiagramsSrv.saveDiagram(dataDiagram).subscribe({
-			next: () => {
-				this.UserDiagramsSrv.currentDiagram = dataDiagram;
-				this.isSaving = false;
-				this.isSave = true;
-			},
-			error: () => {
-				// this.UserDiagramsSrv.updateDiagram;
-				this.UserDiagramsSrv.updateDiagramTime({
-					id: this.diagramId,
-					data: dataDiagram,
-				});
-			},
-		});
+	getDiagramObj() {
+		const diagramJSONString: string = this.diagram.model.toJson();
+
+		try {
+			return JSON.parse(diagramJSONString);
+		} catch (e) {
+			console.error('No pude parsear el JSON del diagrama:', e);
+			return;
+		}
+	}
+
+	autosaveDiagram() {
+		this.isSaving = true;
+		const diagramObj = this.getDiagramObj();
+		//Guardar en el localhost
+		this.saveDiagramLocalStorage(
+			this.diagramId,
+			diagramObj,
+			this.diagramName,
+			this.diagramDescription,
+			this.typeDiagram
+		);
+
+		const dataForm = this.getFormDataWithData();
+
+		if (this.typeDiagram === 'template') {
+			this.UserDiagramsSrv.saveDiagram(dataForm).subscribe({
+				next: () => {
+					this.UserDiagramsSrv.currentDiagram =
+						dataForm.get('template_data');
+					this.isSaving = false;
+					this.isSave = true;
+				},
+				error: (err) => console.log(err),
+			});
+		} else {
+			//Guardar en la bdd
+			// this.UserDiagramsSrv.updateDiagram;
+			this.UserDiagramsSrv.updateDiagramTime({
+				id: this.diagramId,
+				data: dataForm,
+			});
+		}
 	}
 
 	async generateImg(diagram: go.Diagram) {
@@ -269,7 +281,8 @@ export default class MyDiagramComponent implements OnInit {
 					this.diagramId,
 					diagramData.data,
 					newName,
-					this.diagramDescription
+					this.diagramDescription,
+					this.typeDiagram
 				);
 			},
 			error: (err) => {

@@ -77,6 +77,7 @@ export default class HomeComponent implements OnInit {
 		this.TemplatesService.getTemplateById(id).subscribe({
 			next: (data: any) => {
 				this.TemplatesService.template = data.diagram;
+				this.DiagramTransferSrv.setType('template');
 				this.DiagramTransferSrv.changeJSON(
 					this.TemplatesService.template
 				);
@@ -93,6 +94,7 @@ export default class HomeComponent implements OnInit {
 		this.UserDiagramsSrv.getDiagramById(id).subscribe({
 			next: (data: any) => {
 				this.UserDiagramsSrv.currentDiagram = data.diagram;
+				this.DiagramTransferSrv.setType('user');
 				this.DiagramTransferSrv.changeJSON(
 					this.UserDiagramsSrv.currentDiagram
 				);
