@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 
-export class DiamondNode {
+export class InterfaceNode {
 	protected node: go.Node;
 	constructor() {
 		function makePort(name: any, spot: any, output: any, input: any) {
@@ -104,7 +104,7 @@ export class DiamondNode {
 			})
 		);
 
-		this.node = new go.Node('Auto', {
+		this.node = new go.Node('Vertical', {
 			locationSpot: go.Spot.Center,
 			rotatable: true,
 			rotateAdornmentTemplate: nodeRotateAdornmentTemplate,
@@ -119,18 +119,25 @@ export class DiamondNode {
 			.bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify)
 			.bindTwoWay('angle');
 		this.node.add(
-			new go.Shape('Diamond', {
-				fill: 'transparent',
-				name: 'PANEL',
-				stroke: 'red',
-				strokeWidth: 5,
-				minSize: new go.Size(80, 80),
-			}),
-			new go.TextBlock({
+			new go.Panel('Auto').add(
+				new go.Shape('Ellipse', {
+					name: 'PANEL',
+					fill: '#970FF7',
+					stroke: 'white',
+					minSize: new go.Size(40, 40),
+				}),
+				makePort('T', go.Spot.Top, true, true),
+				makePort('L', go.Spot.Left, true, true),
+				makePort('R', go.Spot.Right, true, true),
+				makePort('B', go.Spot.Bottom, true, true)
+			),
+			new go.TextBlock('Texto', {
+				name: 'TEXTBLOCK',
 				margin: 8,
 				editable: true,
 				isMultiline: true,
 			})
+
 				.bind(new go.Binding('text', 'text').makeTwoWay())
 				.bind(
 					new go.Binding(
@@ -177,11 +184,7 @@ export class DiamondNode {
 				.bind(new go.Binding('text', 'text').makeTwoWay())
 				.bind(new go.Binding('background', 'textBgColor').makeTwoWay())
 				.bind(new go.Binding('font', 'font').makeTwoWay())
-				.bind(new go.Binding('alignment', 'alignment').makeTwoWay()),
-			makePort('T', go.Spot.Top, true, true),
-			makePort('L', go.Spot.Left, true, true),
-			makePort('R', go.Spot.Right, true, true),
-			makePort('B', go.Spot.Bottom, true, true)
+				.bind(new go.Binding('alignment', 'alignment').makeTwoWay())
 		);
 
 		const shape = this.node.findObject('PANEL');

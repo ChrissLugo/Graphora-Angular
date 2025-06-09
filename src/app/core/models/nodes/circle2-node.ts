@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 
-export class DiamondNode {
+export class Circle2Node {
 	protected node: go.Node;
 	constructor() {
 		function makePort(name: any, spot: any, output: any, input: any) {
@@ -119,12 +119,12 @@ export class DiamondNode {
 			.bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify)
 			.bindTwoWay('angle');
 		this.node.add(
-			new go.Shape('Diamond', {
+			new go.Shape('Ellipse', {
 				fill: 'transparent',
+				stroke: 'yellow',
 				name: 'PANEL',
-				stroke: 'red',
-				strokeWidth: 5,
 				minSize: new go.Size(80, 80),
+				strokeWidth: 5,
 			}),
 			new go.TextBlock({
 				margin: 8,

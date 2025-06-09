@@ -51,7 +51,102 @@ export class FiguresPalette {
 						editable: false,
 						stroke: '#fff',
 						font: '14px sans-serif',
-						text: 'Texto',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.itemtemplates.add(
+			'RectangleNode',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'Rectangle', {
+					fill: 'transparent',
+					stroke: 'blue',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.itemtemplates.add(
+			'RoundedRectangleNode',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'RoundedRectangle', {
+					fill: 'transparent',
+					stroke: 'green',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.itemtemplates.add(
+			'Circle2Node',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'Capsule', {
+					fill: 'transparent',
+					stroke: 'yellow',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.itemtemplates.add(
+			'TriangleUpNode',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'TriangleUp', {
+					fill: 'transparent',
+					stroke: 'pink',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
 					},
 					new go.Binding('text')
 				)
@@ -64,7 +159,11 @@ export class FiguresPalette {
 			paletteNodeData: [
 				{ category: 'EmptyNode' },
 				{ category: 'EmptyNode' },
-				{ category: 'DiamondNode', text: 'Texto', color: '#ffffff' },
+				{ category: 'DiamondNode', color: '#ffffff' },
+				{ category: 'RectangleNode', color: '#ffffff' },
+				{ category: 'RoundedRectangleNode', color: '#ffffff' },
+				{ category: 'Circle2Node', color: '#ffffff' },
+				{ category: 'TriangleUpNode', color: '#ffffff' },
 			],
 			paletteModelData: { prop: 'val' },
 		};

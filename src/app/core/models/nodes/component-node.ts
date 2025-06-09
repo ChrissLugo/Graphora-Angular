@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 
-export class DiamondNode {
+export class ComponentNode {
 	protected node: go.Node;
 	constructor() {
 		function makePort(name: any, spot: any, output: any, input: any) {
@@ -104,13 +104,14 @@ export class DiamondNode {
 			})
 		);
 
-		this.node = new go.Node('Auto', {
+		this.node = new go.Node('Position', {
 			locationSpot: go.Spot.Center,
 			rotatable: true,
 			rotateAdornmentTemplate: nodeRotateAdornmentTemplate,
 			resizable: true,
 			resizeObjectName: 'PANEL',
 			resizeAdornmentTemplate: nodeResizeAdornmentTemplate,
+			minSize: new go.Size(180, 80),
 			selectable: true,
 			selectionAdornmentTemplate: nodeSelectionAdornmentTemplate,
 			mouseEnter: (e, node) => showSmallPorts(node, true),
@@ -119,69 +120,92 @@ export class DiamondNode {
 			.bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify)
 			.bindTwoWay('angle');
 		this.node.add(
-			new go.Shape('Diamond', {
-				fill: 'transparent',
+			new go.Panel('Auto').add(
+				new go.Shape('RoundedRectangle', {
+					minSize: new go.Size(180, 80),
+					name: 'PANEL',
+					fill: 'white',
+					stroke: 'black',
+				}),
+				makePort('T', go.Spot.Top, true, true),
+				makePort('L', go.Spot.Left, true, true),
+				makePort('R', go.Spot.Right, true, true),
+				makePort('B', go.Spot.Bottom, true, true),
+				new go.TextBlock('Texto', {
+					name: 'TEXTBLOCK',
+					margin: 8,
+					editable: true,
+					isMultiline: true,
+					textAlign: 'center',
+					verticalAlignment: go.Spot.Center,
+				})
+
+					.bind(new go.Binding('text', 'text').makeTwoWay())
+					.bind(
+						new go.Binding(
+							'stroke',
+							'',
+							(_: any, tb: go.GraphObject) => {
+								const data =
+									(tb.part && tb.part.data) || ({} as any);
+								const userColor = (data.color || '')
+									.toString()
+									.toLowerCase();
+								if (
+									userColor !== '#000' &&
+									userColor !== '#000000' &&
+									userColor !== '#fff' &&
+									userColor !== '#ffffff'
+								) {
+									return data.color;
+								}
+								const textBgHex =
+									(data.textBgColor as string) || '';
+								if (textBgHex) {
+									return isColorLight(textBgHex)
+										? '#000000'
+										: '#FFFFFF';
+								}
+								const shapeBgHex =
+									(data.shapeBgColor as string) || '';
+								if (shapeBgHex) {
+									return isColorLight(shapeBgHex)
+										? '#000000'
+										: '#FFFFFF';
+								}
+								if (tb.diagram) {
+									return tb.diagram.themeManager.findValue(
+										'text',
+										'colors'
+									);
+								}
+								return '#000000';
+							}
+						).makeTwoWay()
+					)
+					.bind(new go.Binding('text', 'text').makeTwoWay())
+					.bind(
+						new go.Binding('background', 'textBgColor').makeTwoWay()
+					)
+					.bind(new go.Binding('font', 'font').makeTwoWay())
+					.bind(new go.Binding('alignment', 'alignment').makeTwoWay())
+			),
+			new go.Shape('RoundedRectangle', {
+				position: new go.Point(-20, 20),
+				width: 40,
+				height: 20,
 				name: 'PANEL',
-				stroke: 'red',
-				strokeWidth: 5,
-				minSize: new go.Size(80, 80),
+				fill: 'white',
+				stroke: 'black',
 			}),
-			new go.TextBlock({
-				margin: 8,
-				editable: true,
-				isMultiline: true,
+			new go.Shape('RoundedRectangle', {
+				position: new go.Point(-20, 45),
+				width: 40,
+				height: 20,
+				name: 'PANEL',
+				fill: 'white',
+				stroke: 'black',
 			})
-				.bind(new go.Binding('text', 'text').makeTwoWay())
-				.bind(
-					new go.Binding(
-						'stroke',
-						'',
-						(_: any, tb: go.GraphObject) => {
-							const data =
-								(tb.part && tb.part.data) || ({} as any);
-							const userColor = (data.color || '')
-								.toString()
-								.toLowerCase();
-							if (
-								userColor !== '#000' &&
-								userColor !== '#000000' &&
-								userColor !== '#fff' &&
-								userColor !== '#ffffff'
-							) {
-								return data.color;
-							}
-							const textBgHex =
-								(data.textBgColor as string) || '';
-							if (textBgHex) {
-								return isColorLight(textBgHex)
-									? '#000000'
-									: '#FFFFFF';
-							}
-							const shapeBgHex =
-								(data.shapeBgColor as string) || '';
-							if (shapeBgHex) {
-								return isColorLight(shapeBgHex)
-									? '#000000'
-									: '#FFFFFF';
-							}
-							if (tb.diagram) {
-								return tb.diagram.themeManager.findValue(
-									'text',
-									'colors'
-								);
-							}
-							return '#000000';
-						}
-					).makeTwoWay()
-				)
-				.bind(new go.Binding('text', 'text').makeTwoWay())
-				.bind(new go.Binding('background', 'textBgColor').makeTwoWay())
-				.bind(new go.Binding('font', 'font').makeTwoWay())
-				.bind(new go.Binding('alignment', 'alignment').makeTwoWay()),
-			makePort('T', go.Spot.Top, true, true),
-			makePort('L', go.Spot.Left, true, true),
-			makePort('R', go.Spot.Right, true, true),
-			makePort('B', go.Spot.Bottom, true, true)
 		);
 
 		const shape = this.node.findObject('PANEL');
@@ -228,7 +252,7 @@ export class DiamondNode {
 		function showSmallPorts(node: any, show: any) {
 			node.ports.each((port: any) => {
 				if (port.portId !== '') {
-					port.fill = show ? 'rgba(255,255,255,.6)' : null;
+					port.fill = show ? 'rgba(151,15,247,.6)' : null;
 				}
 			});
 		}

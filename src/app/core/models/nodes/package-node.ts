@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 
-export class DiamondNode {
+export class PackageNode {
 	protected node: go.Node;
 	constructor() {
 		function makePort(name: any, spot: any, output: any, input: any) {
@@ -108,8 +108,10 @@ export class DiamondNode {
 			locationSpot: go.Spot.Center,
 			rotatable: true,
 			rotateAdornmentTemplate: nodeRotateAdornmentTemplate,
-			resizable: true,
-			resizeObjectName: 'PANEL',
+			// resizable: true,
+			minSize: new go.Size(100, 100),
+			maxSize: new go.Size(200, Infinity),
+			// resizeObjectName: 'PANEL',
 			resizeAdornmentTemplate: nodeResizeAdornmentTemplate,
 			selectable: true,
 			selectionAdornmentTemplate: nodeSelectionAdornmentTemplate,
@@ -119,65 +121,98 @@ export class DiamondNode {
 			.bindTwoWay('location', 'loc', go.Point.parse, go.Point.stringify)
 			.bindTwoWay('angle');
 		this.node.add(
-			new go.Shape('Diamond', {
-				fill: 'transparent',
-				name: 'PANEL',
-				stroke: 'red',
-				strokeWidth: 5,
-				minSize: new go.Size(80, 80),
-			}),
-			new go.TextBlock({
-				margin: 8,
-				editable: true,
-				isMultiline: true,
-			})
-				.bind(new go.Binding('text', 'text').makeTwoWay())
-				.bind(
-					new go.Binding(
-						'stroke',
-						'',
-						(_: any, tb: go.GraphObject) => {
-							const data =
-								(tb.part && tb.part.data) || ({} as any);
-							const userColor = (data.color || '')
-								.toString()
-								.toLowerCase();
-							if (
-								userColor !== '#000' &&
-								userColor !== '#000000' &&
-								userColor !== '#fff' &&
-								userColor !== '#ffffff'
-							) {
-								return data.color;
-							}
-							const textBgHex =
-								(data.textBgColor as string) || '';
-							if (textBgHex) {
-								return isColorLight(textBgHex)
-									? '#000000'
-									: '#FFFFFF';
-							}
-							const shapeBgHex =
-								(data.shapeBgColor as string) || '';
-							if (shapeBgHex) {
-								return isColorLight(shapeBgHex)
-									? '#000000'
-									: '#FFFFFF';
-							}
-							if (tb.diagram) {
-								return tb.diagram.themeManager.findValue(
-									'text',
-									'colors'
-								);
-							}
-							return '#000000';
-						}
-					).makeTwoWay()
+			new go.Panel('Vertical', {
+				stretch: go.GraphObject.Fill, // Estira horizontalmente el panel vertical
+			}).add(
+				new go.Shape('Rectangle', {
+					stretch: go.GraphObject.Horizontal,
+					minSize: new go.Size(100, 25),
+					maxSize: new go.Size(100, 25),
+					fill: 'white',
+					stroke: 'black',
+				}),
+
+				new go.Panel('Auto', { stretch: go.GraphObject.Fill }).add(
+					new go.Shape('Rectangle', {
+						name: 'PANEL',
+						row: 0,
+						column: 0,
+						minSize: new go.Size(100, 100),
+						maxSize: new go.Size(200, Infinity),
+						stretch: go.GraphObject.Fill,
+						fill: 'white',
+						stroke: 'black',
+					}),
+					new go.TextBlock('Paquete', {
+						row: 0,
+						column: 0,
+						name: 'TEXTBLOCK',
+						margin: 8,
+						stroke: 'black',
+						editable: true,
+						isMultiline: true,
+						textAlign: 'left',
+					})
+						.bind(new go.Binding('text', 'text').makeTwoWay())
+						.bind(
+							new go.Binding(
+								'stroke',
+								'',
+								(_: any, tb: go.GraphObject) => {
+									const data =
+										(tb.part && tb.part.data) ||
+										({} as any);
+									const userColor = (data.color || '')
+										.toString()
+										.toLowerCase();
+									if (
+										userColor !== '#000' &&
+										userColor !== '#000000' &&
+										userColor !== '#fff' &&
+										userColor !== '#ffffff'
+									) {
+										return data.color;
+									}
+									const textBgHex =
+										(data.textBgColor as string) || '';
+									if (textBgHex) {
+										return isColorLight(textBgHex)
+											? '#000000'
+											: '#FFFFFF';
+									}
+									const shapeBgHex =
+										(data.shapeBgColor as string) || '';
+									if (shapeBgHex) {
+										return isColorLight(shapeBgHex)
+											? '#000000'
+											: '#FFFFFF';
+									}
+									if (tb.diagram) {
+										return tb.diagram.themeManager.findValue(
+											'text',
+											'colors'
+										);
+									}
+									return '#000000';
+								}
+							).makeTwoWay()
+						)
+						.bind(new go.Binding('text', 'text').makeTwoWay())
+						.bind(
+							new go.Binding(
+								'background',
+								'textBgColor'
+							).makeTwoWay()
+						)
+						.bind(new go.Binding('font', 'font').makeTwoWay())
+						.bind(
+							new go.Binding(
+								'alignment',
+								'alignment'
+							).makeTwoWay()
+						)
 				)
-				.bind(new go.Binding('text', 'text').makeTwoWay())
-				.bind(new go.Binding('background', 'textBgColor').makeTwoWay())
-				.bind(new go.Binding('font', 'font').makeTwoWay())
-				.bind(new go.Binding('alignment', 'alignment').makeTwoWay()),
+			),
 			makePort('T', go.Spot.Top, true, true),
 			makePort('L', go.Spot.Left, true, true),
 			makePort('R', go.Spot.Right, true, true),
@@ -228,7 +263,7 @@ export class DiamondNode {
 		function showSmallPorts(node: any, show: any) {
 			node.ports.each((port: any) => {
 				if (port.portId !== '') {
-					port.fill = show ? 'rgba(255,255,255,.6)' : null;
+					port.fill = show ? 'rgba(151,15,247,.6)' : null;
 				}
 			});
 		}

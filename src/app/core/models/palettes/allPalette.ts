@@ -59,31 +59,6 @@ export class AllPalette {
 			)
 		);
 
-		this.nodeTemplates.add(
-			'DiamondNode',
-			$(
-				go.Node,
-				'Auto',
-				$(go.Shape, 'Diamond', {
-					fill: 'transparent',
-					stroke: 'red',
-					strokeWidth: 5,
-					desiredSize: new go.Size(80, 70),
-				}),
-				$(
-					go.TextBlock,
-					{
-						margin: 8,
-						editable: false,
-						stroke: '#fff',
-						font: '14px sans-serif',
-						text: 'Texto',
-					},
-					new go.Binding('text')
-				)
-			)
-		);
-
 		// DIAGRAMA CASOS DE USO
 
 		this.nodeTemplates.add(
@@ -283,6 +258,285 @@ export class AllPalette {
 				)
 			)
 		);
+
+		// DIAGRAMA DE PAQUETES
+		this.nodeTemplates.add(
+			'PackageNode',
+			$(
+				go.Node,
+				'Auto',
+				{
+					minSize: new go.Size(90, 50),
+					maxSize: new go.Size(90, Infinity),
+				},
+				new go.Panel('Vertical', {
+					stretch: go.GraphObject.Fill,
+				}).add(
+					new go.Shape('Rectangle', {
+						stretch: go.GraphObject.Horizontal,
+
+						fill: 'white',
+						stroke: 'black',
+						minSize: new go.Size(50, 20),
+						maxSize: new go.Size(50, 20),
+					}),
+					new go.Panel('Auto', {
+						stretch: go.GraphObject.Horizontal,
+					}).add(
+						new go.Shape('Rectangle', {
+							stroke: 'black',
+							height: 50,
+							fill: 'white',
+						}),
+						new go.TextBlock('Texto', {
+							name: 'TEXTBLOCK',
+							margin: 8,
+							text: 'Paquete',
+							stroke: 'black',
+							editable: false,
+							isMultiline: true,
+						})
+					)
+				)
+			)
+		);
+
+		this.nodeTemplates.add(
+			'PackageContainerNode',
+			$(
+				go.Node,
+				'Auto',
+				{
+					minSize: new go.Size(90, 50),
+					maxSize: new go.Size(90, Infinity),
+				},
+				new go.Panel('Vertical', {
+					stretch: go.GraphObject.Fill,
+				}).add(
+					new go.Panel('Auto', {
+						stretch: go.GraphObject.Horizontal,
+					}).add(
+						new go.Shape('Rectangle', {
+							stroke: 'black',
+
+							minSize: new go.Size(50, 20),
+							maxSize: new go.Size(50, 20),
+							fill: 'white',
+						}),
+						new go.TextBlock('Texto', {
+							name: 'TEXTBLOCK',
+							margin: 8,
+							text: '',
+							stroke: 'black',
+							editable: false,
+							isMultiline: true,
+						})
+					),
+					new go.Shape('Rectangle', {
+						stretch: go.GraphObject.Horizontal,
+						height: 50,
+						fill: 'transparent',
+						stroke: 'white',
+					})
+				)
+			)
+		);
+
+		// DIAGRAMA DE COMPONENTES
+		this.nodeTemplates.add(
+			'ComponentNode',
+			$(
+				go.Node,
+				'Position',
+				{
+					minSize: new go.Size(90, 50),
+					maxSize: new go.Size(90, Infinity),
+				},
+				new go.Panel('Auto', {
+					stretch: go.GraphObject.Fill,
+				}).add(
+					new go.Shape('RoundedRectangle', {
+						stroke: 'white',
+						minSize: new go.Size(80, 50),
+						maxSize: new go.Size(80, 50),
+						fill: 'white',
+					}),
+					new go.TextBlock('Texto', {
+						name: 'TEXTBLOCK',
+						margin: 8,
+						text: '',
+						stroke: 'black',
+						editable: false,
+						isMultiline: true,
+					})
+				),
+				new go.Shape('RoundedRectangle', {
+					position: new go.Point(-10, 10),
+					width: 20,
+					height: 10,
+					name: 'PANEL',
+					fill: 'white',
+					stroke: 'black',
+				}),
+				new go.Shape('RoundedRectangle', {
+					position: new go.Point(-10, 25),
+					width: 20,
+					height: 10,
+					name: 'PANEL',
+					fill: 'white',
+					stroke: 'black',
+				})
+			)
+		);
+
+		this.nodeTemplates.add(
+			'InterfaceNode',
+			$(
+				go.Node,
+				'Vertical',
+				{
+					minSize: new go.Size(90, 50),
+					maxSize: new go.Size(90, Infinity),
+				},
+				new go.Panel('Auto', {}).add(
+					new go.Shape('Ellipse', {
+						stroke: 'white',
+						minSize: new go.Size(40, 40),
+						maxSize: new go.Size(40, 40),
+						fill: '#970FF7',
+					})
+				),
+				new go.TextBlock('Texto', {
+					name: 'TEXTBLOCK',
+					margin: 8,
+					text: 'Interfaz',
+					stroke: 'white',
+					editable: false,
+					isMultiline: true,
+				})
+			)
+		);
+
+		// Figuras
+		this.nodeTemplates.add(
+			'DiamondNode',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'Diamond', {
+					fill: 'transparent',
+					stroke: 'red',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.nodeTemplates.add(
+			'RectangleNode',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'Rectangle', {
+					fill: 'transparent',
+					stroke: 'blue',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.nodeTemplates.add(
+			'RoundedRectangleNode',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'RoundedRectangle', {
+					fill: 'transparent',
+					stroke: 'green',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.nodeTemplates.add(
+			'Circle2Node',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'Capsule', {
+					fill: 'transparent',
+					stroke: 'yellow',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
+
+		this.nodeTemplates.add(
+			'TriangleUpNode',
+			$(
+				go.Node,
+				'Auto',
+				$(go.Shape, 'TriangleUp', {
+					fill: 'transparent',
+					stroke: 'pink',
+					strokeWidth: 5,
+					desiredSize: new go.Size(80, 80),
+				}),
+				$(
+					go.TextBlock,
+					{
+						margin: 8,
+						editable: false,
+						stroke: '#fff',
+						font: '14px sans-serif',
+					},
+					new go.Binding('text')
+				)
+			)
+		);
 	}
 
 	public getPalette() {
@@ -290,7 +544,6 @@ export class AllPalette {
 			paletteNodeData: [
 				{ category: 'EmptyNode' },
 				{ category: 'EmptyNode' },
-				{ category: 'DiamondNode', text: 'Texto', color: '#ffffff' },
 				{
 					category: 'ContainerNode',
 					text: 'Contenedor',
@@ -320,8 +573,35 @@ export class AllPalette {
 					text: 'Clase',
 					texto: 'Texto inicial',
 					group: '',
-					// color: 'gray',
 				},
+				{
+					category: 'PackageNode',
+					text: 'Paquete',
+					texto: 'Texto inicial',
+					group: '',
+				},
+				{
+					category: 'PackageContainerNode',
+					text: 'Paquete',
+					texto: 'Texto inicial',
+					group: '',
+				},
+				{
+					category: 'ComponentNode',
+					text: 'Paquete',
+					texto: 'Texto inicial',
+					group: '',
+				},
+				{
+					category: 'InterfaceNode',
+					text: 'Interfaz',
+					color: '#ffffff',
+				},
+				{ category: 'DiamondNode', color: '#ffffff' },
+				{ category: 'RectangleNode', color: '#ffffff' },
+				{ category: 'RoundedRectangleNode', color: '#ffffff' },
+				{ category: 'Circle2Node', color: '#ffffff' },
+				{ category: 'TriangleUpNode', color: '#ffffff' },
 			],
 			paletteModelData: { prop: 'val' },
 		};

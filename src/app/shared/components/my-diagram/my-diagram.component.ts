@@ -29,6 +29,16 @@ import { SequencePalette } from '../../../core/models/palettes/sequencePalette';
 import { ActivityNode } from '../../../core/models/nodes/activity-node';
 import { ClassNode } from '../../../core/models/nodes/class-node';
 import { ClassPalette } from '../../../core/models/palettes/classPalette';
+import { PackageNode } from '../../../core/models/nodes/package-node';
+import { PackageContainerNode } from '../../../core/models/nodes/packageContainer-node';
+import { PackagePalette } from '../../../core/models/palettes/packagePalette';
+import { ComponentNode } from '../../../core/models/nodes/component-node';
+import { InterfaceNode } from '../../../core/models/nodes/interface-node';
+import { ComponentsPalette } from '../../../core/models/palettes/componentsPalette';
+import { RoundedRectangleNode } from '../../../core/models/nodes/roundedRectangle-node';
+import { Circle2Node } from '../../../core/models/nodes/circle2-node';
+import { RectangleNode } from '../../../core/models/nodes/rectangle-node copy';
+import { TriangleUpNode } from '../../../core/models/nodes/triangleUp-node';
 
 interface ModelJson {
 	modelData: any;
@@ -292,6 +302,14 @@ export default class MyDiagramComponent implements OnInit {
 		map.add('ActorNode', new ActorNode().getNode());
 		map.add('ActivityNode', new ActivityNode().getNode());
 		map.add('ClassNode', new ClassNode().getNode());
+		map.add('PackageNode', new PackageNode().getNode());
+		map.add('PackageContainerNode', new PackageContainerNode().getNode());
+		map.add('ComponentNode', new ComponentNode().getNode());
+		map.add('InterfaceNode', new InterfaceNode().getNode());
+		map.add('RectangleNode', new RectangleNode().getNode());
+		map.add('RoundedRectangleNode', new RoundedRectangleNode().getNode());
+		map.add('Circle2Node', new Circle2Node().getNode());
+		map.add('TriangleUpNode', new TriangleUpNode().getNode());
 
 		return map;
 	};
@@ -567,6 +585,14 @@ export default class MyDiagramComponent implements OnInit {
 			case 'classes':
 				this.templates = new ClassPalette().getNodeTemplates();
 				this.allPaletteState = new ClassPalette().getPalette();
+				break;
+			case 'packages':
+				this.templates = new PackagePalette().getNodeTemplates();
+				this.allPaletteState = new PackagePalette().getPalette();
+				break;
+			case 'components':
+				this.templates = new ComponentsPalette().getNodeTemplates();
+				this.allPaletteState = new ComponentsPalette().getPalette();
 				break;
 
 			default:
