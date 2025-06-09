@@ -38,6 +38,23 @@ export default class HomeComponent implements OnInit {
 		this.getUserDiagrams();
 	}
 
+	newDiagram() {
+		localStorage.removeItem('currentDiagram');
+		// this.messageService.loadMessage();
+		//Obtenemos los datos del diagrama, los enviamos y redigimos al usuario
+		this.UserDiagramsSrv.currentDiagram = {
+			name: 'Nuevo Diagrama',
+			description: 'Sin descripción', // (puede ser null)
+			category_id: null, // (por el momento puede ser null)
+			template_data: {}, // (este tiene que ser un json)
+		};
+
+		// Swal.close();
+		this.DiagramTransferSrv.changeJSON(this.UserDiagramsSrv.currentDiagram);
+		this.DiagramTransferSrv.setType('template');
+		this.router.navigate(['/diagram']);
+	}
+
 	sendToRecyclingBin(id: number) {
 		Swal.fire({
 			title: '¿Seguro que desea enviar este diagrama a la papelera?',

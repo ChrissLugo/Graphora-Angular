@@ -34,8 +34,8 @@
 			<div
 				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer h-fit w-fit"
 				title="Crear un diagrama nuevo desde 0."
+				(click)="newDiagram()"
 			>
-				<!-- (click)="" -->
 				<a class="flex flex-col items-center">
 					<div
 						class="flex bg-white w-35 h-40 rounded items-center justify-center"
@@ -54,16 +54,17 @@
 			@for (diagram of UserDiagramsSrv.allDiagrams; track $index) {
 			<div
 				(click)="sendDiagramJSON(diagram.template_id)"
-				class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+				class="w-35 h-49 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
 				[title]="diagram.description"
 			>
 				<a class="flex flex-col items-center group">
 					<div
-						class="flex bg-white w-35 h-40 rounded items-center justify-center relative"
+						class="flex bg-white w-35 h-40 max-h-40 rounded items-center justify-center relative"
 					>
 						<img
 							[src]="diagram.preview_image"
 							alt="Imagen base64"
+							class="max-w-full max-h-full object-contain"
 						/>
 						<button
 							class="absolute hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"

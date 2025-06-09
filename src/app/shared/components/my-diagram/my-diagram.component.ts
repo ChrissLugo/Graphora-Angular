@@ -115,13 +115,13 @@ export default class MyDiagramComponent implements OnInit {
 	}
 
 	getDiagram() {
-		const dataDiagram = this.getDataFromLocalStorage('currentDiagram');
-		this.typeDiagram = this.DiagramTransferSrv.getType();
+		// Obtenemos el diagrama del servicio y lo guardamos en el ls
 		this.DiagramTransferSrv.currentJson.subscribe((data) => {
 			if (!data || !data.template_data) {
 				console.warn('No hay datos válidos en el servicio');
 				return;
 			}
+			this.typeDiagram = this.DiagramTransferSrv.getType();
 			this.diagramId = data.template_id;
 			this.diagramName = data.name;
 			this.diagramDescription = data.description;
@@ -133,11 +133,14 @@ export default class MyDiagramComponent implements OnInit {
 				this.typeDiagram
 			);
 		});
+		//Obtenemos el diagama del ls
+		const dataDiagram = this.getDataFromLocalStorage('currentDiagram');
 		if (dataDiagram) {
 			this.loadJson(dataDiagram.data);
 			this.diagramName = dataDiagram.name;
 			this.diagramId = dataDiagram.id;
 			this.diagramDescription = dataDiagram.description;
+			this.typeDiagram = dataDiagram.type;
 			this.isLoading = false;
 		}
 	}
@@ -147,7 +150,7 @@ export default class MyDiagramComponent implements OnInit {
 		data: any,
 		name: any,
 		description: any,
-		type: string
+		type: any
 	) {
 		const currentDiagram = {
 			id: id,
@@ -165,7 +168,6 @@ export default class MyDiagramComponent implements OnInit {
 
 		try {
 			const file = await this.generateImg(this.diagram);
-			console.log('Listo:', file);
 			dataDiagram.append('preview_image', file);
 		} catch (err) {
 			console.error(err);
@@ -189,7 +191,6 @@ export default class MyDiagramComponent implements OnInit {
 	}
 
 	autosaveDiagram() {
-		debugger;
 		this.isSaving = true;
 		const diagramObj = this.getDiagramObj();
 		//Guardar en el localhost
@@ -207,7 +208,6 @@ export default class MyDiagramComponent implements OnInit {
 	async saveOrUpdateDiagram() {
 		try {
 			const dataForm = await this.getFormDataWithData();
-
 			if (this.typeDiagram === 'template') {
 				this.UserDiagramsSrv.saveDiagram(dataForm).subscribe({
 					next: (data) => {
@@ -218,14 +218,13 @@ export default class MyDiagramComponent implements OnInit {
 						this.DiagramTransferSrv.setType('user');
 						this.typeDiagram = 'user';
 						this.diagramId = data.diagramId;
-						console.log(data);
 					},
 					error: (err) => {
 						console.error(err);
 						this.isSaving = false;
 					},
 				});
-			} else {
+			} else if (this.typeDiagram === 'user') {
 				this.UserDiagramsSrv.updateDiagramTime({
 					id: this.diagramId,
 					data: dataForm,
@@ -643,7 +642,6 @@ export default class MyDiagramComponent implements OnInit {
 	public groupTemplate!: any;
 
 	public setPalette(opc: any) {
-		console.log('Esta es la opcion de la paleta', opc);
 		switch (opc) {
 			case 'all':
 				this.templates = new AllPalette().getNodeTemplates();
