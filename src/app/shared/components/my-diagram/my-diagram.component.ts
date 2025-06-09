@@ -202,11 +202,16 @@ export default class MyDiagramComponent implements OnInit {
 
 		if (this.typeDiagram === 'template') {
 			this.UserDiagramsSrv.saveDiagram(dataForm).subscribe({
-				next: () => {
+				next: (data) => {
 					this.UserDiagramsSrv.currentDiagram =
 						dataForm.get('template_data');
 					this.isSaving = false;
 					this.isSave = true;
+					this.DiagramTransferSrv.setType('user');
+					this.typeDiagram = 'user';
+					//actualizar id
+					this.diagramId = data.diagramId;
+					console.log(data);
 				},
 				error: (err) => console.log(err),
 			});
@@ -221,6 +226,7 @@ export default class MyDiagramComponent implements OnInit {
 	}
 
 	async generateImg(diagram: go.Diagram) {
+		this.diagram.themeManager.currentTheme = 'light';
 		// 1) Generas el DataURL. Escoge fondo y escala que necesites:
 		const dataUrl = diagram.makeImageData({
 			background: 'white',
@@ -229,6 +235,7 @@ export default class MyDiagramComponent implements OnInit {
 
 		// 2) Lo transformas a File con nuestro helper:
 		const fileName = `mi-diagrama-${Date.now()}.png`;
+		this.diagram.themeManager.currentTheme = this.theme;
 		return this.dataURLtoFile(dataUrl, fileName);
 	}
 

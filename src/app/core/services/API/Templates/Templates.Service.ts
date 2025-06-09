@@ -22,4 +22,8 @@ export class TemplatesService {
 	getTemplateById(id: number) {
 		return this.http.get<any[]>(`${this.API_URL}/diagram/templates/${id}`);
 	}
+
+	updateTemplate(id: number, data: any) {
+		return this.http.put(`${this.API_URL}/diagram/templates/${id}`, data);
+	}
 }

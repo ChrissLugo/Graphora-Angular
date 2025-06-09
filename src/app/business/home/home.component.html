@@ -54,13 +54,17 @@
 			@for (diagram of UserDiagramsSrv.allDiagrams; track $index) {
 			<div
 				(click)="sendDiagramJSON(diagram.template_id)"
-				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+				class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
 				[title]="diagram.description"
 			>
 				<a class="flex flex-col items-center group">
 					<div
 						class="flex bg-white w-35 h-40 rounded items-center justify-center relative"
 					>
+						<img
+							[src]="diagram.preview_image"
+							alt="Imagen base64"
+						/>
 						<button
 							class="absolute hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
 							(click)="
@@ -73,6 +77,21 @@
 								[icon]="['fas', 'trash']"
 								[size]="'lg'"
 								class="text-red-700"
+							></fa-icon>
+						</button>
+
+						<button
+							class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
+							(click)="
+								sendToRecyclingBin(diagram.template_id);
+								$event.stopPropagation()
+							"
+							title="Enviar a la papelera"
+						>
+							<fa-icon
+								[icon]="['fas', 'star']"
+								[size]="'lg'"
+								class="text-amber-400"
 							></fa-icon>
 						</button>
 					</div>
@@ -116,29 +135,8 @@
 						class="flex bg-white w-35 h-40 rounded items-center justify-center"
 					>
 						<img
-							class="hidden"
-							src="/images/diagram/classDiagram.png"
-							alt=""
-						/>
-						<img
-							class=""
-							src="/images/diagram/useCases.png"
-							alt=""
-						/>
-						<img
-							class="hidden"
-							src="/images/diagram/secuence.png"
-							alt=""
-						/>
-						<img
-							class="hidden"
-							src="/images/diagram/packageDiagram.png"
-							alt=""
-						/>
-						<img
-							class="hidden"
-							src="/images/diagram/components.png"
-							alt=""
+							[src]="template.preview_image"
+							alt="Imagen base64"
 						/>
 					</div>
 					<h1
