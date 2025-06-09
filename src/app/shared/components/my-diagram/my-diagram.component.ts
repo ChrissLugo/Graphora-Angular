@@ -171,12 +171,25 @@ export default class MyDiagramComponent implements OnInit {
 			this.diagramDescription
 		);
 
-		const dataDiagram = {
-			name: this.diagramName,
-			description: this.diagramDescription, // (puede ser null)
-			// category_id: null, // (por el momento puede ser null)
-			template_data: diagramObj, // (este tiene que ser un json)
-		};
+		const dataDiagram = new FormData();
+		this.generateImg(this.diagram)
+			.then((file) => {
+				console.log('Listo:', file);
+				dataDiagram.append('preview_image', file);
+			})
+			.catch((err) => console.error(err));
+
+		// const dataDiagram = {
+		// 	name: this.diagramName,
+		// 	description: this.diagramDescription, // (puede ser null)
+		// 	// category_id: null, // (por el momento puede ser null)
+		// 	template_data: diagramObj, // (este tiene que ser un json)
+		// };
+		console.log(diagramObj);
+
+		dataDiagram.append('name', this.diagramName);
+		dataDiagram.append('description', this.diagramDescription);
+		dataDiagram.append('template_data', diagramObj);
 
 		//Guardar en la bdd
 		this.UserDiagramsSrv.saveDiagram(dataDiagram).subscribe({
@@ -193,6 +206,41 @@ export default class MyDiagramComponent implements OnInit {
 				});
 			},
 		});
+	}
+
+	async generateImg(diagram: go.Diagram) {
+		// 1) Generas el DataURL. Escoge fondo y escala que necesites:
+		const dataUrl = diagram.makeImageData({
+			background: 'white',
+			scale: 1,
+		});
+
+		// 2) Lo transformas a File con nuestro helper:
+		const fileName = `mi-diagrama-${Date.now()}.png`;
+		return this.dataURLtoFile(dataUrl, fileName);
+	}
+
+	/**
+	 * Convierte un DataURL en un File.
+	 */
+	dataURLtoFile(dataUrl: any, filename: string): File {
+		// Separa el header del contenido
+		const [header, base64Data] = dataUrl.split(',');
+		// Extrae el tipo MIME (ej. image/png)
+		const mimeMatch = header.match(/:(.*?);/);
+		const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+
+		// Decodifica el base64
+		const binary = atob(base64Data);
+		const len = binary.length;
+		const arr = new Uint8Array(len);
+		for (let i = 0; i < len; i++) {
+			arr[i] = binary.charCodeAt(i);
+		}
+
+		const blob = new Blob([arr], { type: mime });
+		// Aquí sí usamos el constructor File; TS lo valida si tienes lib:["dom"]
+		return new File([blob], filename, { type: mime });
 	}
 
 	getDataFromLocalStorage(key: string) {
