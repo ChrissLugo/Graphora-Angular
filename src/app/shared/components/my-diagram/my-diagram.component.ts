@@ -159,15 +159,17 @@ export default class MyDiagramComponent implements OnInit {
 		localStorage.setItem('currentDiagram', JSON.stringify(currentDiagram));
 	}
 
-	getFormDataWithData() {
+	async getFormDataWithData() {
 		const diagramObj = this.getDiagramObj();
 		const dataDiagram = new FormData();
-		this.generateImg(this.diagram)
-			.then((file) => {
-				console.log('Listo:', file);
-				dataDiagram.append('preview_image', file);
-			})
-			.catch((err) => console.error(err));
+
+		try {
+			const file = await this.generateImg(this.diagram);
+			console.log('Listo:', file);
+			dataDiagram.append('preview_image', file);
+		} catch (err) {
+			console.error(err);
+		}
 
 		dataDiagram.append('name', this.diagramName);
 		dataDiagram.append('description', this.diagramDescription);
@@ -187,6 +189,7 @@ export default class MyDiagramComponent implements OnInit {
 	}
 
 	autosaveDiagram() {
+		debugger;
 		this.isSaving = true;
 		const diagramObj = this.getDiagramObj();
 		//Guardar en el localhost
@@ -198,30 +201,40 @@ export default class MyDiagramComponent implements OnInit {
 			this.typeDiagram
 		);
 
-		const dataForm = this.getFormDataWithData();
+		this.saveOrUpdateDiagram().then;
+	}
 
-		if (this.typeDiagram === 'template') {
-			this.UserDiagramsSrv.saveDiagram(dataForm).subscribe({
-				next: (data) => {
-					this.UserDiagramsSrv.currentDiagram =
-						dataForm.get('template_data');
-					this.isSaving = false;
-					this.isSave = true;
-					this.DiagramTransferSrv.setType('user');
-					this.typeDiagram = 'user';
-					//actualizar id
-					this.diagramId = data.diagramId;
-					console.log(data);
-				},
-				error: (err) => console.log(err),
-			});
-		} else {
-			//Guardar en la bdd
-			// this.UserDiagramsSrv.updateDiagram;
-			this.UserDiagramsSrv.updateDiagramTime({
-				id: this.diagramId,
-				data: dataForm,
-			});
+	async saveOrUpdateDiagram() {
+		try {
+			const dataForm = await this.getFormDataWithData();
+
+			if (this.typeDiagram === 'template') {
+				this.UserDiagramsSrv.saveDiagram(dataForm).subscribe({
+					next: (data) => {
+						this.UserDiagramsSrv.currentDiagram =
+							dataForm.get('template_data');
+						this.isSaving = false;
+						this.isSave = true;
+						this.DiagramTransferSrv.setType('user');
+						this.typeDiagram = 'user';
+						this.diagramId = data.diagramId;
+						console.log(data);
+					},
+					error: (err) => {
+						console.error(err);
+						this.isSaving = false;
+					},
+				});
+			} else {
+				this.UserDiagramsSrv.updateDiagramTime({
+					id: this.diagramId,
+					data: dataForm,
+				});
+				this.isSaving = true;
+			}
+		} catch (err) {
+			console.error('Error al generar FormData:', err);
+			this.isSaving = false;
 		}
 	}
 
