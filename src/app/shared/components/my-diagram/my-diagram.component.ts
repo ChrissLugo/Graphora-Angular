@@ -189,7 +189,7 @@ export default class MyDiagramComponent implements OnInit {
 
 		dataDiagram.append('name', this.diagramName);
 		dataDiagram.append('description', this.diagramDescription);
-		dataDiagram.append('template_data', diagramObj);
+		dataDiagram.append('template_data', JSON.stringify(diagramObj));
 
 		//Guardar en la bdd
 		this.UserDiagramsSrv.saveDiagram(dataDiagram).subscribe({
