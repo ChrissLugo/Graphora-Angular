@@ -12,6 +12,7 @@ import { InspectorComponent } from '../../../core/models/inspector/inspector.com
 import { CommonModule } from '@angular/common';
 import { produce } from 'immer';
 import { DiamondNode } from '../../../core/models/nodes/diamond-node';
+import { initTextEditor } from './extensions/CustomTextEditor';
 import { GuidedDraggingTool } from './extensions/GuidedDraggingTool';
 import { RotateMultipleTool } from './extensions/RotateMultipleTool';
 import { AllPalette } from '../../../core/models/palettes/allPalette';
@@ -26,6 +27,8 @@ import { FiguresPalette } from '../../../core/models/palettes/figuresPalette';
 import { LifeLineNode } from '../../../core/models/nodes/lifeLine-node';
 import { SequencePalette } from '../../../core/models/palettes/sequencePalette';
 import { ActivityNode } from '../../../core/models/nodes/activity-node';
+import { ClassNode } from '../../../core/models/nodes/class-node';
+import { ClassPalette } from '../../../core/models/palettes/classPalette';
 
 interface ModelJson {
 	modelData: any;
@@ -288,6 +291,8 @@ export default class MyDiagramComponent implements OnInit {
 		map.add('CircleNode', new CircleNode().getNode());
 		map.add('ActorNode', new ActorNode().getNode());
 		map.add('ActivityNode', new ActivityNode().getNode());
+		map.add('ClassNode', new ClassNode().getNode());
+
 		return map;
 	};
 
@@ -310,8 +315,11 @@ export default class MyDiagramComponent implements OnInit {
 			'draggingTool.guidelineWidth': 1,
 			'draggingTool.dragsLink': true,
 			'relinkingTool.isUnconnectedLinkValid': true,
+			'relinkingTool.portGravity': 20,
+			'linkingTool.portGravity': 20,
 			// 'relinkingTool.portGravity': 0,
 			'linkingTool.isUnconnectedLinkValid': true,
+			// 'textEditingTool.defaultTextEditor': new CustomTextEditor(),
 			// 'linkingTool.portGravity': 0,
 			rotatingTool: new RotateMultipleTool(),
 			initialContentAlignment: go.Spot.Center,
@@ -325,8 +333,8 @@ export default class MyDiagramComponent implements OnInit {
 			}),
 		});
 
-		this.diagram.toolManager.linkingTool.portGravity = 0;
-		this.diagram.toolManager.relinkingTool.portGravity = 0;
+		this.diagram.toolManager.textEditingTool.defaultTextEditor =
+			initTextEditor(window);
 
 		this.diagram.themeManager.currentTheme = 'dark';
 
@@ -555,6 +563,10 @@ export default class MyDiagramComponent implements OnInit {
 				this.templates = new SequencePalette().getNodeTemplates();
 				this.groupTemplate = new SequencePalette().getGroupTemplates();
 				this.allPaletteState = new SequencePalette().getPalette();
+				break;
+			case 'classes':
+				this.templates = new ClassPalette().getNodeTemplates();
+				this.allPaletteState = new ClassPalette().getPalette();
 				break;
 
 			default:

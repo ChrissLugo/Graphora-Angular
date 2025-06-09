@@ -129,7 +129,7 @@ export class ContainerNode {
 			}).theme('stroke', 'arrow'),
 			new go.TextBlock('Texto', {
 				name: 'TEXTBLOCK',
-				editable: false,
+				editable: true,
 				isMultiline: true,
 				alignment: go.Spot.Top,
 				alignmentFocus: go.Spot.Top,

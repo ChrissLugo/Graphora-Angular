@@ -129,7 +129,7 @@ export class LifeLineNode {
 					new go.TextBlock('Texto', {
 						name: 'TEXTBLOCK',
 						font: 'bold 10pt sans-serif',
-						editable: false,
+						editable: true,
 						isMultiline: true,
 						margin: 8,
 					})

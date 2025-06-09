@@ -126,7 +126,7 @@ export class DiamondNode {
 			}),
 			new go.TextBlock('Texto', {
 				margin: 8,
-				editable: false,
+				editable: true,
 				isMultiline: true,
 			})
 				.bind(new go.Binding('text', 'text').makeTwoWay())

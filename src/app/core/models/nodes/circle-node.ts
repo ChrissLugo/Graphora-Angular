@@ -133,7 +133,7 @@ export class CircleNode {
 			new go.TextBlock('Texto', {
 				name: 'TEXTBLOCK',
 				margin: 8,
-				editable: false,
+				editable: true,
 				isMultiline: true,
 			})
 

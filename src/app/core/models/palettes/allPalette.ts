@@ -202,7 +202,7 @@ export class AllPalette {
 					resizable: false,
 					rotatable: false,
 					locationSpot: go.Spot.Center,
-					desiredSize: new go.Size(90, 70),
+					desiredSize: new go.Size(100, 70),
 				},
 				$(
 					go.Panel,
@@ -239,21 +239,47 @@ export class AllPalette {
 			'ActivityNode',
 			$(
 				go.Node,
-				'Spot',
-				$(go.Shape, 'Ellipse', {
-					fill: '#970FF7',
-					strokeWidth: 2,
-					desiredSize: new go.Size(80, 60),
-				}),
-				$(
-					go.TextBlock,
-					{
-						alignment: go.Spot.Center,
-						editable: false,
-						stroke: '#fff',
-						font: '10px sans-serif',
-					},
-					new go.Binding('text')
+				'Auto',
+				$(go.Shape, 'Rectangle', {
+					fill: 'white',
+					stroke: 'gray',
+					desiredSize: new go.Size(20, 60),
+					margin: new go.Margin(0, 30, 0, 30),
+				})
+			)
+		);
+
+		// DIAGRAMA DE CLASES
+		this.nodeTemplates.add(
+			'ClassNode',
+			$(
+				go.Node,
+				'Auto',
+				new go.Panel('Vertical', {
+					stretch: go.GraphObject.Horizontal,
+				}).add(
+					new go.Panel('Auto', {
+						stretch: go.GraphObject.Horizontal,
+					}).add(
+						new go.Shape('Rectangle', {
+							stroke: 'black',
+							height: 20,
+							fill: '#c27aff',
+						}),
+						new go.TextBlock('Texto', {
+							name: 'TEXTBLOCK',
+							margin: 8,
+							text: 'Clase',
+							stroke: 'black',
+							editable: false,
+							isMultiline: true,
+						})
+					),
+					new go.Shape('Rectangle', {
+						fill: 'white',
+						stroke: 'black',
+						height: 50,
+					})
 				)
 			)
 		);
@@ -289,9 +315,17 @@ export class AllPalette {
 					group: '',
 					color: 'gray',
 				},
+				{
+					category: 'ClassNode',
+					text: 'Clase',
+					texto: 'Texto inicial',
+					group: '',
+					// color: 'gray',
+				},
 			],
 			paletteModelData: { prop: 'val' },
 		};
+
 		return palette;
 	}
 

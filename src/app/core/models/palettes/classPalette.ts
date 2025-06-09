@@ -1,6 +1,6 @@
 import * as go from 'gojs';
 
-export class SequencePalette {
+export class ClassPalette {
 	private nodeTemplates = new go.Map<any, any>();
 	private groupTemplates = new go.Map<any, any>();
 
@@ -59,62 +59,38 @@ export class SequencePalette {
 			)
 		);
 
-		// DIAGRAMA DE SECUENCIA
-		this.groupTemplates.add(
-			'LifeLineNode',
-			$(
-				go.Group,
-				'Vertical',
-				{
-					// No hace falta interacción en la paleta
-					selectable: true,
-					resizable: false,
-					rotatable: false,
-					locationSpot: go.Spot.Center,
-					desiredSize: new go.Size(90, 70),
-				},
-				$(
-					go.Panel,
-					'Auto',
-					{ name: 'HEADER' },
-					$(go.Shape, 'Rectangle', {
-						name: 'PANEL',
-						// minSize: new go.Size(100, 40),
-						fill: 'transparent',
-						stroke: 'white',
-						strokeWidth: 2,
-					}),
-					$(go.TextBlock, {
-						name: 'TEXTBLOCK',
-						text: 'Linea Libre',
-						margin: 6,
-						stroke: 'white',
-						font: 'bold 10pt sans-serif',
-					})
-				),
-				$(go.Shape, {
-					figure: 'LineV',
-					stroke: 'gray',
-					strokeDashArray: [4, 4],
-					width: 4,
-					strokeWidth: 4,
-					height: 200,
-					alignment: go.Spot.Center,
-				})
-			)
-		);
-
+		// DIAGRAMA DE CLASES
 		this.nodeTemplates.add(
-			'ActivityNode',
+			'ClassNode',
 			$(
 				go.Node,
 				'Auto',
-				$(go.Shape, 'Rectangle', {
-					fill: 'white',
-					stroke: 'gray',
-					desiredSize: new go.Size(20, 60),
-					margin: new go.Margin(0, 30, 0, 30),
-				})
+				new go.Panel('Vertical', {
+					stretch: go.GraphObject.Horizontal,
+				}).add(
+					new go.Panel('Auto', {
+						stretch: go.GraphObject.Horizontal,
+					}).add(
+						new go.Shape('Rectangle', {
+							stroke: 'black',
+							height: 20,
+							fill: '#c27aff',
+						}),
+						new go.TextBlock('Texto', {
+							name: 'TEXTBLOCK',
+							margin: 8,
+							text: 'Clase',
+							stroke: 'black',
+							editable: false,
+							isMultiline: true,
+						})
+					),
+					new go.Shape('Rectangle', {
+						fill: 'white',
+						stroke: 'black',
+						height: 50,
+					})
+				)
 			)
 		);
 	}
@@ -126,20 +102,16 @@ export class SequencePalette {
 				{ category: 'EmptyNode' },
 				{ category: 'TextNode', text: 'Texto', color: '#ffffff' },
 				{
-					category: 'LifeLineNode',
-					isGroup: true,
-					color: '#ffffff',
-					text: 'Linea Libre',
-				},
-				{
-					category: 'ActivityNode',
-					text: 'Caso de Uso',
+					category: 'ClassNode',
+					text: 'Clase',
+					texto: 'Texto inicial',
 					group: '',
-					color: 'gray',
+					// color: 'gray',
 				},
 			],
 			paletteModelData: { prop: 'val' },
 		};
+
 		return palette;
 	}
 
