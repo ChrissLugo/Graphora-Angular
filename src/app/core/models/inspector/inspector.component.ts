@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as go from 'gojs';
 import { CommonModule } from '@angular/common';
 import { InspectorRowComponent } from './inspector-row.component';
@@ -31,11 +31,17 @@ import { FormsModule } from '@angular/forms';
 	templateUrl: './inspector.component.html',
 	styleUrl: './inspector.component.css',
 })
-export class InspectorComponent {
+export class InspectorComponent implements OnInit {
 	@Input()
 	public nodeData!: go.ObjectData;
 
 	public font!: Font;
+	innerWidth!: string;
+
+	ngOnInit() {
+		const innerWidth = window.innerWidth;
+		this.innerWidth = `${innerWidth - 40}px`;
+	}
 
 	constructor(library: FaIconLibrary) {
 		library.addIcons(
@@ -48,9 +54,6 @@ export class InspectorComponent {
 
 	stringify(value: any): string {
 		return JSON.stringify(value);
-	}
-	ngOnInit(): void {
-		console.log('data enviada', this.nodeData);
 	}
 
 	alignmentText(position: string) {
