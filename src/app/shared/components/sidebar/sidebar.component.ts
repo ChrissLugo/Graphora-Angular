@@ -44,6 +44,10 @@ export class SidebarComponent {
 	selectedFilter: string = '';
 	notification!: boolean;
 	userData$: Observable<User | null>;
+	userName!: string;
+	userLastname!: string;
+	userEmail!: string;
+	userImage!: any;
 
 	constructor(
 		private router: Router,
@@ -70,16 +74,18 @@ export class SidebarComponent {
 	}
 
 	ngOnInit(): void {
-		if (
-			this._tokenService.getAuthToken() &&
-			!this._userStateService.currentUserValue
-		) {
-			this.loadUserData();
-		}
+		// if (
+		// 	this._tokenService.getAuthToken() &&
+		// 	!this._userStateService.currentUserValue
+		// ) {
+		// 	this.loadUserData();
+		// }
+		this.loadUserData();
 	}
 
 	private loadUserData(): void {
 		const userId = this._tokenService.getUserIdFromToken();
+		console.log('userID', userId);
 
 		if (!userId) {
 			this._messageService.messageIcon(
@@ -90,10 +96,11 @@ export class SidebarComponent {
 		}
 
 		this._userService.getUserData(userId).subscribe({
-			next: (user) => this._userStateService.setUserData(user),
-			error: (err: any) => {
-				console.log(err);
+			next: (user) => {
+				console.log('usuario', user);
+				this._userStateService.setUserData(user);
 			},
+			error: (err: any) => console.log(err),
 		});
 	}
 

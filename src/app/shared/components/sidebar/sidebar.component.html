@@ -215,29 +215,16 @@
 				<div>
 					<img
 						class="w-8 h-8 rounded-full object-cover"
-						[src]="
-							 // user?.image ? user.image : 'images/userDefault.png'
-						"
+						src="/images/account.png"
 						alt="avatar"
 					/>
 				</div>
-				<div *ngIf="userData$ | async as user">
-					{{ user.name || "User" }}
-					{{ user.lastname || "Lastname" }}
+				<div class="flex md:block justify-start flex-col items-start">
+					<p class="text-sm leading-5 text-white">User Lastname</p>
+					<p class="text-xs leading-3 text-gray-300">
+						user&#64;gmail.com
+					</p>
 				</div>
-				<!-- @if (userData$ | async as user) {
-					<div
-						class="flex hidden md:block justify-start flex-col items-start"
-					>
-						<p class="text-sm leading-5 text-white">
-							{{ user.name || "User" }}
-							{{ user.lastname || "Lastname" }}
-						</p>
-						<p class="text-xs leading-3 text-gray-300">
-							{{ user.email  "user@gmail.com" }}
-						</p>
-					</div>
-				} -->
 			</div>
 
 			<div
