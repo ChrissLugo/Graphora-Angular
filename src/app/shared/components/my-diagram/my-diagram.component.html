@@ -9,24 +9,36 @@
 	class=""
 />
 <div class="h-dvh w-full flex flex-row">
+	<button
+		class="z-30 top-20 h-10 w-10 absolute rounded bg-purple-700 text-white p-1 md:hidden"
+		(click)="togglePalette()"
+		[class.hidden]="showPalette"
+	>
+		<fa-icon class="text-white" [icon]="['fas', 'bars']"></fa-icon>
+	</button>
 	<!-- Paleta del diagrama -->
 	<div
-		class="h-dvh w-90 bg-black overflow-hidden border-x-1 border-gray-900 flex flex-row"
+		[class.hidden]="!showPalette"
+		class="h-dvh w-[70%] md:w-90 bg-black overflow-hidden border-x border-gray-900 flex flex-row animate-fade-right animate-duration-[200ms]"
 	>
 		<app-sidebar-palette
 			(title)="setPaletteTitle($event)"
 			(option)="setPalette($event)"
+			(hiddePalette)="togglePalette()"
 		/>
 		<div class="flex flex-col relative h-full w-full">
 			<div
-				class="flex absolute border-b-1 border-gray-700 w-full text-center p-1 top-20 h-11 items-center justify-center bg-black z-100"
+				class="absolute top-20 h-11 w-full flex items-center justify-center border-b border-gray-700 bg-black z-10"
 			>
-				<h1 class="text-white font-bold">{{ this.titlePalette }}</h1>
+				<h1 class="text-white md:text-base text-xs font-bold truncate">
+					{{ this.titlePalette }}
+				</h1>
 			</div>
+
 			<gojs-palette
 				#myPalette
 				[initPalette]="initPalette"
-				divClassName="h-full mt-2 p-20"
+				divClassName="h-full mt-2 p-4"
 				[nodeDataArray]="allPaletteState.paletteNodeData"
 				[modelData]="allPaletteState.paletteModelData"
 				class="h-full"
@@ -53,7 +65,7 @@
 	<!-- Propiedades de los elementos (inspector) -->
 	<div
 		*ngIf="state.selectedNodeData"
-		class="absolute z-9999 bottom-33 right-2.5 lg:h-[20rem] xl:h-[27.5rem] 2xl:h-[76%] bg-black rounded-md border border-gray-600 animate-fade-left animate-duration-300 py-2"
+		class="hidden md:block md:absolute z-9999 bottom-33 right-2.5 lg:h-[20rem] xl:h-[27.5rem] 2xl:h-[76%] bg-black rounded-md border border-gray-600 animate-fade-left animate-duration-300 py-2"
 	>
 		<div class="overflow-y-auto max-h-full">
 			<h1 class="text-white font-bold mb-4 text-xl text-center">
@@ -66,9 +78,21 @@
 		</div>
 	</div>
 
+	<div
+		*ngIf="state.selectedNodeData"
+		class="md:hidden absolute z-9999 bottom-0 left-0 h-fit w-full bg-black rounded-md border border-gray-600 animate-fade-up animate-duration-300 py-2"
+	>
+		<div class="overflow-y-auto max-h-full">
+			<app-inspector
+				[nodeData]="state.selectedNodeData"
+				(onInspectorChange)="handleInspectorChange($event)"
+			></app-inspector>
+		</div>
+	</div>
+
 	<!-- Vista previa -->
 	<div
-		class="absolute z-50 bottom-1 right-2.5 w-52 h-30 bg-[#E0DBD9] dark:bg-black border border-gray-600 rounded-md"
+		class="hidden md:absolute md:block z-50 bottom-1 right-2.5 w-52 h-30 bg-[#E0DBD9] dark:bg-black border border-gray-600 rounded-md"
 	>
 		<gojs-overview
 			#myOverview
