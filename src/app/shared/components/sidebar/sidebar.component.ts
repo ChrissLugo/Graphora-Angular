@@ -82,7 +82,6 @@ export class SidebarComponent {
 
 	private loadUserData(): void {
 		const userId = this._tokenService.getUserIdFromToken();
-		console.log('userID', userId);
 
 		if (!userId) {
 			this._messageService.messageIcon(
@@ -94,9 +93,9 @@ export class SidebarComponent {
 
 		this._userService.getUserData(userId).subscribe({
 			next: (user) => {
-				console.log('usuario', user.user);
 				this.userData = user.user;
 				this._userStateService.setUserData(user);
+				localStorage.setItem('email_user', user.user.email)
 			},
 			error: (err: any) => console.log(err),
 		});

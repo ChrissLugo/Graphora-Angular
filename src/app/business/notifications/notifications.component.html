@@ -1,1 +1,20 @@
-<h1 class="text-white font-semibold text-3xl">Notificaciones</h1>
+<div>
+    <div class="flex w-full items-center bg-black relative">
+        <span
+            class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl box-content font-extrabold text-transparent text-center select-none"
+        >
+            🔔 Notificaciones
+        </span>
+        <h1
+            class="relative flex flex-row items-center gap-3 top-0 w-fit h-auto py-4 justify-center bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent text-center select-auto"
+        >
+            🔔 Notificaciones
+        </h1>
+
+        <ul class="space-y-2">
+          <li *ngFor="let noti of notifications" class="p-3 bg-gray-800 rounded-lg text-white shadow">
+            <strong>{{ noti.from }}</strong>: {{ noti.message }}
+          </li>
+        </ul>
+    </div>
+</div>

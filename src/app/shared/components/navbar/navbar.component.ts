@@ -24,6 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import go from 'gojs';
 import jsPDF from 'jspdf';
+import { InvitationService } from '../../../core/services/invitation/invitation.service';
 
 interface ModelJson {
 	modelData: any;
@@ -55,7 +56,10 @@ export class NavbarComponent {
 
 	public theme = 'dark';
 
-	constructor(icons: FaIconLibrary) {
+	constructor(
+		icons: FaIconLibrary,
+		private _invitationService: InvitationService
+	) {
 		icons.addIcons(
 			faChevronDown,
 			faFile,
@@ -341,4 +345,44 @@ export class NavbarComponent {
 		URL.revokeObjectURL(url);
 		document.body.removeChild(a);
 	}
+
+	sendNotification() {
+        Swal.fire({
+            title: '¿Desea invitar a alguien para colaborar con usted?',
+            icon: 'info',
+			input: "email",
+            inputPlaceholder: "correo@ejemplo.com",
+            theme: 'dark',
+            showCancelButton: true,
+            confirmButtonColor: '#8200DB',
+            cancelButtonColor: '#E92718',
+            confirmButtonText: 'Enviar',
+			inputValidator: (value) => {
+				if (!value) {
+					return "Debes ingresar un correo"
+				} 
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailRegex.test(value)) {
+					return 'Correo no válido';
+				}
+				return null;
+			}
+        }).then((result) => {
+            if (result.isConfirmed && result.value?.trim()) {
+				const email = result.value.trim()
+				const storedDiagram = localStorage.getItem('currentDiagram');
+				const diagramId = storedDiagram ? JSON.parse(storedDiagram).id : null;
+                this._invitationService.sendNotification(email, diagramId)
+                Swal.fire({
+                    title: 'Listo!',
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    theme: 'dark',
+                    text: 'Invitacion enviada correctamente',
+                    icon: 'success',
+                });
+            }
+        });
+    }
 }

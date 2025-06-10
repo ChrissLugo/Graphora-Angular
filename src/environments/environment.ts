@@ -1,5 +1,5 @@
 export const environment = {
 	production: false,
-	apiUrl: 'https://api-graphora.up.railway.app',
+	apiUrl: 'http://localhost:4000',
 	featureXEnabled: true,
 };
