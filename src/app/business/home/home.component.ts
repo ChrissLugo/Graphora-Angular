@@ -116,11 +116,14 @@ export default class HomeComponent implements OnInit {
 
 				Swal.fire({
 					title: 'Favoritos',
+					position: 'top-end',
 					text: isFavorite
 						? '¡Diagrama agregado a favoritos!'
 						: '¡Diagrama removido de favoritos!',
 					icon: 'success',
 					theme: 'dark',
+					showConfirmButton: false,
+					timer: 2000
 				});
 			},
 			error: (err) => {
@@ -155,12 +158,7 @@ export default class HomeComponent implements OnInit {
 	getUserDiagrams() {
 		this.UserDiagramsSrv.getDiagrams().subscribe({
 			next: (data: any) => {
-				this.UserDiagramsSrv.allDiagrams = data.diagrams.map(
-					(diagram: any) => ({
-						...diagram,
-						is_favorite: false, // Por defecto, hasta que el usuario lo marque
-					})
-				);
+				this.UserDiagramsSrv.allDiagrams = data.diagrams
 			},
 			error: (err: any) => {
 				console.error(err);

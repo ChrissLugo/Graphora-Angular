@@ -1,4 +1,15 @@
-<h1 class="text-white font-semibold text-3xl">Favoritos</h1>
+<div class="flex w-full items-center bg-black relative mb-6">
+    <span
+        class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl box-content font-extrabold text-transparent text-center select-none"
+    >
+        Favoritos
+    </span>
+    <h1
+        class="relative flex flex-row items-center gap-3 top-0 w-fit h-auto py-4 justify-center bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent text-center select-auto"
+    >
+        Favoritos
+    </h1>
+</div>
 <div *ngIf="favoriteDiagrams.length === 0" class="text-white mt-4">
   No tienes diagramas favoritos.
 </div>
