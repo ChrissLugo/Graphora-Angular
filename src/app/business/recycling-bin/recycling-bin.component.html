@@ -1,1 +1,59 @@
-<p class="text-white">recycling-bin works!</p>
+<!-- recycling-bin.component.html -->
+<h2 class="text-white">Diagramas en la papelera</h2>
+
+<ng-container *ngIf="recycledDiagrams$ | async as diagrams; else loading">
+    <div *ngIf="diagrams.length > 0; else empty" class="flex flex-row mt-2 space-x-4 flex-wrap">
+        <div
+            *ngFor="let diagram of diagrams"
+            class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer m-2"
+            [title]="diagram.description"
+        >
+            <a class="flex flex-col items-center group">
+                <div
+                    class="flex bg-white w-35 h-40 rounded items-center justify-center relative"
+                >
+                    <img
+                        [src]="diagram.preview_image"
+                        alt="Imagen base64"
+                        class="object-contain max-h-full max-w-full"
+                    />
+                    <!-- Botón para restaurar (ejemplo, puedes implementar el método) -->
+                    <button
+                        class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
+                        title="Restaurar diagrama"
+                        (click)="restoreDiagram(diagram.template_id)"
+                    >
+                        <fa-icon
+                            [icon]="['fas', 'arrow-rotate-left']"
+                            [size]="'lg'"
+                            class="text-green-400"
+                        ></fa-icon>
+                    </button>
+                    <!-- Botón para eliminar definitivamente (ejemplo, puedes implementar el método) -->
+                    <button
+                        class="absolute hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
+                        title="Eliminar definitivamente"
+                        (click)="deleteDiagramPermanently(diagram.template_id)"
+                    >
+                        <fa-icon
+                            [icon]="['fas', 'trash']"
+                            [size]="'lg'"
+                            class="text-red-700"
+                        ></fa-icon>
+                    </button>
+                </div>
+                <h1 class="text-white font-bold text-xs p-2 truncate w-full text-center">
+                    {{ diagram.name }}
+                </h1>
+            </a>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #loading>
+    <p class="text-white">Cargando diagramas en papelera...</p>
+</ng-template>
+
+<ng-template #empty>
+    <p class="text-white">No hay diagramas en la papelera 🗑️</p>
+</ng-template>

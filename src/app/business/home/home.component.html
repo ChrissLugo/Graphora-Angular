@@ -83,16 +83,13 @@
 
 						<button
 							class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
-							(click)="
-								sendToRecyclingBin(diagram.template_id);
-								$event.stopPropagation()
-							"
-							title="Enviar a la papelera"
+							(click)="addToFavorites(diagram.template_id, !diagram.is_favorite); $event.stopPropagation()"
+							[title]="diagram.is_favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'"
 						>
 							<fa-icon
 								[icon]="['fas', 'star']"
+								[ngClass]="diagram.is_favorite ? 'text-amber-400' : 'text-gray-400'"
 								[size]="'lg'"
-								class="text-amber-400"
 							></fa-icon>
 						</button>
 					</div>
