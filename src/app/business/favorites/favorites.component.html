@@ -1,60 +1,70 @@
 <div class="flex items-center bg-black w-9/10 mb-4">
-  <span
-    class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl box-content font-extrabold text-transparent text-center select-none"
-  >
-    ⭐ Tus favoritos ⭐
-  </span>
-  <h1
-    class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent text-center select-auto"
-  >
-    ⭐ Tus favoritos ⭐
-  </h1>
+	<span
+		class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-2xl md:text-4xl box-content font-extrabold text-transparent text-center select-none"
+	>
+		⭐ Tus favoritos ⭐
+	</span>
+	<h1
+		class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-2xl md:text-4xl font-extrabold text-transparent text-center select-auto"
+	>
+		⭐ Tus favoritos ⭐
+	</h1>
 </div>
 <div *ngIf="favoriteDiagrams.length === 0" class="text-white mt-4">
-  No tienes diagramas favoritos.
+	No tienes diagramas favoritos.
 </div>
-<div class="flex flex-row mt-4 space-x-4">
-  <div
-    *ngFor="let diagram of favoriteDiagrams"
-    class="w-35 h-49 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
-    [title]="diagram.description"
-    (click)="sendDiagramJSON(diagram.template_id)"
-  >
-    <a class="flex flex-col items-center group">
-      <div class="flex bg-white w-35 h-40 max-h-40 rounded items-center justify-center relative">
-        <img
-          [src]="diagram.preview_image"
-          alt="Imagen base64"
-          class="max-w-full max-h-full object-contain"
-        />
-        <!-- Botón favorito: sale por la izquierda -->
-        <button
-          class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
-          (click)="removeFromFavorites(diagram.template_id); $event.stopPropagation()"
-          title="Quitar de favoritos"
-        >
-          <fa-icon
-            [icon]="['fas', 'star']"
-            class="text-amber-400"
-            size="lg"
-          ></fa-icon>
-        </button>
-        <!-- Botón papelera: sale por la derecha -->
-        <button
-          class="absolute hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
-          (click)="sendToRecyclingBin(diagram.template_id); $event.stopPropagation()"
-          title="Enviar a la papelera"
-        >
-          <fa-icon
-            [icon]="['fas', 'trash']"
-            class="text-red-500"
-            size="lg"
-          ></fa-icon>
-        </button>
-      </div>
-      <h1 class="text-white font-bold text-xs p-2 truncate w-full text-center">
-        {{ diagram.name }}
-      </h1>
-    </a>
-  </div>
+<div class="md:flex gap-4 grid grid-cols-2 md:flex-row mt-4 space-x-4">
+	<div
+		*ngFor="let diagram of favoriteDiagrams"
+		class="w-35 h-49 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+		[title]="diagram.description"
+		(click)="sendDiagramJSON(diagram.template_id)"
+	>
+		<a class="flex flex-col items-center group">
+			<div
+				class="flex bg-white w-35 h-40 max-h-40 rounded items-center justify-center relative"
+			>
+				<img
+					[src]="diagram.preview_image"
+					alt="Imagen base64"
+					class="max-w-full max-h-full object-contain"
+				/>
+				<!-- Botón favorito: sale por la izquierda -->
+				<button
+					class="absolute md:hidden md:group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
+					(click)="
+						removeFromFavorites(diagram.template_id);
+						$event.stopPropagation()
+					"
+					title="Quitar de favoritos"
+				>
+					<fa-icon
+						[icon]="['fas', 'star']"
+						class="text-amber-400"
+						size="lg"
+					></fa-icon>
+				</button>
+				<!-- Botón papelera: sale por la derecha -->
+				<button
+					class="absolute md:hidden md:group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
+					(click)="
+						sendToRecyclingBin(diagram.template_id);
+						$event.stopPropagation()
+					"
+					title="Enviar a la papelera"
+				>
+					<fa-icon
+						[icon]="['fas', 'trash']"
+						class="text-red-500"
+						size="lg"
+					></fa-icon>
+				</button>
+			</div>
+			<h1
+				class="text-white font-bold text-xs p-2 truncate w-full text-center"
+			>
+				{{ diagram.name }}
+			</h1>
+		</a>
+	</div>
 </div>

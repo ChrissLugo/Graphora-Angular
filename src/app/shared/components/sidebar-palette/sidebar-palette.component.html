@@ -2,6 +2,14 @@
 	class="flex flex-col bg-black pt-22 w-12 h-full px-2 border-r-1 border-gray-900 gap-4"
 >
 	<button
+		class="md:hidden rounded transition duration-250 ease-in-out cursor-pointer active:scale-90 active:animate-jump"
+		title="Todos los Nodos"
+		(click)="handlePalette()"
+	>
+		<fa-icon class="text-white" [icon]="['fas', 'x']"></fa-icon>
+	</button>
+
+	<button
 		class="rounded transition duration-250 ease-in-out cursor-pointer active:scale-90"
 		title="Todos los Nodos"
 		(click)="handleOption('all', 'Todos los Nodos')"

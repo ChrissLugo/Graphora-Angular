@@ -39,6 +39,11 @@ import { RoundedRectangleNode } from '../../../core/models/nodes/roundedRectangl
 import { Circle2Node } from '../../../core/models/nodes/circle2-node';
 import { RectangleNode } from '../../../core/models/nodes/rectangle-node copy';
 import { TriangleUpNode } from '../../../core/models/nodes/triangleUp-node';
+import {
+	FaIconLibrary,
+	FontAwesomeModule,
+} from '@fortawesome/angular-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 interface ModelJson {
 	modelData: any;
@@ -56,6 +61,7 @@ interface ModelJson {
 		InspectorComponent,
 		CommonModule,
 		SidebarPaletteComponent,
+		FontAwesomeModule,
 	],
 	templateUrl: './my-diagram.component.html',
 	styleUrl: './my-diagram.component.css',
@@ -83,13 +89,20 @@ export default class MyDiagramComponent implements OnInit {
 	public typeDiagram!: 'user' | 'template';
 	//datos de la paleta
 	public titlePalette: string = 'Sin Título';
+	public showPalette = true;
 
 	constructor(
 		private cdr: ChangeDetectorRef,
 		private DiagramTransferSrv: DiagramsTransferService,
-		public UserDiagramsSrv: UserDiagramsService
+		public UserDiagramsSrv: UserDiagramsService,
+		icons: FaIconLibrary
 	) {
 		this.initDiagram = this.initDiagram.bind(this);
+		icons.addIcons(faBars);
+	}
+
+	togglePalette() {
+		this.showPalette = !this.showPalette;
 	}
 
 	ngOnInit(): void {

@@ -6,7 +6,7 @@
 	<div class="w-full flex-col items-center px-4 justify-between">
 		<!-- Barra superior -->
 		<div class="flex flex-row justify-between">
-			<h2 class="text-lg font-semibold text-white">
+			<h2 class="md:text-lg text-base font-semibold text-white">
 				{{ this.diagramName }}
 			</h2>
 			<!-- Compartir -->
@@ -58,7 +58,9 @@
 					[matMenuTriggerFor]="archivoMenu"
 				>
 					<fa-icon size="lg" [icon]="['fas', 'file']"></fa-icon>
-					<label class="text-sm cursor-pointer mx-1">Archivo</label>
+					<label class="text-xs md:text-sm cursor-pointer mx-1"
+						>Archivo</label
+					>
 					<fa-icon
 						size="xs"
 						[icon]="['fas', 'chevron-down']"
@@ -93,7 +95,9 @@
 						size="lg"
 						[icon]="['fas', 'file-export']"
 					></fa-icon>
-					<label class="text-sm cursor-pointer mx-1">Exportar</label>
+					<label class="text-xs md:text-sm cursor-pointer mx-1"
+						>Exportar</label
+					>
 					<fa-icon
 						size="xs"
 						[icon]="['fas', 'chevron-down']"

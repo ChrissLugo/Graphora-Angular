@@ -1,164 +1,172 @@
-<div class="flex items-center bg-black w-9/10">
-	<span
-		class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl box-content font-extrabold text-transparent text-center select-none"
-	>
-		🎨 ¡Explora, experimenta y diseña! 🚀
-	</span>
-	<h1
-		class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent text-center select-auto"
-	>
-		🎨 ¡Explora, experimenta y diseña! 🚀
-	</h1>
-</div>
-<fa-icon [icon]="['fas', 'arrow-rotate-left']"></fa-icon>
-<div class="space-y-4 w-full">
-	<!-- Continuar trabajo -->
-	<div class="p-4">
-		<div class="flex w-full items-center bg-black">
-			<span
-				class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-white via-white to-white bg-clip-text text-xl box-content font-extrabold text-transparent text-center select-none"
-			>
-				Continuar trabajo
-			</span>
-			<h1
-				class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-white via-white to-white bg-clip-text text-xl font-extrabold text-transparent text-center select-auto"
-			>
-				🔄 Continuar trabajo
-			</h1>
-		</div>
-		<p class="text-white">
-			Sigue desarrollando tu diagrama desde donde lo dejaste y dale forma
-			a tus ideas.
-		</p>
-		<div class="flex p-2 w-full h-60 flex-row mt-2 space-x-4 overflow-auto">
-			<div
-				class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer h-fit w-fit"
-				title="Crear un diagrama nuevo desde 0."
-				(click)="newDiagram()"
-			>
-				<a class="flex flex-col items-center">
-					<div
-						class="flex bg-white w-35 h-40 rounded items-center justify-center"
-					>
-						<fa-icon
-							[icon]="['fas', 'plus']"
-							[size]="'2xl'"
-							class="text-gray-500"
-						></fa-icon>
-					</div>
-					<h1 class="text-white font-semibold text-sm p-2">
-						Nuevo diagrama
-					</h1>
-				</a>
-			</div>
-			@for (diagram of UserDiagramsSrv.allDiagrams; track $index) {
-			<div
-				(click)="sendDiagramJSON(diagram.template_id)"
-				class="w-35 h-49 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
-				[title]="diagram.description"
-			>
-				<a class="flex flex-col items-center group">
-					<div
-						class="flex bg-white w-35 h-40 max-h-40 rounded items-center justify-center relative"
-					>
-						<img
-							[src]="diagram.preview_image"
-							alt="Imagen base64"
-							class="max-w-full max-h-full object-contain"
-						/>
-						<button
-							class="absolute hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
-							(click)="
-								sendToRecyclingBin(diagram.template_id);
-								$event.stopPropagation()
-							"
-							title="Enviar a la papelera"
-						>
-							<fa-icon
-								[icon]="['fas', 'trash']"
-								[size]="'lg'"
-								class="text-red-700"
-							></fa-icon>
-						</button>
-
-						<button
-							class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
-							(click)="
-								addToFavorites(
-									diagram.template_id,
-									!diagram.is_favorite
-								);
-								$event.stopPropagation()
-							"
-							[title]="
-								diagram.is_favorite
-									? 'Quitar de favoritos'
-									: 'Agregar a favoritos'
-							"
-						>
-							<fa-icon
-								[icon]="['fas', 'star']"
-								[ngClass]="
-									diagram.is_favorite
-										? 'text-amber-400'
-										: 'text-gray-400'
-								"
-								[size]="'lg'"
-							></fa-icon>
-						</button>
-					</div>
-					<h1
-						class="text-white font-bold text-xs p-2 truncate w-full text-center"
-					>
-						{{ diagram.name }}
-					</h1>
-				</a>
-			</div>
-			}
-		</div>
+<div class="scroll-auto">
+	<div class="flex items-center bg-black md:w-9/10 w-full">
+		<span
+			class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-2xl md:text-4xl box-content font-extrabold text-transparent text-center select-none"
+		>
+			🎨 ¡Explora, experimenta y diseña! 🚀
+		</span>
+		<h1
+			class="relative top-0 md:w-fit w-full h-auto py-4 justify-center flex bg-gradient-to-r items-center from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-2xl md:text-4xl font-extrabold text-transparent text-center select-auto"
+		>
+			🎨 ¡Explora, experimenta y diseña! 🚀
+		</h1>
 	</div>
-
-	<div class="p-4 mt-10 w-8/10">
-		<div class="flex w-full items-center bg-black">
-			<span
-				class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-white via-white to-white bg-clip-text text-xl box-content font-extrabold text-transparent text-center select-none"
-			>
-				🆕 Nuevo con plantilla
-			</span>
-			<h1
-				class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-white via-white to-white bg-clip-text text-xl font-extrabold text-transparent text-center select-auto"
-			>
-				🆕 Nuevo con plantilla
-			</h1>
-		</div>
-		<p class="text-white">
-			Comienza un nuevo diagrama usando una de nuestras plantillas como
-			punto de partida.
-		</p>
-		<div class="flex flex-row mt-2 space-x-4">
-			@for (template of TemplatesService.allTemplates; track $index) {
-			<div
-				class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer h-fit"
-				[title]="template.description"
-				(click)="sendTemplateJSON(template.template_id)"
-			>
-				<a class="flex flex-col items-center truncate">
-					<div
-						class="flex bg-white w-35 h-40 rounded items-center justify-center"
-					>
-						<img
-							[src]="template.preview_image"
-							alt="Imagen base64"
-						/>
-					</div>
-					<h1
-						class="text-white font-bold text-xs p-2 truncate w-full text-center"
-					>
-						{{ template.name }}
-					</h1>
-				</a>
+	<fa-icon [icon]="['fas', 'arrow-rotate-left']"></fa-icon>
+	<div class="space-y-4 w-full">
+		<!-- Continuar trabajo -->
+		<div class="md:p-4">
+			<div class="flex w-full items-center bg-black">
+				<span
+					class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-white via-white to-white bg-clip-text text-lg md:text-xl box-content font-extrabold text-transparent text-center select-none"
+				>
+					Continuar trabajo
+				</span>
+				<h1
+					class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-white via-white to-white bg-clip-text text-lg md:text-xl font-extrabold text-transparent text-center select-auto"
+				>
+					🔄 Continuar trabajo
+				</h1>
 			</div>
-			}
+			<p class="text-white text-sm md:text-base">
+				Sigue desarrollando tu diagrama desde donde lo dejaste y dale
+				forma a tus ideas.
+			</p>
+			<div
+				class="flex p-2 w-full h-50 md:h-60 flex-row mt-2 space-x-4 overflow-auto"
+			>
+				<div
+					class="hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer h-fit w-fit"
+					title="Crear un diagrama nuevo desde 0."
+					(click)="newDiagram()"
+				>
+					<a class="flex flex-col items-center">
+						<div
+							class="flex bg-white w-25 h-30 md:w-35 md:h-40 rounded items-center justify-center"
+						>
+							<fa-icon
+								[icon]="['fas', 'plus']"
+								[size]="'2xl'"
+								class="text-gray-500"
+							></fa-icon>
+						</div>
+						<h1
+							class="text-white font-semibold text-[11px] md:text-sm p-2"
+						>
+							Nuevo diagrama
+						</h1>
+					</a>
+				</div>
+				@for (diagram of UserDiagramsSrv.allDiagrams; track $index) {
+				<div
+					(click)="sendDiagramJSON(diagram.template_id)"
+					class="w-25 h-39 md:w-35 md:h-49 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+					[title]="diagram.description"
+				>
+					<a class="flex flex-col items-center group">
+						<div
+							class="flex bg-white w-25 h-30 md:w-35 md:h-40 max-h-40 rounded items-center justify-center relative"
+						>
+							<img
+								[src]="diagram.preview_image"
+								alt="Imagen base64"
+								class="max-w-full max-h-full object-contain"
+							/>
+							<button
+								class="absolute md:hidden md:group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
+								(click)="
+									sendToRecyclingBin(diagram.template_id);
+									$event.stopPropagation()
+								"
+								title="Enviar a la papelera"
+							>
+								<fa-icon
+									[icon]="['fas', 'trash']"
+									[size]="'lg'"
+									class="text-red-700"
+								></fa-icon>
+							</button>
+
+							<button
+								class="absolute md:hidden md:group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
+								(click)="
+									addToFavorites(
+										diagram.template_id,
+										!diagram.is_favorite
+									);
+									$event.stopPropagation()
+								"
+								[title]="
+									diagram.is_favorite
+										? 'Quitar de favoritos'
+										: 'Agregar a favoritos'
+								"
+							>
+								<fa-icon
+									[icon]="['fas', 'star']"
+									[ngClass]="
+										diagram.is_favorite
+											? 'text-amber-400'
+											: 'text-gray-400'
+									"
+									[size]="'lg'"
+								></fa-icon>
+							</button>
+						</div>
+						<h1
+							class="text-white font-bold text-[11px] md:text-xs p-2 truncate w-full text-center"
+						>
+							{{ diagram.name }}
+						</h1>
+					</a>
+				</div>
+				}
+			</div>
+		</div>
+
+		<div class="md:p-4 md:mt-10 w-full">
+			<div class="flex w-full items-center bg-black">
+				<span
+					class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-white via-white to-white bg-clip-text text-xl box-content font-extrabold text-transparent text-center select-none"
+				>
+					🆕 Nuevo con plantilla
+				</span>
+				<h1
+					class="relative top-0 w-fit h-auto py-4 justify-center flex bg-gradient-to-r items-center from-white via-white to-white bg-clip-text text-xl font-extrabold text-transparent text-center select-auto"
+				>
+					🆕 Nuevo con plantilla
+				</h1>
+			</div>
+			<p class="text-white text-sm md:text-base">
+				Comienza un nuevo diagrama usando una de nuestras plantillas
+				como punto de partida.
+			</p>
+			<div
+				class="p-2 flex h-50 md:h-60 flex-row mt-2 space-x-4 overflow-auto w-full"
+			>
+				@for (template of TemplatesService.allTemplates; track $index) {
+				<div
+					class="md:w-35 w-25 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer h-fit"
+					[title]="template.description"
+					(click)="sendTemplateJSON(template.template_id)"
+				>
+					<a class="flex flex-col items-center truncate">
+						<div
+							class="flex bg-white w-25 h-30 md:w-35 md:h-40 rounded items-center justify-center"
+						>
+							<img
+								[src]="template.preview_image"
+								alt="Imagen base64"
+							/>
+						</div>
+						<h1
+							class="text-white font-bold text-xs p-2 truncate w-full text-center"
+						>
+							{{ template.name }}
+						</h1>
+					</a>
+				</div>
+				}
+			</div>
 		</div>
 	</div>
 </div>

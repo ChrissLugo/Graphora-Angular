@@ -1,69 +1,74 @@
 <div class="flex w-full items-center bg-black relative mb-6">
-    <span
-        class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl box-content font-extrabold text-transparent text-center select-none"
-    >
-        Papelera
-    </span>
-    <h2
-        class="relative flex flex-row items-center gap-3 top-0 w-fit h-auto py-4 justify-center bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent text-center select-auto"
-    >
-        Papelera
-    </h2>
+	<span
+		class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-2xl md:text-4xl box-content font-extrabold text-transparent text-center select-none"
+	>
+		Papelera
+	</span>
+	<h2
+		class="relative flex flex-row items-center gap-3 top-0 w-fit h-auto py-4 justify-center bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-2xl md:text-4xl font-extrabold text-transparent text-center select-auto"
+	>
+		Papelera
+	</h2>
 </div>
 
 <ng-container *ngIf="recycledDiagrams$ | async as diagrams; else loading">
-    <div *ngIf="diagrams.length > 0; else empty" class="flex flex-row mt-2 space-x-4 flex-wrap">
-        <div
-            *ngFor="let diagram of diagrams"
-            class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer m-2"
-            [title]="diagram.description"
-        >
-            <a class="flex flex-col items-center group">
-                <div
-                    class="flex bg-white w-35 h-40 rounded items-center justify-center relative"
-                >
-                    <img
-                        [src]="diagram.preview_image"
-                        alt="Imagen base64"
-                        class="object-contain max-h-full max-w-full"
-                    />
-                    <!-- Botón para restaurar (ejemplo, puedes implementar el método) -->
-                    <button
-                        class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
-                        title="Restaurar diagrama"
-                        (click)="restoreDiagram(diagram.template_id)"
-                    >
-                        <fa-icon
-                            [icon]="['fas', 'arrow-rotate-left']"
-                            [size]="'lg'"
-                            class="text-green-400"
-                        ></fa-icon>
-                    </button>
-                    <!-- Botón para eliminar definitivamente (ejemplo, puedes implementar el método) -->
-                    <button
-                        class="absolute hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
-                        title="Eliminar definitivamente"
-                        (click)="deleteDiagramPermanently(diagram.template_id)"
-                    >
-                        <fa-icon
-                            [icon]="['fas', 'trash']"
-                            [size]="'lg'"
-                            class="text-red-700"
-                        ></fa-icon>
-                    </button>
-                </div>
-                <h1 class="text-white font-bold text-xs p-2 truncate w-full text-center">
-                    {{ diagram.name }}
-                </h1>
-            </a>
-        </div>
-    </div>
+	<div
+		*ngIf="diagrams.length > 0; else empty"
+		class="flex flex-row mt-2 space-x-4 flex-wrap"
+	>
+		<div
+			*ngFor="let diagram of diagrams"
+			class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer m-2"
+			[title]="diagram.description"
+		>
+			<a class="flex flex-col items-center group">
+				<div
+					class="flex bg-white w-35 h-40 rounded items-center justify-center relative"
+				>
+					<img
+						[src]="diagram.preview_image"
+						alt="Imagen base64"
+						class="object-contain max-h-full max-w-full"
+					/>
+					<!-- Botón para restaurar (ejemplo, puedes implementar el método) -->
+					<button
+						class="absolute md:hidden md:group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
+						title="Restaurar diagrama"
+						(click)="restoreDiagram(diagram.template_id)"
+					>
+						<fa-icon
+							[icon]="['fas', 'arrow-rotate-left']"
+							[size]="'lg'"
+							class="text-green-400"
+						></fa-icon>
+					</button>
+					<!-- Botón para eliminar definitivamente (ejemplo, puedes implementar el método) -->
+					<button
+						class="absolute md:hidden md:group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
+						title="Eliminar definitivamente"
+						(click)="deleteDiagramPermanently(diagram.template_id)"
+					>
+						<fa-icon
+							[icon]="['fas', 'trash']"
+							[size]="'lg'"
+							class="text-red-700"
+						></fa-icon>
+					</button>
+				</div>
+				<h1
+					class="text-white font-bold text-xs p-2 truncate w-full text-center"
+				>
+					{{ diagram.name }}
+				</h1>
+			</a>
+		</div>
+	</div>
 </ng-container>
 
 <ng-template #loading>
-    <p class="text-white">Cargando diagramas en papelera...</p>
+	<p class="text-white">Cargando diagramas en papelera...</p>
 </ng-template>
 
 <ng-template #empty>
-    <p class="text-white">No hay diagramas en la papelera 🗑️</p>
+	<p class="text-white">No hay diagramas en la papelera 🗑️</p>
 </ng-template>
