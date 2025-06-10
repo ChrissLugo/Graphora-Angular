@@ -69,7 +69,15 @@ export default class HomeComponent implements OnInit {
 		}).then((result) => {
 			if (result.isConfirmed) {
 				this.UserDiagramsSrv.sendToRecyclingBin(id).subscribe({
-					next: (value) => {},
+					next: (value) => {
+						Swal.fire({
+							title: 'Listo!',
+							theme: 'dark',
+							text: 'Puede ver el diagrama en la papelera',
+							icon: 'success',
+						});
+						this.ngOnInit();
+					},
 					error(err) {
 						Swal.fire({
 							theme: 'dark',
@@ -78,12 +86,6 @@ export default class HomeComponent implements OnInit {
 							icon: 'error',
 						});
 					},
-				});
-				Swal.fire({
-					title: 'Listo!',
-					theme: 'dark',
-					text: 'Puede ver el diagrama en la papelera',
-					icon: 'success',
 				});
 			}
 		});
@@ -123,7 +125,7 @@ export default class HomeComponent implements OnInit {
 					icon: 'success',
 					theme: 'dark',
 					showConfirmButton: false,
-					timer: 2000
+					timer: 2000,
 				});
 			},
 			error: (err) => {
@@ -158,7 +160,7 @@ export default class HomeComponent implements OnInit {
 	getUserDiagrams() {
 		this.UserDiagramsSrv.getDiagrams().subscribe({
 			next: (data: any) => {
-				this.UserDiagramsSrv.allDiagrams = data.diagrams
+				this.UserDiagramsSrv.allDiagrams = data.diagrams;
 			},
 			error: (err: any) => {
 				console.error(err);
