@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   styleUrl: './start.component.css',
 })
 export default class StartComponent {
+  currentYear: number = new Date().getFullYear();
   constructor(private router: Router) {}
 
   login() {
