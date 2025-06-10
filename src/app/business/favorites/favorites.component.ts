@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SwalMessageService } from '../../core/services/messages/swal-message.service';
 import Swal from 'sweetalert2';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DiagramsTransferService } from '../../core/services/Data Transfer/DiagramsTransfer.service';
 
 @Component({
   selector: 'app-favorites',
@@ -18,13 +19,18 @@ export default class FavoritesComponent implements OnInit {
   constructor(
     private userDiagramsSrv: UserDiagramsService,
     private router: Router,
-    private messageService: SwalMessageService
+    private messageService: SwalMessageService,
+    private diagramTransferSrv: DiagramsTransferService // <--- Agrega esto
   ) {}
 
   ngOnInit(): void {
     this.userDiagramsSrv.getFavoriteDiagrams().subscribe({
       next: (data: any) => {
-        this.favoriteDiagrams = Array.isArray(data?.data) ? data.data : [];
+        // Si solo tienes los ids de favoritos:
+        const favoriteIds = Array.isArray(data?.data) ? data.data.map((d: any) => d.template_id) : [];
+        this.favoriteDiagrams = this.userDiagramsSrv.allDiagrams.filter(
+          (diagram: any) => favoriteIds.includes(diagram.template_id)
+        );
       },
       error: (err) => {
         console.error(err);
@@ -53,9 +59,8 @@ export default class FavoritesComponent implements OnInit {
     this.userDiagramsSrv.getDiagramById(id).subscribe({
       next: (data: any) => {
         this.userDiagramsSrv.currentDiagram = data.diagram;
-        // Si tienes un DiagramsTransferService, puedes usarlo aquí si es necesario
-        // this.DiagramTransferSrv.setType('user');
-        // this.DiagramTransferSrv.changeJSON(this.userDiagramsSrv.currentDiagram);
+        this.diagramTransferSrv.setType('user'); // <--- Igual que en home
+        this.diagramTransferSrv.changeJSON(this.userDiagramsSrv.currentDiagram); // <--- Igual que en home
         Swal.close();
         this.router.navigate(['/diagram']);
       },

@@ -74,6 +74,9 @@ export default class DocumentsComponent implements OnInit {
           next: () => {
             Swal.fire({
               title: 'Listo!',
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
               theme: 'dark',
               text: 'Puede ver el diagrama en la papelera',
               icon: 'success',
@@ -94,13 +97,36 @@ export default class DocumentsComponent implements OnInit {
     });
   }
 
-  addToFavorites(id: number) {
-    // Aquí puedes implementar la lógica para agregar a favoritos
-    Swal.fire({
-      title: 'Favoritos',
-      text: 'Funcionalidad de favoritos aún no implementada.',
-      icon: 'info',
-      theme: 'dark'
+  addToFavorites(diagramId: number, isFavorite: boolean) {
+    this.userDiagramsService.favoriteDiagram(diagramId, isFavorite).subscribe({
+      next: () => {
+        // Actualiza el array local para reflejar el cambio en la UI
+        const diagram = this.diagrams.find(
+          (d) => d.template_id === diagramId
+        );
+        if (diagram) diagram.is_favorite = isFavorite;
+
+        Swal.fire({
+          title: 'Favoritos',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          text: isFavorite
+            ? '¡Diagrama agregado a favoritos!'
+            : '¡Diagrama removido de favoritos!',
+          icon: 'success',
+          theme: 'dark',
+        });
+      },
+      error: (err) => {
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo actualizar el favorito.',
+          icon: 'error',
+          theme: 'dark',
+        });
+        console.error(err);
+      },
     });
   }
 }

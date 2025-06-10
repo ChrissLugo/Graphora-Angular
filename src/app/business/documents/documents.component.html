@@ -41,13 +41,17 @@
             <fa-icon [icon]="['fas', 'trash']" [size]="'lg'" class="text-red-700"></fa-icon>
           </button>
           <!-- Botón favorito -->
-          <button
-            class="absolute top-2 left-5 hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out"
-            (click)="addToFavorites(diagram.template_id); $event.stopPropagation()"
-            title="Agregar a favoritos"
-          >
-            <fa-icon [icon]="['fas', 'star']" [size]="'lg'" class="text-amber-400"></fa-icon>
-          </button>
+          	<button
+							class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
+							(click)="addToFavorites(diagram.template_id, !diagram.is_favorite); $event.stopPropagation()"
+							[title]="diagram.is_favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+						>
+							<fa-icon
+								[icon]="['fas', 'star']"
+								[ngClass]="diagram.is_favorite ? 'text-amber-400' : 'text-gray-400'"
+								[size]="'lg'"
+							></fa-icon>
+						</button>
         </div>
         <h1 class="text-white font-bold text-xs p-2 truncate w-full text-center">
           {{ diagram.name || 'Sin nombre' }}
