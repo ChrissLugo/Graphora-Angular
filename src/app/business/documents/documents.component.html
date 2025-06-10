@@ -1,1 +1,61 @@
-<h1 class="text-white font-semibold text-3xl">Mis documentos</h1>
+<div>
+
+    <div class="flex w-full items-center bg-black relative">
+        <span
+            class="absolute mx-auto py-4 flex border w-fit bg-gradient-to-r blur-xl from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl box-content font-extrabold text-transparent text-center select-none"
+        >
+            Mis Diagramas
+        </span>
+        <h1
+            class="relative flex flex-row items-center gap-3 top-0 w-fit h-auto py-4 justify-center bg-gradient-to-r from-purple-400 via-purple-300 to-purple-500 bg-clip-text text-4xl font-extrabold text-transparent text-center select-auto"
+        >
+            Mis Diagramas
+        </h1>
+    </div>
+
+
+
+  <div *ngIf="loading">Cargando diagramas...</div>
+  <div *ngIf="error">{{ error }}</div>
+  <div class="flex flex-row flex-wrap gap-6 mt-4" *ngIf="!loading && diagrams.length">
+    <div
+      *ngFor="let diagram of diagrams"
+      class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer relative"
+      [title]="diagram.description"
+      (click)="openDiagram(diagram.template_id)"
+    >
+      <div class="flex flex-col items-center group">
+        <div class="flex bg-white w-35 h-40 rounded items-center justify-center relative">
+          <img
+            *ngIf="diagram.preview_image"
+            [src]="diagram.preview_image"
+            alt="Preview"
+            class="w-full h-40 object-contain rounded border border-gray-700 bg-white"
+          />
+          <!-- Botón borrar -->
+          <button
+            class="absolute top-2 right-5 hidden group-hover:block animate-fade-left animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out"
+            (click)="sendToRecyclingBin(diagram.template_id); $event.stopPropagation()"
+            title="Enviar a la papelera"
+          >
+            <fa-icon [icon]="['fas', 'trash']" [size]="'lg'" class="text-red-700"></fa-icon>
+          </button>
+          <!-- Botón favorito -->
+          <button
+            class="absolute top-2 left-5 hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out"
+            (click)="addToFavorites(diagram.template_id); $event.stopPropagation()"
+            title="Agregar a favoritos"
+          >
+            <fa-icon [icon]="['fas', 'star']" [size]="'lg'" class="text-amber-400"></fa-icon>
+          </button>
+        </div>
+        <h1 class="text-white font-bold text-xs p-2 truncate w-full text-center">
+          {{ diagram.name || 'Sin nombre' }}
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="text-white" *ngIf="!loading && !diagrams.length && !error">
+    No tienes diagramas guardados.
+  </div>
+</div>

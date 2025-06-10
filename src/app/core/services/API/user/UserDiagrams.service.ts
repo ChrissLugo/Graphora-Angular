@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.prod';
 import { Subject, Observable, EMPTY } from 'rxjs';
-import { debounceTime, switchMap, catchError } from 'rxjs/operators';
+import { debounceTime, switchMap, catchError, map } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
@@ -54,5 +54,28 @@ export class UserDiagramsService {
 		return this.http.patch(`${this.API_URL}/diagram/me/delete/${id}`, {
 			status: 'I',
 		});
+	}
+	
+	getRecyclingBin(): Observable<any[]> {
+		return this.http.get<{ data: any[] }>(`${this.API_URL}/diagram/me/trash`).pipe(
+			// Extrae el array de la propiedad "data"
+			map(res => res.data ?? [])
+		);
+	}
+
+	restoreDiagram(id: number): Observable<any> {
+		return this.http.patch(`${this.API_URL}/diagram/me/restore/${id}`, {});
+	}
+
+	favoriteDiagram(diagramId: number, isFavorite: boolean): Observable<any> {
+		return this.http.patch(`${this.API_URL}/diagram/me/favorite/${diagramId}`, { is_favorite: isFavorite });
+	}
+
+	getFavoriteDiagrams(): Observable<any> {
+		return this.http.get(`${this.API_URL}/diagram/me/favorites`);
+	}
+
+	deleteDiagramPermanently(id: number) {
+		return this.http.delete(`${this.API_URL}/diagram/me/${id}`);
 	}
 }

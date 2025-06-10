@@ -14,10 +14,11 @@ import { DiagramsTransferService } from '../../core/services/Data Transfer/Diagr
 import { SwalMessageService } from '../../core/services/messages/swal-message.service';
 import Swal from 'sweetalert2';
 import { UserDiagramsService } from '../../core/services/API/user/UserDiagrams.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'app-home',
-	imports: [RouterModule, FontAwesomeModule],
+	imports: [RouterModule, FontAwesomeModule, CommonModule],
 	templateUrl: './home.component.html',
 	styleUrl: './home.component.css',
 })
@@ -88,6 +89,35 @@ export default class HomeComponent implements OnInit {
 		});
 	}
 
+	addToFavorites(diagramId: number, isFavorite: boolean) {
+		this.UserDiagramsSrv.favoriteDiagram(diagramId, isFavorite).subscribe({
+			next: () => {
+				const diagram = this.UserDiagramsSrv.allDiagrams.find(
+					(d) => d.template_id === diagramId
+				);
+				if (diagram) diagram.is_favorite = isFavorite;
+
+				Swal.fire({
+					title: 'Favoritos',
+					text: isFavorite
+						? '¡Diagrama agregado a favoritos!'
+						: '¡Diagrama removido de favoritos!',
+					icon: 'success',
+					theme: 'dark',
+				});
+			},
+			error: (err) => {
+				Swal.fire({
+					title: 'Error',
+					text: 'No se pudo actualizar el favorito.',
+					icon: 'error',
+					theme: 'dark',
+				});
+				console.error(err);
+			},
+		});
+	}
+
 	sendDiagramJSON(id: number) {
 		this.messageService.loadMessage();
 		//Obtenemos los datos del diagrama, los enviamos y redigimos al usuario
@@ -108,7 +138,12 @@ export default class HomeComponent implements OnInit {
 	getUserDiagrams() {
 		this.UserDiagramsSrv.getDiagrams().subscribe({
 			next: (data: any) => {
-				this.UserDiagramsSrv.allDiagrams = data.diagrams;
+				this.UserDiagramsSrv.allDiagrams = data.diagrams.map(
+					(diagram: any) => ({
+						...diagram,
+						is_favorite: false, // Por defecto, hasta que el usuario lo marque
+					})
+				);
 			},
 			error: (err: any) => {
 				console.error(err);

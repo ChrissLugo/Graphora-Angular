@@ -1,1 +1,41 @@
 <h1 class="text-white font-semibold text-3xl">Favoritos</h1>
+<div *ngIf="favoriteDiagrams.length === 0" class="text-white mt-4">
+  No tienes diagramas favoritos.
+</div>
+<div class="flex flex-row mt-4 space-x-4">
+  <div
+    *ngFor="let diagram of favoriteDiagrams"
+    class="w-35 hover:scale-105 transition duration-300 easy-in-out rounded-lg bg-purple-950 shadow-lg shadow-purple-600/50 hover:cursor-pointer"
+    [title]="diagram.description"
+    (click)="sendDiagramJSON(diagram.template_id)"
+  >
+    <a class="flex flex-col items-center group">
+      <div class="flex bg-white w-35 h-40 rounded items-center justify-center relative">
+        <img [src]="diagram.preview_image" alt="Imagen base64" />
+        <button
+          class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 left-5"
+          (click)="removeFromFavorites(diagram.template_id); $event.stopPropagation()"
+          title="Quitar de favoritos"
+        >
+          <fa-icon
+            [icon]="['fas', 'star']"
+            class="text-amber-400"
+            size="lg"
+          ></fa-icon>
+        </button>
+        <button
+          class="absolute hidden group-hover:block animate-fade-right animate-duration-300 cursor-pointer hover:scale-120 transition ease-in-out top-2 right-5"
+          (click)="sendToRecyclingBin(diagram.template_id); $event.stopPropagation()"
+          title="Enviar a la papelera"
+        >
+          <fa-icon
+            [icon]="['fas', 'trash']"
+            class="text-red-500"
+            size="lg"
+          ></fa-icon>
+        </button>
+      </div>
+      <h2 class="text-white font-bold text-xs p-2 truncate w-full text-center">{{ diagram.name }}</h2>
+    </a>
+  </div>
+</div>
