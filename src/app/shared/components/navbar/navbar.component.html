@@ -2,22 +2,28 @@
 	class="flex flex-row fixed top-0 left-0 w-screen h-20 z-50 bg-gradient-to-b from-purple-950 from-5% to-black to-99% border-b-[1px] border-gray-800 items-center"
 >
 	<!-- Logo -->
-	<img class="h-14 w-14 ml-4 mb-2" src="images/logo.png" alt="Logo" />
-	<div class="w-full flex-col items-center px-4 justify-between">
+	<img
+		class="md:h-14 md:w-14 md:ml-4 h-10 w-10 mb-2"
+		src="images/logo.png"
+		alt="Logo"
+	/>
+	<div class="w-full flex flex-col p-1 gap-1 md:px-4 justify-between">
 		<!-- Barra superior -->
 		<div class="flex flex-row justify-between">
-			<h2 class="md:text-lg text-base font-semibold text-white">
+			<h2 class="text-md md:text-lg font-semibold text-white">
 				{{ this.diagramName }}
 			</h2>
 			<!-- Compartir -->
 			<button
-				class="flex items-center md:h-7 text-white md:p-2 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full"
+				class="flex items-center md:h-7 text-white md:p-2 rounded-sm transition duration-200 ease-in-out focus:outline-none cursor-pointer hover:scale-105 bg-purple-600 font-bold h-full px-1"
 			>
 				<fa-icon
 					size="lg"
 					[icon]="['fas', 'share-from-square']"
 				></fa-icon>
-				<span class="ml-2 tex-nomal">Compartir</span>
+				<span class="hidden md:inline-block ml-2 text-sm"
+					>Compartir</span
+				>
 			</button>
 		</div>
 
@@ -57,7 +63,17 @@
 					class="my-button"
 					[matMenuTriggerFor]="archivoMenu"
 				>
-					<fa-icon size="lg" [icon]="['fas', 'file']"></fa-icon>
+					<fa-icon
+						class="hidden md:inline-block"
+						size="lg"
+						[icon]="['fas', 'file']"
+					></fa-icon>
+					<fa-icon
+						class="md:hidden"
+						size="sm"
+						[icon]="['fas', 'file']"
+					></fa-icon>
+
 					<label class="text-xs md:text-sm cursor-pointer mx-1"
 						>Archivo</label
 					>
@@ -93,6 +109,12 @@
 				>
 					<fa-icon
 						size="lg"
+						class="hidden md:inline-block"
+						[icon]="['fas', 'file-export']"
+					></fa-icon>
+					<fa-icon
+						size="sm"
+						class="md:hidden"
 						[icon]="['fas', 'file-export']"
 					></fa-icon>
 					<label class="text-xs md:text-sm cursor-pointer mx-1"
