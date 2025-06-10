@@ -220,9 +220,12 @@
 					/>
 				</div>
 				<div class="flex md:block justify-start flex-col items-start">
-					<p class="text-sm leading-5 text-white">User Lastname</p>
+					<p class="text-sm leading-5 text-white">
+						{{ this.userData.name || "Nombre" }}
+						{{ this.userData.lastname || "Apellido" }}
+					</p>
 					<p class="text-xs leading-3 text-gray-300">
-						user&#64;gmail.com
+						{{ this.userData.email || "usuario&#64;gmail.com" }}
 					</p>
 				</div>
 			</div>

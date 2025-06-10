@@ -44,10 +44,7 @@ export class SidebarComponent {
 	selectedFilter: string = '';
 	notification!: boolean;
 	userData$: Observable<User | null>;
-	userName!: string;
-	userLastname!: string;
-	userEmail!: string;
-	userImage!: any;
+	userData!: any;
 
 	constructor(
 		private router: Router,
@@ -97,7 +94,8 @@ export class SidebarComponent {
 
 		this._userService.getUserData(userId).subscribe({
 			next: (user) => {
-				console.log('usuario', user);
+				console.log('usuario', user.user);
+				this.userData = user.user;
 				this._userStateService.setUserData(user);
 			},
 			error: (err: any) => console.log(err),
