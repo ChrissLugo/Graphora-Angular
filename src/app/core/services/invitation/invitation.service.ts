@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { environment } from '../../../../environments/environment.prod';
 import { TokenService } from '../API/auth/token/token.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class InvitationService {
     private socket: Socket;
     readonly API_URL = environment.apiUrl;
+    private invitationSubject = new Subject<any>();
 
     constructor(
         private _tokenService: TokenService,
@@ -28,6 +29,11 @@ export class InvitationService {
 
         this.socket.on('disconnect', () => {
             console.log('🔴 Desconectado del servidor Socket.IO');
+        });
+
+        this.socket.on('invitation', (data) => {
+            console.log('📨 Notificación global recibida:', data);
+            this.invitationSubject.next(data);
         });
 
     }
@@ -50,6 +56,11 @@ export class InvitationService {
                 observer.next(data);
             });
         });
+    }
+
+    // Suscribirse globalmente
+        onGlobalInvitation(): Observable<any> {
+        return this.invitationSubject.asObservable();
     }
 
 }

@@ -26,6 +26,7 @@ import { SwalMessageService } from '../../../core/services/messages/swal-message
 import { UserStateService } from '../../../core/services/user-state/user-state.service';
 import { Observable } from 'rxjs';
 import { User } from '../../../core/interfaces/user';
+import { InvitationService } from '../../../core/services/invitation/invitation.service';
 
 @Component({
 	selector: 'app-sidebar',
@@ -45,6 +46,7 @@ export class SidebarComponent {
 	notification!: boolean;
 	userData$: Observable<User | null>;
 	userData!: any;
+	totalNotifications = 0;
 
 	constructor(
 		private router: Router,
@@ -53,7 +55,8 @@ export class SidebarComponent {
 		private _authService: AuthService,
 		private _messageService: SwalMessageService,
 		private _userStateService: UserStateService,
-		icons: FaIconLibrary
+		icons: FaIconLibrary,
+		private _invitationService: InvitationService
 	) {
 		this.selectedFilter = this.router.url.replace(/\//g, '');
 		this.userData$ = this._userStateService.userData$;
@@ -78,6 +81,10 @@ export class SidebarComponent {
 		// 	this.loadUserData();
 		// }
 		this.loadUserData();
+		this._invitationService.onGlobalInvitation().subscribe((noti) => {
+			console.log("Notificación recibida desde cualquier lugar ", noti)
+			this.totalNotifications++;
+		})
 	}
 
 	private loadUserData(): void {
