@@ -58,7 +58,6 @@
 			(modelChange)="diagramModelChange($event)"
 			[skipsDiagramUpdate]="state.skipsDiagramUpdate"
 		>
-			>
 		</gojs-diagram>
 	</div>
 
@@ -80,7 +79,7 @@
 
 	<div
 		*ngIf="state.selectedNodeData"
-		class="md:hidden absolute z-9999 bottom-0 left-0 h-fit w-full bg-black rounded-md border border-gray-600 animate-fade-up animate-duration-300 py-2"
+		class="md:hidden absolute z-9999 bottom-0 left-0 h-61 w-full bg-black rounded-md border border-gray-600 animate-fade-up animate-duration-300 py-2"
 	>
 		<div class="overflow-y-auto max-h-full">
 			<app-inspector

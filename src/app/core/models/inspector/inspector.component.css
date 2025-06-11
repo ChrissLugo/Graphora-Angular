@@ -33,3 +33,8 @@
 ::ng-deep .font-name {
 	color: gray !important;
 }
+
+#fontPickerPhone ::ng-deep .font-picker {
+	background-color: black !important;
+	top: 0px !important;
+}

@@ -39,9 +39,29 @@
 					[fpSortByFamilies]="true"
 					[fpResultsLabel]="'Resultados de la búsqueda'"
 					(fontPickerChange)="fontpicker()"
-					class="border border-gray-600 text-white rounded px-4 py-2 cursor-pointer text-sm hover:bg-gray-950 overflow-hidden whitespace-nowrap text-ellipsis justify-center text-center md:w-auto items-center"
+					class="hidden md:block border border-gray-600 text-white rounded px-4 py-2 cursor-pointer text-sm hover:bg-gray-950 overflow-hidden whitespace-nowrap text-ellipsis justify-center text-center md:w-auto items-center"
 				>
 					{{ nodeData["font"] || "Ninguna" }}
+				</div>
+
+				<div id="fontPickerPhone">
+					<div
+						[(fontPicker)]="font"
+						[fpSearchText]="'Buscar fuentes'"
+						[fpLoadingText]="'Cargando fuentes...'"
+						[fpPopularLabel]="'Fuentes populares'"
+						[fpWidth]="this.innerWidth"
+						[fpHeight]="'10px'"
+						[fpPosition]="'top'"
+						[fpSortByFamilies]="true"
+						[id]="'fontPickerPhone'"
+						[className]=""
+						[fpResultsLabel]="'Resultados de la búsqueda'"
+						(fontPickerChange)="fontpicker()"
+						class="md:hidden border border-gray-600 text-white rounded px-4 py-2 cursor-pointer text-sm hover:bg-gray-950 overflow-hidden whitespace-nowrap text-ellipsis justify-center text-center md:w-auto items-center"
+					>
+						{{ nodeData["font"] || "Ninguna" }}
+					</div>
 				</div>
 
 				<!-- ALING TEXT -->
